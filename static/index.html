@@ -9,7 +9,11 @@
 <body>
   <header class="topbar">
     <div class="brand">
-      <span class="logo">✦</span>
+      <span class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12h4l2-5 4 10 3-8 2 3h5" />
+        </svg>
+      </span>
       <div>
         <h1>MedLit Evidence</h1>
         <p class="tagline">医学文献循证问答助手 · 检索 PubMed 并给出带引用的证据级回答</p>
@@ -24,7 +28,12 @@
     <section class="search-card">
       <textarea id="query" rows="2" placeholder="输入一个临床问题，例如：二甲双胍能降低 2 型糖尿病患者的心血管风险吗？"></textarea>
       <div class="search-row">
-        <button id="askBtn">提问</button>
+        <button id="askBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 2 11 13" /><path d="M22 2 15 22l-4-9-9-4z" />
+          </svg>
+          提问
+        </button>
         <span class="hint">支持中英文 · 自动检索 PubMed · 证据分级</span>
       </div>
       <div class="examples">
