@@ -2,16 +2,8 @@ const GRADE_ZH = {
   High: "高", Moderate: "中", Low: "低", "Very low": "极低", "N/A": "未分级",
 };
 const GRADE_COLOR = {
-  High: "#4f46e5", Moderate: "#2563eb", Low: "#0284c7",
-  "Very low": "#64748b", "N/A": "#94a3b8",
-};
-// 分布条与图例用的渐变（浅上深下，做出厚度），徽章仍用上面的平色
-const GRADE_GRAD = {
-  High: "linear-gradient(180deg, #818cf8, #4338ca)",
-  Moderate: "linear-gradient(180deg, #60a5fa, #1d4ed8)",
-  Low: "linear-gradient(180deg, #38bdf8, #0369a1)",
-  "Very low": "linear-gradient(180deg, #a8b3c2, #475569)",
-  "N/A": "linear-gradient(180deg, #cbd5e1, #64748b)",
+  High: "#16a34a", Moderate: "#2563eb", Low: "#f59e0b",
+  "Very low": "#ef4444", "N/A": "#94a3b8",
 };
 const STYPE_ZH = {
   meta_analysis: "Meta 分析",
@@ -141,12 +133,12 @@ function renderDist(dist) {
     const seg = document.createElement("div");
     seg.className = "dist-seg";
     seg.style.width = pct + "%";
-    seg.style.background = GRADE_GRAD[k];
+    seg.style.background = GRADE_COLOR[k];
     seg.title = `${GRADE_ZH[k]}：${v} 篇`;
     bar.appendChild(seg);
 
     const item = document.createElement("span");
-    item.innerHTML = `<i class="swatch" style="background:${GRADE_GRAD[k]}"></i>${GRADE_ZH[k]} · ${v} 篇`;
+    item.innerHTML = `<i class="swatch" style="background:${GRADE_COLOR[k]}"></i>${GRADE_ZH[k]} · ${v} 篇`;
     legend.appendChild(item);
   });
 }
@@ -199,7 +191,7 @@ async function ask(query) {
     const r = await fetch("/api/answer", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify({ query, retmax: settings.retmax }),
     });
     if (!r.ok) {
       const e = await r.json().catch(() => ({}));
@@ -212,6 +204,7 @@ async function ask(query) {
     renderAnswer(data);
     renderDist(data.evidence_distribution || {});
     renderDocs(data.results || []);
+    recordHistory(query, data.evidence, elapsed);
     $("loading").classList.add("hidden");
     $("result").classList.remove("hidden");
   } catch (err) {
@@ -231,4 +224,156 @@ document.querySelectorAll(".chip").forEach((c) =>
   c.addEventListener("click", () => ask(c.dataset.q))
 );
 
+/* ---------- 设置 ---------- */
+const SETTINGS_KEY = "medlit.settings";
+const defaultSettings = { retmax: 20, showAbstract: true };
+
+function loadSettings() {
+  try {
+    const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
+    return Object.assign({}, defaultSettings, s);
+  } catch {
+    return { ...defaultSettings };
+  }
+}
+
+function saveSettings() {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+}
+
+const settings = loadSettings();
+
+function applySettingsUI() {
+  document.querySelectorAll("#retmaxSeg button").forEach((b) =>
+    b.classList.toggle("active", Number(b.dataset.v) === settings.retmax)
+  );
+  $("showAbstract").checked = settings.showAbstract;
+  $("docList").classList.toggle("hide-abstract", !settings.showAbstract);
+}
+
+document.querySelectorAll("#retmaxSeg button").forEach((b) =>
+  b.addEventListener("click", () => {
+    settings.retmax = Number(b.dataset.v);
+    saveSettings();
+    applySettingsUI();
+  })
+);
+$("showAbstract").addEventListener("change", (e) => {
+  settings.showAbstract = e.target.checked;
+  saveSettings();
+  applySettingsUI();
+});
+
+/* ---------- 通知 / 历史记录 ---------- */
+const HISTORY_KEY = "medlit.history";
+
+function getHistory() {
+  try {
+    return JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function recordHistory(query, ev, elapsedMs) {
+  const h = getHistory();
+  h.unshift({
+    query,
+    verdict: ev ? ev.verdict : "–",
+    confidence: ev ? ev.confidence : "–",
+    conflict: ev ? !!ev.conflict : false,
+    time: Date.now(),
+    elapsedMs: Math.round(elapsedMs),
+  });
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0, 20)));
+  updateNotifBadge();
+}
+
+function updateNotifBadge() {
+  const n = getHistory().length;
+  const badge = $("notifBadge");
+  if (n > 0) {
+    badge.textContent = n > 99 ? "99+" : String(n);
+    badge.classList.remove("hidden");
+  } else {
+    badge.classList.add("hidden");
+  }
+}
+
+function renderHistory() {
+  const list = $("notifList");
+  list.innerHTML = "";
+  const h = getHistory();
+  if (!h.length) {
+    list.innerHTML = '<p class="notif-empty">暂无问答记录</p>';
+    return;
+  }
+  h.forEach((it) => {
+    const div = document.createElement("div");
+    div.className = "notif-item";
+    const cls = it.conflict ? "conflict" : (it.verdict === "证据倾向支持" ? "support" : "neutral");
+    const color = it.conflict ? "#f59e0b" : (it.verdict === "证据倾向支持" ? "#16a34a" : "#8a93a3");
+    const t = new Date(it.time);
+    const hh = String(t.getHours()).padStart(2, "0");
+    const mm = String(t.getMinutes()).padStart(2, "0");
+    div.innerHTML = `
+      <p class="notif-query">${esc(it.query)}</p>
+      <div class="notif-meta">
+        <span class="notif-verdict" style="color:${color}">${esc(it.verdict)}</span>
+        <span>置信度 ${it.confidence}</span>
+        <span>${it.elapsedMs}ms</span>
+        <span>${hh}:${mm}</span>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+  const clear = document.createElement("button");
+  clear.className = "notif-clear";
+  clear.textContent = "清空记录";
+  clear.addEventListener("click", () => {
+    localStorage.removeItem(HISTORY_KEY);
+    updateNotifBadge();
+    renderHistory();
+  });
+  list.appendChild(clear);
+}
+
+/* ---------- 抽屉开合 ---------- */
+function openDrawer(name) {
+  const isSettings = name === "settings";
+  const drawer = $(isSettings ? "settingsDrawer" : "notifDrawer");
+  const mask = document.querySelector(`.drawer-mask[data-close="${name}"]`);
+  drawer.classList.remove("hidden");
+  mask.classList.remove("hidden");
+  if (!isSettings) renderHistory();
+}
+function closeDrawer(name) {
+  const isSettings = name === "settings";
+  $(isSettings ? "settingsDrawer" : "notifDrawer").classList.add("hidden");
+  document.querySelector(`.drawer-mask[data-close="${name}"]`).classList.add("hidden");
+}
+
+document.querySelectorAll(".drawer-close, .drawer-mask").forEach((el) =>
+  el.addEventListener("click", () => closeDrawer(el.dataset.close))
+);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    ["settings", "notif"].forEach(closeDrawer);
+  }
+});
+
+/* ---------- 左侧图标栏 ---------- */
+$("navHome").addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  $("query").focus();
+});
+$("navNew").addEventListener("click", () => {
+  $("query").value = "";
+  $("query").focus();
+});
+$("navSettings").addEventListener("click", () => openDrawer("settings"));
+$("navNotifications").addEventListener("click", () => openDrawer("notif"));
+
+applySettingsUI();
+updateNotifBadge();
 checkHealth();

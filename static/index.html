@@ -9,54 +9,38 @@
 <body>
   <div class="layout">
 
-    <!-- ========== 侧边栏 ========== -->
-    <aside class="sidebar">
-      <div class="side-brand">
-        <span class="logo" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 12h4l2-5 4 10 3-8 2 3h5" />
-          </svg>
-        </span>
-        <span class="side-name">MedLit</span>
+    <!-- ========== 左侧图标栏（Motrix 风格） ========== -->
+    <aside class="rail">
+      <div class="rail-logo" title="MedLit Evidence">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12h4l2-5 4 10 3-8 2 3h5" />
+        </svg>
       </div>
 
-      <nav class="side-nav">
-        <p class="side-label">提问</p>
-        <button class="side-item active" id="navHome">
+      <nav class="rail-nav">
+        <button class="rail-item active" id="navHome" title="循证问答">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 8.5-8.5 8.38 8.38 0 0 1 8.5 8.5z"/></svg>
-          循证问答
         </button>
-
-        <p class="side-label">示例问题</p>
-        <button class="side-item chip" data-q="statins risk of incident diabetes">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/></svg>
-          他汀与新发糖尿病
-        </button>
-        <button class="side-item chip" data-q="metformin cardiovascular risk type 2 diabetes">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-          二甲双胍与心血管
-        </button>
-        <button class="side-item chip" data-q="SGLT2 inhibitor heart failure">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-          SGLT2 与心衰
-        </button>
-        <button class="side-item chip" data-q="PD-1 inhibitor advanced melanoma overall survival">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20zM2 12h20"/></svg>
-          PD-1 与黑色素瘤
-        </button>
-        <button class="side-item chip" data-q="intensive blood pressure control SPRINT">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2-5 4 10 3-8 2 3h5"/></svg>
-          强化降压对比
+        <button class="rail-item rail-add" id="navNew" title="新问题">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
         </button>
       </nav>
 
-      <div class="side-foot">
-        <div class="status" id="status">
-          <span class="dot"></span><span id="statusText">连接中…</span>
-        </div>
-        <a class="side-github" href="https://github.com/QianRongAn/medlit-evidence" target="_blank" rel="noopener">
+      <div class="rail-spacer"></div>
+
+      <nav class="rail-nav">
+        <button class="rail-item" id="navSettings" title="设置">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+        <button class="rail-item" id="navNotifications" title="通知">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="rail-badge hidden" id="notifBadge"></span>
+        </button>
+      </nav>
+
+      <div class="rail-foot">
+        <a class="rail-item" href="https://github.com/QianRongAn/medlit-evidence" target="_blank" rel="noopener" title="GitHub">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C17.3 4.6 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.9 1.2 1.9 1.2 3.2 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.6.8.5A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
-          GitHub
         </a>
       </div>
     </aside>
@@ -65,7 +49,7 @@
     <main class="content">
       <div class="page-head">
         <h1>循证问答</h1>
-        <span class="hint">检索 PubMed · 证据分级 · 冲突检测</span>
+        <div class="status" id="status"><span class="dot"></span><span id="statusText">连接中…</span></div>
       </div>
 
       <section class="search-card">
@@ -78,6 +62,14 @@
             提问
           </button>
           <span class="hint">Ctrl + Enter 发送 · 支持中英文</span>
+        </div>
+        <div class="examples">
+          <span class="examples-label">试试：</span>
+          <button class="chip" data-q="statins risk of incident diabetes">他汀与新发糖尿病</button>
+          <button class="chip" data-q="metformin cardiovascular risk type 2 diabetes">二甲双胍与心血管</button>
+          <button class="chip" data-q="SGLT2 inhibitor heart failure">SGLT2 与心衰</button>
+          <button class="chip" data-q="PD-1 inhibitor advanced melanoma overall survival">PD-1 与黑色素瘤</button>
+          <button class="chip" data-q="intensive blood pressure control SPRINT">强化降压对比</button>
         </div>
       </section>
 
@@ -147,6 +139,67 @@
       </footer>
     </main>
   </div>
+
+  <!-- ========== 设置抽屉 ========== -->
+  <div class="drawer-mask hidden" data-close="settings"></div>
+  <aside class="drawer hidden" id="settingsDrawer">
+    <header class="drawer-head">
+      <h2>设置</h2>
+      <button class="drawer-close" data-close="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </header>
+    <div class="drawer-body">
+      <div class="setting-row">
+        <div>
+          <p class="setting-title">每次返回文献数</p>
+          <p class="setting-desc">控制单次检索返回并用于分级与合成的文献篇数</p>
+        </div>
+        <div class="seg" id="retmaxSeg">
+          <button data-v="10">10</button>
+          <button data-v="20">20</button>
+          <button data-v="40">40</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div>
+          <p class="setting-title">显示文献摘要</p>
+          <p class="setting-desc">在证据来源卡片中展开每篇文献的摘要</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="showAbstract" checked />
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+      <div class="drawer-divider"></div>
+      <div class="setting-row">
+        <div>
+          <p class="setting-title">数据来源</p>
+          <p class="setting-desc">PubMed E-utilities，离线时回退内置示例语料</p>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div>
+          <p class="setting-title">版本</p>
+          <p class="setting-desc">v0.1.0 · MIT</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========== 通知抽屉 ========== -->
+  <div class="drawer-mask hidden" data-close="notif"></div>
+  <aside class="drawer hidden" id="notifDrawer">
+    <header class="drawer-head">
+      <h2>通知</h2>
+      <button class="drawer-close" data-close="notif">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </header>
+    <div class="drawer-body" id="notifList">
+      <p class="notif-empty">暂无问答记录</p>
+    </div>
+  </aside>
 
   <script src="/static/app.js"></script>
 </body>
