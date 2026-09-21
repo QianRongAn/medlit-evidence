@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedLit Evidence · 医学文献循证问答</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">✦</span>
+      <div>
+        <h1>MedLit Evidence</h1>
+        <p class="tagline">医学文献循证问答助手 · 检索 PubMed 并给出带引用的证据级回答</p>
+      </div>
+    </div>
+    <div class="status" id="status">
+      <span class="dot"></span><span id="statusText">连接中…</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="search-card">
+      <textarea id="query" rows="2" placeholder="输入一个临床问题，例如：二甲双胍能降低 2 型糖尿病患者的心血管风险吗？"></textarea>
+      <div class="search-row">
+        <button id="askBtn">提问</button>
+        <span class="hint">支持中英文 · 自动检索 PubMed · 证据分级</span>
+      </div>
+      <div class="examples">
+        <span class="examples-label">试试：</span>
+        <button class="chip" data-q="metformin cardiovascular risk type 2 diabetes">二甲双胍与糖尿病心血管风险</button>
+        <button class="chip" data-q="SGLT2 inhibitor heart failure">SGLT2 抑制剂与心衰</button>
+        <button class="chip" data-q="statins risk of incident diabetes">他汀与新发糖尿病风险</button>
+        <button class="chip" data-q="PD-1 inhibitor advanced melanoma overall survival">PD-1 抑制剂与晚期黑色素瘤</button>
+        <button class="chip" data-q="intensive blood pressure control SPRINT">强化降压 vs 标准降压</button>
+      </div>
+    </section>
+
+    <section id="result" class="hidden">
+      <div class="result-meta" id="resultMeta"></div>
+
+      <div class="answer-card">
+        <div class="card-head">
+          <h2>回答</h2>
+          <span class="mode-badge" id="modeBadge"></span>
+        </div>
+        <div class="answer-body" id="answerBody"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>证据等级分布</h2></div>
+        <div class="dist-bar" id="distBar"></div>
+        <div class="dist-legend" id="distLegend"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>证据来源</h2><span class="count" id="docCount"></span></div>
+        <div id="docList" class="doc-list"></div>
+      </div>
+    </section>
+
+    <section id="loading" class="hidden">
+      <div class="spinner"></div>
+      <p>正在检索 PubMed 并生成回答…</p>
+    </section>
+
+    <section id="error" class="hidden error-box"></section>
+  </main>
+
+  <footer>
+    <p>数据来自 PubMed E-utilities（离线时回退内置示例语料）。回答仅供参考，不构成医疗建议。</p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+[
+  {
+    "pmid": "9742977",
+    "title": "Effect of intensive blood-glucose control with metformin on complications in overweight patients with type 2 diabetes (UKPDS 34)",
+    "journal": "Lancet",
+    "year": "1998",
+    "authors": ["UK Prospective Diabetes Study (UKPDS) Group"],
+    "pubtypes": ["Randomized Controlled Trial"],
+    "abstract": "In overweight patients with newly diagnosed type 2 diabetes, metformin reduced the risk of any diabetes-related endpoint and all-cause mortality compared with conventional management, despite similar glycemic control. The benefit was not explained by glucose lowering alone."
+  },
+  {
+    "pmid": "11832527",
+    "title": "Reduction in the incidence of type 2 diabetes with lifestyle intervention or metformin",
+    "journal": "N Engl J Med",
+    "year": "2002",
+    "authors": ["Knowler WC", "Barrett-Connor E", "Fowler SE"],
+    "pubtypes": ["Randomized Controlled Trial"],
+    "abstract": "In the Diabetes Prevention Program, lifestyle intervention reduced the incidence of type 2 diabetes by 58 percent and metformin by 31 percent compared with placebo in high-risk adults. Lifestyle modification was more effective than metformin overall."
+  },
+  {
+    "pmid": "26378978",
+    "title": "Empagliflozin, Cardiovascular Outcomes, and Mortality in Type 2 Diabetes",
+    "journal": "N Engl J Med",
+    "year": "2015",
+    "authors": ["Zinman B", "Wanner C", "Lachin JM"],
+    "pubtypes": ["Randomized Controlled Trial"],
+    "abstract": "In patients with type 2 diabetes at high cardiovascular risk, empagliflozin reduced the primary composite outcome of cardiovascular death, nonfatal myocardial infarction, or nonfatal stroke, driven mainly by a reduction in cardiovascular death and all-cause mortality."
+  },
+  {
+    "pmid": "31535829",
+    "title": "Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction",
+    "journal": "N Engl J Med",
+    "year": "2019",
+    "authors": ["McMurray JJV", "Solomon SD", "Inzucchi SE"],
+    "pubtypes": ["Randomized Controlled Trial"],
+    "abstract": "Among patients with heart failure and a reduced ejection fraction, dapagliflozin reduced the risk of worsening heart failure or cardiovascular death regardless of diabetes status. The benefit was consistent across the studied subgroups."
+  },
+  {
+    "pmid": "26551272",
+    "title": "A Randomized Trial of Intensive versus Standard Blood-Pressure Control",
+    "journal": "N Engl J Med",
+    "year": "2015",
+    "authors": ["SPRINT Research Group"],
+    "pubtypes": ["Randomized Controlled Trial"],
+    "abstract": "Targeting a systolic blood pressure of less than 120 mm Hg reduced the rate of cardiovascular events and death compared with a target of less than 140 mm Hg in high-risk adults without diabetes. Serious adverse events of hypotension and acute kidney injury were more common with intensive treatment."
+  },
+  {
+    "pmid": "18997196",
+    "title": "Rosuvastatin to Prevent Vascular Events in Men and Women with Elevated C-Reactive Protein",
+    "journal": "N Engl J Med",
+    "year": "2008",
+    "authors": ["Ridker PM", "Danielson E", "Fonseca FAH"],
+    "pubtypes": ["Randomized Controlled Trial"],
+    "abstract": "In apparently healthy adults with elevated high-sensitivity C-reactive protein and normal LDL cholesterol, rosuvastatin reduced the incidence of major cardiovascular events. The trial supported statin use based on inflammatory risk."
+  },
+  {
+    "pmid": "10639539",
+    "title": "Effects of an angiotensin-converting-enzyme inhibitor, ramipril, on cardiovascular events in high-risk patients",
+    "journal": "N Engl J Med",
+    "year": "2000",
+    "authors": ["The Heart Outcomes Prevention Evaluation Study Investigators"],
+    "pubtypes": ["Randomized Controlled Trial"],
+    "abstract": "Ramipril reduced the rates of death, myocardial infarction, and stroke in high-risk patients with cardiovascular disease or diabetes plus one additional risk factor. The benefit was larger than expected from blood-pressure reduction alone."
+  },
+  {
+    "pmid": "28817792",
+    "title": "Overall Survival with Combined Nivolumab and Ipilimumab in Advanced Melanoma",
+    "journal": "N Engl J Med",
+    "year": "2017",
+    "authors": ["Wolchok JD", "Chiarion-Sileni V", "Gonzalez R"],
+    "pubtypes": ["Randomized Controlled Trial"],
+    "abstract": "In previously untreated advanced melanoma, the combination of nivolumab and ipilimumab improved overall survival and progression-free survival compared with ipilimumab alone, at the cost of more frequent grade 3 or 4 immune-related adverse events."
+  },
+  {
+    "pmid": "25891173",
+    "title": "Pembrolizumab versus Ipilimumab in Advanced Melanoma",
+    "journal": "N Engl J Med",
+    "year": "2015",
+    "authors": ["Robert C", "Schachter J", "Long GV"],
+    "pubtypes": ["Randomized Controlled Trial"],
+    "abstract": "Anti-PD-1 therapy with pembrolizumab prolonged progression-free and overall survival and was associated with fewer high-grade adverse events than ipilimumab in patients with advanced melanoma."
+  },
+  {
+    "pmid": "2871444",
+    "title": "Final report on the aspirin component of the ongoing Physicians' Health Study",
+    "journal": "N Engl J Med",
+    "year": "1989",
+    "authors": ["Steering Committee of the Physicians' Health Study Research Group"],
+    "pubtypes": ["Randomized Controlled Trial"],
+    "abstract": "Low-dose aspirin reduced the risk of first myocardial infarction in healthy male physicians but did not reduce cardiovascular mortality and was associated with a small increase in bleeding."
+  },
+  {
+    "pmid": "20167359",
+    "title": "Statins and risk of incident diabetes: a collaborative meta-analysis of randomised statin trials",
+    "journal": "Lancet",
+    "year": "2010",
+    "authors": ["Sattar N", "Preiss D", "Murray HM"],
+    "pubtypes": ["Meta-Analysis"],
+    "abstract": "Statin therapy was associated with a modestly increased risk of new-onset diabetes, an effect that was strongest in trials of older participants. The absolute cardiovascular benefit outweighed the small diabetes risk in most patients."
+  }
+]
