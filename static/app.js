@@ -2,8 +2,16 @@ const GRADE_ZH = {
   High: "高", Moderate: "中", Low: "低", "Very low": "极低", "N/A": "未分级",
 };
 const GRADE_COLOR = {
-  High: "#16a34a", Moderate: "#2563eb", Low: "#f59e0b",
-  "Very low": "#ef4444", "N/A": "#94a3b8",
+  High: "#4f46e5", Moderate: "#2563eb", Low: "#0284c7",
+  "Very low": "#64748b", "N/A": "#94a3b8",
+};
+// 分布条与图例用的渐变（浅上深下，做出厚度），徽章仍用上面的平色
+const GRADE_GRAD = {
+  High: "linear-gradient(180deg, #818cf8, #4338ca)",
+  Moderate: "linear-gradient(180deg, #60a5fa, #1d4ed8)",
+  Low: "linear-gradient(180deg, #38bdf8, #0369a1)",
+  "Very low": "linear-gradient(180deg, #a8b3c2, #475569)",
+  "N/A": "linear-gradient(180deg, #cbd5e1, #64748b)",
 };
 const STYPE_ZH = {
   meta_analysis: "Meta 分析",
@@ -133,12 +141,12 @@ function renderDist(dist) {
     const seg = document.createElement("div");
     seg.className = "dist-seg";
     seg.style.width = pct + "%";
-    seg.style.background = GRADE_COLOR[k];
-    seg.title = `${k}：${v} 篇`;
+    seg.style.background = GRADE_GRAD[k];
+    seg.title = `${GRADE_ZH[k]}：${v} 篇`;
     bar.appendChild(seg);
 
     const item = document.createElement("span");
-    item.innerHTML = `<i class="swatch" style="background:${GRADE_COLOR[k]}"></i>${k} 级 · ${v} 篇`;
+    item.innerHTML = `<i class="swatch" style="background:${GRADE_GRAD[k]}"></i>${GRADE_ZH[k]} · ${v} 篇`;
     legend.appendChild(item);
   });
 }
