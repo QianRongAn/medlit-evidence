@@ -12,6 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from .config import CORPUS_FILE, LLM_API_KEY, RETMAX, STATIC_DIR
+from .evidence import analyze_evidence
 from .pubmed import efetch, esearch, load_corpus
 from .retrieval import rank
 from .study_type import classify
@@ -149,6 +150,8 @@ async def answer(q: Query):
         answer_text = "\n\n".join(parts)
         mode = "extractive"
 
+    evidence = analyze_evidence(top or docs)
+
     # 证据等级分布
     from collections import Counter
     dist = Counter(d.get("grade", "N/A") for d in docs)
@@ -160,6 +163,7 @@ async def answer(q: Query):
         "mode": mode,
         "answer": answer_text,
         "sentences": sentences,
+        "evidence": evidence,
         "evidence_distribution": {k: dist.get(k, 0) for k in ["High", "Moderate", "Low", "Very low", "N/A"]},
         "results": [
             {

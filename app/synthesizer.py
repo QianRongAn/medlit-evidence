@@ -4,6 +4,7 @@ import re
 import httpx
 
 from .config import LLM_API_KEY, LLM_BASE_URL, LLM_MODEL
+from .evidence import classify_polarity
 from .study_type import GRADE_ORDER
 
 SENT_SPLIT = re.compile(r"(?<=[.!?])\s+")
@@ -75,7 +76,12 @@ def extractive_answer(docs, query_tokens, max_sentences=4):
         if key in seen:
             continue
         seen.add(key)
-        picked.append({"sentence": s, "pmid": d.get("pmid"), "title": d.get("title")})
+        picked.append({
+            "sentence": s,
+            "pmid": d.get("pmid"),
+            "title": d.get("title"),
+            "polarity": classify_polarity(s),
+        })
         if len(picked) >= max_sentences:
             break
     return picked

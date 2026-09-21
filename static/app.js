@@ -52,13 +52,27 @@ function esc(s) {
   }[c]));
 }
 
+const POLARITY = {
+  support: { label: "支持", mark: "✓", color: "#16a34a" },
+  against: { label: "反对", mark: "✗", color: "#ef4444" },
+  neutral: { label: "中立", mark: "·", color: "#94a3b8" },
+};
+
 function renderAnswer(data) {
   const body = $("answerBody");
   body.innerHTML = "";
   if (data.sentences && data.sentences.length) {
     data.sentences.forEach((s) => {
       const p = document.createElement("p");
-      p.textContent = s.sentence + " ";
+      p.className = "answer-sentence";
+      const pol = POLARITY[s.polarity] || POLARITY.neutral;
+      const mark = document.createElement("span");
+      mark.className = "pol-mark";
+      mark.style.color = pol.color;
+      mark.title = "结论方向：" + pol.label;
+      mark.textContent = pol.mark + " ";
+      p.appendChild(mark);
+      p.appendChild(document.createTextNode(s.sentence + " "));
       const cite = document.createElement("span");
       cite.className = "cite";
       cite.textContent = `[PMID ${s.pmid}]`;
@@ -72,6 +86,36 @@ function renderAnswer(data) {
   }
   $("modeBadge").textContent =
     data.mode === "llm" ? "生成式回答（LLM）" : "抽取式回答（离线）";
+}
+
+function renderVerdict(ev) {
+  if (!ev) return;
+  $("verdictText").textContent = ev.verdict;
+  $("confidenceNum").textContent = ev.confidence;
+  $("confidenceFill").style.width = (ev.confidence || 0) + "%";
+
+  const subParts = [];
+  subParts.push(`支持 ${ev.support_count} 篇 · 反对 ${ev.against_count} 篇 · 中立 ${ev.neutral_count} 篇`);
+  if (ev.conflict) {
+    subParts.push("文献结论存在对立，采信需谨慎");
+  }
+  $("verdictSub").textContent = subParts.join(" · ");
+
+  const verdictCard = $("verdictCard");
+  verdictCard.classList.remove("verdict-support", "verdict-against", "verdict-conflict", "verdict-neutral");
+  if (ev.conflict) verdictCard.classList.add("verdict-conflict");
+  else if (ev.verdict === "证据倾向支持") verdictCard.classList.add("verdict-support");
+  else if (ev.verdict === "证据倾向不支持") verdictCard.classList.add("verdict-against");
+  else verdictCard.classList.add("verdict-neutral");
+
+  const counts = $("polarityCounts");
+  counts.innerHTML = "";
+  [["支持", ev.support_count, "#16a34a"], ["反对", ev.against_count, "#ef4444"], ["中立", ev.neutral_count, "#94a3b8"]].forEach(([label, n, color]) => {
+    const chip = document.createElement("span");
+    chip.className = "pol-chip";
+    chip.innerHTML = `<i class="swatch" style="background:${color}"></i>${label} ${n} 篇`;
+    counts.appendChild(chip);
+  });
 }
 
 function renderDist(dist) {
@@ -161,6 +205,7 @@ async function ask(query) {
     setStatus(data.online);
     renderMeta(data);
     renderAnswer(data);
+    renderVerdict(data.evidence);
     renderDist(data.evidence_distribution || {});
     renderDocs(data.results || []);
     $("loading").classList.add("hidden");
