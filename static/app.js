@@ -2,9 +2,20 @@ const GRADE_ZH = {
   High: "高", Moderate: "中", Low: "低", "Very low": "极低", "N/A": "未分级",
 };
 const GRADE_COLOR = {
-  High: "#16a34a", Moderate: "#2563eb", Low: "#f59e0b",
-  "Very low": "#ef4444", "N/A": "#94a3b8",
+  High: "#3572A5", Moderate: "#563d7c", Low: "#f1e05a",
+  "Very low": "#e34c26", "N/A": "#94a3b8",
 };
+
+// 根据背景亮度自动选深/浅文字，避免亮黄底配白字看不清
+function contrastText(hex) {
+  const m = String(hex || "").replace("#", "");
+  if (m.length < 6) return "#fff";
+  const r = parseInt(m.substr(0, 2), 16);
+  const g = parseInt(m.substr(2, 2), 16);
+  const b = parseInt(m.substr(4, 2), 16);
+  const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return lum > 0.6 ? "#1f2430" : "#fff";
+}
 const STYPE_ZH = {
   meta_analysis: "Meta 分析",
   systematic_review: "系统综述",
@@ -167,7 +178,7 @@ function renderDocs(results) {
     div.innerHTML = `
       <p class="doc-title"><a href="${url}" target="_blank" rel="noopener">${esc(d.title)}</a></p>
       <div class="doc-meta">
-        <span class="badge" style="background:${color}">${grade}</span>
+        <span class="badge" style="background:${color};color:${contrastText(color)}">${grade}</span>
         <span>${esc(metaParts)}</span>
         ${d.pmid ? `<span>PMID ${esc(d.pmid)}</span>` : ""}
       </div>

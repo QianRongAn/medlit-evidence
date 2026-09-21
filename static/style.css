@@ -13,7 +13,16 @@
   --red: #ef4444;
   --slate: #94a3b8;
   --radius: 14px;
-  --shadow: 0 1px 2px rgba(22, 24, 29, 0.03);
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05), 0 2px 6px rgba(16, 24, 40, 0.04);
+  --shadow-card:
+    0 1px 1px rgba(16, 24, 40, 0.04),
+    0 3px 6px rgba(16, 24, 40, 0.05),
+    0 10px 20px rgba(16, 24, 40, 0.06),
+    0 22px 44px rgba(16, 24, 40, 0.04);
+  --shadow-card-hover:
+    0 2px 3px rgba(16, 24, 40, 0.05),
+    0 8px 16px rgba(16, 24, 40, 0.07),
+    0 20px 36px rgba(16, 24, 40, 0.08);
 }
 
 * { box-sizing: border-box; }
@@ -123,10 +132,13 @@ body {
 /* ---------- 搜索 ---------- */
 .search-card {
   background: var(--card);
-  border: 1px solid var(--line);
+  border: 1px solid #e7ebf1;
+  border-bottom-color: #dfe4ec;
   border-radius: var(--radius);
   padding: 18px;
-  box-shadow: var(--shadow);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    var(--shadow-card);
   margin-bottom: 20px;
 }
 
@@ -194,9 +206,14 @@ textarea:focus {
 }
 
 .card {
-  background: var(--card); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 18px;
-  box-shadow: var(--shadow);
+  background: var(--card);
+  border: 1px solid #e7ebf1;
+  border-bottom-color: #dfe4ec;
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    var(--shadow-card);
   display: flex; flex-direction: column;
 }
 
@@ -224,6 +241,12 @@ textarea:focus {
 .stat-card.verdict-against .stat-accent { background: linear-gradient(90deg, #fca5a5, #ef4444); }
 .stat-card.verdict-conflict { border-color: #f2d99c; }
 .stat-card.verdict-conflict .stat-accent { background: linear-gradient(90deg, #fcd34d, #f59e0b); }
+
+.stat-card { transition: transform 0.16s ease, box-shadow 0.16s ease; }
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), var(--shadow-card-hover);
+}
 
 /* ---------- 双栏区（回答 + 分布） ---------- */
 .duo-grid {
@@ -293,10 +316,14 @@ textarea:focus {
 .doc-item {
   border: 1px solid var(--line); border-radius: 12px;
   padding: 14px 16px;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
   display: flex; flex-direction: column;
 }
-.doc-item:hover { border-color: #ccd6f6; box-shadow: 0 4px 14px rgba(22, 24, 29, 0.06); }
+.doc-item:hover {
+  border-color: #ccd6f6;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
 .doc-title { font-weight: 650; font-size: 13.5px; margin: 0 0 6px; line-height: 1.45; }
 .doc-title a { color: var(--ink); text-decoration: none; }
 .doc-title a:hover { color: var(--blue); }
