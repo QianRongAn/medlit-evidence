@@ -13,16 +13,13 @@
   --red: #ef4444;
   --slate: #94a3b8;
   --radius: 14px;
-  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05), 0 2px 6px rgba(16, 24, 40, 0.04);
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04), 0 2px 4px rgba(16, 24, 40, 0.03);
   --shadow-card:
-    0 1px 1px rgba(16, 24, 40, 0.04),
-    0 3px 6px rgba(16, 24, 40, 0.05),
-    0 10px 20px rgba(16, 24, 40, 0.06),
-    0 22px 44px rgba(16, 24, 40, 0.04);
+    0 1px 3px rgba(16, 24, 40, 0.04),
+    0 8px 24px rgba(16, 24, 40, 0.05);
   --shadow-card-hover:
-    0 2px 3px rgba(16, 24, 40, 0.05),
-    0 8px 16px rgba(16, 24, 40, 0.07),
-    0 20px 36px rgba(16, 24, 40, 0.08);
+    0 2px 4px rgba(16, 24, 40, 0.05),
+    0 12px 28px rgba(16, 24, 40, 0.07);
 }
 
 * { box-sizing: border-box; }
@@ -132,13 +129,10 @@ body {
 /* ---------- 搜索 ---------- */
 .search-card {
   background: var(--card);
-  border: 1px solid #e7ebf1;
-  border-bottom-color: #dfe4ec;
+  border: 1px solid #eceff3;
   border-radius: var(--radius);
   padding: 18px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    var(--shadow-card);
+  box-shadow: var(--shadow-card);
   margin-bottom: 20px;
 }
 
@@ -207,13 +201,10 @@ textarea:focus {
 
 .card {
   background: var(--card);
-  border: 1px solid #e7ebf1;
-  border-bottom-color: #dfe4ec;
+  border: 1px solid #eceff3;
   border-radius: var(--radius);
   padding: 18px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    var(--shadow-card);
+  box-shadow: var(--shadow-card);
   display: flex; flex-direction: column;
 }
 
@@ -244,8 +235,8 @@ textarea:focus {
 
 .stat-card { transition: transform 0.16s ease, box-shadow 0.16s ease; }
 .stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), var(--shadow-card-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card-hover);
 }
 
 /* ---------- 双栏区（回答 + 分布） ---------- */
