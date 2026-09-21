@@ -27,9 +27,16 @@ WEAK_LABELS = {
 def _strip_label(s):
     m = re.match(r"^([A-Za-z][A-Za-z ]{1,24}):\s*(.{20,})$", s, re.S)
     if m:
-        label = m.group(1).strip().lower()
-        if label in SECTION_LABELS:
-            return label, m.group(2)
+        label_raw = m.group(1).strip().lower()
+        body = m.group(2)
+        # 多词标签（如 BACKGROUND AND AIMS）取首个已知词；全大写未知标签也剥掉
+        if label_raw in SECTION_LABELS:
+            return label_raw, body
+        for w in label_raw.split():
+            if w in SECTION_LABELS:
+                return w, body
+        if label_raw.upper() == m.group(1).strip() and 3 <= len(label_raw) <= 24:
+            return "other", body
     return None, s
 
 

@@ -88,34 +88,36 @@ function renderAnswer(data) {
     data.mode === "llm" ? "生成式回答（LLM）" : "抽取式回答（离线）";
 }
 
-function renderVerdict(ev) {
-  if (!ev) return;
-  $("verdictText").textContent = ev.verdict;
-  $("confidenceNum").textContent = ev.confidence;
-  $("confidenceFill").style.width = (ev.confidence || 0) + "%";
+function renderStats(data, elapsedMs, ev) {
+  // 卡 1：证据置信度
+  $("confidenceNum").textContent = ev ? ev.confidence : "–";
+  $("confidenceFill").style.width = (ev ? ev.confidence || 0 : 0) + "%";
 
-  const subParts = [];
-  subParts.push(`支持 ${ev.support_count} 篇 · 反对 ${ev.against_count} 篇 · 中立 ${ev.neutral_count} 篇`);
-  if (ev.conflict) {
-    subParts.push("文献结论存在对立，采信需谨慎");
+  // 卡 2：证据判定
+  $("verdictText").textContent = ev ? ev.verdict : "–";
+  const statCards = document.querySelectorAll(".stat-card");
+  const verdictCard = statCards[1];
+  verdictCard.classList.remove("verdict-support", "verdict-against", "verdict-conflict");
+  if (ev) {
+    if (ev.conflict) verdictCard.classList.add("verdict-conflict");
+    else if (ev.verdict === "证据倾向支持") verdictCard.classList.add("verdict-support");
+    else if (ev.verdict === "证据倾向不支持") verdictCard.classList.add("verdict-against");
   }
-  $("verdictSub").textContent = subParts.join(" · ");
+  $("verdictSub").textContent = ev && ev.conflict ? "文献结论存在对立，采信需谨慎" : "";
+  $("polarityLine").textContent = ev
+    ? `支持 ${ev.support_count} · 反对 ${ev.against_count} · 中立 ${ev.neutral_count}`
+    : "";
 
-  const verdictCard = $("verdictCard");
-  verdictCard.classList.remove("verdict-support", "verdict-against", "verdict-conflict", "verdict-neutral");
-  if (ev.conflict) verdictCard.classList.add("verdict-conflict");
-  else if (ev.verdict === "证据倾向支持") verdictCard.classList.add("verdict-support");
-  else if (ev.verdict === "证据倾向不支持") verdictCard.classList.add("verdict-against");
-  else verdictCard.classList.add("verdict-neutral");
+  // 卡 3：文献命中
+  $("hitNum").textContent = data.total.toLocaleString();
+  $("hitSub").textContent = `返回 ${data.results.length} 篇 · ${data.online ? "PubMed 在线" : "离线语料"}`;
 
-  const counts = $("polarityCounts");
-  counts.innerHTML = "";
-  [["支持", ev.support_count, "#16a34a"], ["反对", ev.against_count, "#ef4444"], ["中立", ev.neutral_count, "#94a3b8"]].forEach(([label, n, color]) => {
-    const chip = document.createElement("span");
-    chip.className = "pol-chip";
-    chip.innerHTML = `<i class="swatch" style="background:${color}"></i>${label} ${n} 篇`;
-    counts.appendChild(chip);
-  });
+  // 卡 4：响应耗时
+  const sec = elapsedMs / 1000;
+  $("timeNum").textContent = sec >= 1 ? sec.toFixed(1) + "s" : Math.round(elapsedMs) + "ms";
+  $("timeSub").textContent = data.mode === "llm" ? "生成式回答" : "抽取式回答";
+
+  $("resultMeta").textContent = `「${data.query}」`;
 }
 
 function renderDist(dist) {
@@ -176,13 +178,6 @@ function renderDocs(results) {
   });
 }
 
-function renderMeta(data) {
-  const src = data.online ? "PubMed 在线检索" : "离线内置语料";
-  const mode = data.mode === "llm" ? "生成式" : "抽取式";
-  $("resultMeta").textContent =
-    `「${data.query}」· ${src} · 命中 ${data.total} 条，返回 ${data.results.length} 条 · 回答模式：${mode}`;
-}
-
 async function ask(query) {
   if (!query.trim()) return;
   $("query").value = query;
@@ -190,6 +185,7 @@ async function ask(query) {
   $("result").classList.add("hidden");
   $("error").classList.add("hidden");
   $("loading").classList.remove("hidden");
+  const started = performance.now();
 
   try {
     const r = await fetch("/api/answer", {
@@ -202,10 +198,10 @@ async function ask(query) {
       throw new Error(e.detail || `请求失败（${r.status}）`);
     }
     const data = await r.json();
+    const elapsed = performance.now() - started;
     setStatus(data.online);
-    renderMeta(data);
+    renderStats(data, elapsed, data.evidence);
     renderAnswer(data);
-    renderVerdict(data.evidence);
     renderDist(data.evidence_distribution || {});
     renderDocs(data.results || []);
     $("loading").classList.add("hidden");

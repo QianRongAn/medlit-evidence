@@ -7,95 +7,146 @@
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <span class="logo" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M2 12h4l2-5 4 10 3-8 2 3h5" />
-        </svg>
-      </span>
-      <div>
-        <h1>MedLit Evidence</h1>
-        <p class="tagline">医学文献循证问答助手 · 检索 PubMed 并给出带引用的证据级回答</p>
-      </div>
-    </div>
-    <div class="status" id="status">
-      <span class="dot"></span><span id="statusText">连接中…</span>
-    </div>
-  </header>
+  <div class="layout">
 
-  <main>
-    <section class="search-card">
-      <textarea id="query" rows="2" placeholder="输入一个临床问题，例如：二甲双胍能降低 2 型糖尿病患者的心血管风险吗？"></textarea>
-      <div class="search-row">
-        <button id="askBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M22 2 11 13" /><path d="M22 2 15 22l-4-9-9-4z" />
+    <!-- ========== 侧边栏 ========== -->
+    <aside class="sidebar">
+      <div class="side-brand">
+        <span class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12h4l2-5 4 10 3-8 2 3h5" />
           </svg>
-          提问
+        </span>
+        <span class="side-name">MedLit</span>
+      </div>
+
+      <nav class="side-nav">
+        <p class="side-label">提问</p>
+        <button class="side-item active" id="navHome">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 8.5-8.5 8.38 8.38 0 0 1 8.5 8.5z"/></svg>
+          循证问答
         </button>
-        <span class="hint">支持中英文 · 自动检索 PubMed · 证据分级</span>
-      </div>
-      <div class="examples">
-        <span class="examples-label">试试：</span>
-        <button class="chip" data-q="metformin cardiovascular risk type 2 diabetes">二甲双胍与糖尿病心血管风险</button>
-        <button class="chip" data-q="SGLT2 inhibitor heart failure">SGLT2 抑制剂与心衰</button>
-        <button class="chip" data-q="statins risk of incident diabetes">他汀与新发糖尿病风险</button>
-        <button class="chip" data-q="PD-1 inhibitor advanced melanoma overall survival">PD-1 抑制剂与晚期黑色素瘤</button>
-        <button class="chip" data-q="intensive blood pressure control SPRINT">强化降压 vs 标准降压</button>
-      </div>
-    </section>
 
-    <section id="result" class="hidden">
-      <div class="result-meta" id="resultMeta"></div>
+        <p class="side-label">示例问题</p>
+        <button class="side-item chip" data-q="statins risk of incident diabetes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/></svg>
+          他汀与新发糖尿病
+        </button>
+        <button class="side-item chip" data-q="metformin cardiovascular risk type 2 diabetes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+          二甲双胍与心血管
+        </button>
+        <button class="side-item chip" data-q="SGLT2 inhibitor heart failure">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          SGLT2 与心衰
+        </button>
+        <button class="side-item chip" data-q="PD-1 inhibitor advanced melanoma overall survival">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20zM2 12h20"/></svg>
+          PD-1 与黑色素瘤
+        </button>
+        <button class="side-item chip" data-q="intensive blood pressure control SPRINT">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2-5 4 10 3-8 2 3h5"/></svg>
+          强化降压对比
+        </button>
+      </nav>
 
-      <div class="answer-card">
-        <div class="card-head">
-          <h2>回答</h2>
-          <span class="mode-badge" id="modeBadge"></span>
+      <div class="side-foot">
+        <div class="status" id="status">
+          <span class="dot"></span><span id="statusText">连接中…</span>
         </div>
-        <div class="answer-body" id="answerBody"></div>
+        <a class="side-github" href="https://github.com/QianRongAn/medlit-evidence" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C17.3 4.6 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.9 1.2 1.9 1.2 3.2 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.6.8.5A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </aside>
+
+    <!-- ========== 主内容 ========== -->
+    <main class="content">
+      <div class="page-head">
+        <h1>循证问答</h1>
+        <span class="hint">检索 PubMed · 证据分级 · 冲突检测</span>
       </div>
 
-      <div class="card verdict-card" id="verdictCard">
-        <div class="card-head"><h2>证据结论</h2></div>
-        <div class="verdict-row">
-          <div class="verdict-main">
-            <div class="verdict-text" id="verdictText"></div>
-            <div class="verdict-sub" id="verdictSub"></div>
+      <section class="search-card">
+        <textarea id="query" rows="2" placeholder="输入一个临床问题，例如：二甲双胍能降低 2 型糖尿病患者的心血管风险吗？"></textarea>
+        <div class="search-row">
+          <button id="askBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 2 11 13" /><path d="M22 2 15 22l-4-9-9-4z" />
+            </svg>
+            提问
+          </button>
+          <span class="hint">Ctrl + Enter 发送 · 支持中英文</span>
+        </div>
+      </section>
+
+      <section id="result" class="hidden">
+        <p class="result-meta" id="resultMeta"></p>
+
+        <div class="stat-grid">
+          <div class="card stat-card">
+            <div class="stat-head"><span class="stat-label">证据置信度</span></div>
+            <div class="stat-num" id="confidenceNum">–</div>
+            <div class="stat-sub" id="verdictSub"></div>
+            <div class="stat-accent accent-indigo"></div>
           </div>
-          <div class="confidence">
-            <div class="confidence-num" id="confidenceNum"></div>
-            <div class="confidence-label">证据置信度</div>
+          <div class="card stat-card">
+            <div class="stat-head"><span class="stat-label">证据判定</span></div>
+            <div class="stat-num stat-text" id="verdictText">–</div>
+            <div class="stat-sub" id="polarityLine"></div>
+            <div class="stat-accent accent-blue"></div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-head"><span class="stat-label">文献命中</span></div>
+            <div class="stat-num" id="hitNum">–</div>
+            <div class="stat-sub" id="hitSub"></div>
+            <div class="stat-accent accent-purple"></div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-head"><span class="stat-label">响应耗时</span></div>
+            <div class="stat-num" id="timeNum">–</div>
+            <div class="stat-sub" id="timeSub"></div>
+            <div class="stat-accent accent-cyan"></div>
           </div>
         </div>
-        <div class="confidence-bar"><div class="confidence-fill" id="confidenceFill"></div></div>
-        <div class="polarity-counts" id="polarityCounts"></div>
-      </div>
 
-      <div class="card">
-        <div class="card-head"><h2>证据等级分布</h2></div>
-        <div class="dist-bar" id="distBar"></div>
-        <div class="dist-legend" id="distLegend"></div>
-      </div>
+        <div class="duo-grid">
+          <div class="card answer-card">
+            <div class="card-head">
+              <h2>回答</h2>
+              <span class="mode-badge" id="modeBadge"></span>
+            </div>
+            <div class="answer-body" id="answerBody"></div>
+          </div>
 
-      <div class="card">
-        <div class="card-head"><h2>证据来源</h2><span class="count" id="docCount"></span></div>
-        <div id="docList" class="doc-list"></div>
-      </div>
-    </section>
+          <div class="card">
+            <div class="card-head"><h2>证据等级分布</h2></div>
+            <div class="dist-bar" id="distBar"></div>
+            <div class="dist-legend" id="distLegend"></div>
+            <div class="confidence-bar"><div class="confidence-fill" id="confidenceFill"></div></div>
+            <p class="conf-bar-label">置信度可视化</p>
+          </div>
+        </div>
 
-    <section id="loading" class="hidden">
-      <div class="spinner"></div>
-      <p>正在检索 PubMed 并生成回答…</p>
-    </section>
+        <div class="card">
+          <div class="card-head"><h2>证据来源</h2><span class="count" id="docCount"></span></div>
+          <div id="docList" class="doc-grid"></div>
+        </div>
+      </section>
 
-    <section id="error" class="hidden error-box"></section>
-  </main>
+      <section id="loading" class="hidden">
+        <div class="spinner"></div>
+        <p>正在检索 PubMed 并生成回答…</p>
+      </section>
 
-  <footer>
-    <p>数据来自 PubMed E-utilities（离线时回退内置示例语料）。回答仅供参考，不构成医疗建议。</p>
-  </footer>
+      <section id="error" class="hidden error-box"></section>
+
+      <footer>
+        <p>数据来自 PubMed E-utilities（离线时回退内置示例语料）。回答仅供参考，不构成医疗建议。</p>
+      </footer>
+    </main>
+  </div>
 
   <script src="/static/app.js"></script>
 </body>
