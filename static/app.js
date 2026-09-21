@@ -100,20 +100,23 @@ function renderAnswer(data) {
 }
 
 function renderStats(data, elapsedMs, ev) {
+  // 判定状态：support / against / conflict / neutral
+  let state = "neutral";
+  if (ev) {
+    if (ev.conflict) state = "conflict";
+    else if (ev.verdict === "证据倾向支持") state = "support";
+    else if (ev.verdict === "证据倾向不支持") state = "against";
+  }
+
   // 卡 1：证据置信度
   $("confidenceNum").textContent = ev ? ev.confidence : "–";
-  $("confidenceFill").style.width = (ev ? ev.confidence || 0 : 0) + "%";
 
   // 卡 2：证据判定
   $("verdictText").textContent = ev ? ev.verdict : "–";
   const statCards = document.querySelectorAll(".stat-card");
   const verdictCard = statCards[1];
   verdictCard.classList.remove("verdict-support", "verdict-against", "verdict-conflict");
-  if (ev) {
-    if (ev.conflict) verdictCard.classList.add("verdict-conflict");
-    else if (ev.verdict === "证据倾向支持") verdictCard.classList.add("verdict-support");
-    else if (ev.verdict === "证据倾向不支持") verdictCard.classList.add("verdict-against");
-  }
+  if (state !== "neutral") verdictCard.classList.add("verdict-" + state);
   $("verdictSub").textContent = ev && ev.conflict ? "文献结论存在对立，采信需谨慎" : "";
   $("polarityLine").textContent = ev
     ? `支持 ${ev.support_count} · 反对 ${ev.against_count} · 中立 ${ev.neutral_count}`
@@ -129,6 +132,29 @@ function renderStats(data, elapsedMs, ev) {
   $("timeSub").textContent = data.mode === "llm" ? "生成式回答" : "抽取式回答";
 
   $("resultMeta").textContent = `「${data.query}」`;
+
+  renderRing(ev ? ev.confidence : 0, state);
+}
+
+/* ---------- 置信度圆环 ---------- */
+const RING_R = 52;
+const RING_C = 2 * Math.PI * RING_R;
+const RING_COLORS = {
+  support: ["#86efac", "#16a34a"],
+  against: ["#fca5a5", "#ef4444"],
+  conflict: ["#fcd34d", "#f59e0b"],
+  neutral: ["#a5b4fc", "#4f46e5"],
+};
+
+function renderRing(confidence, state) {
+  const val = Math.max(0, Math.min(100, confidence || 0));
+  const ring = $("ringValue");
+  ring.style.strokeDasharray = RING_C;
+  ring.style.strokeDashoffset = RING_C * (1 - val / 100);
+  const [light, dark] = RING_COLORS[state] || RING_COLORS.neutral;
+  $("ringStop0").setAttribute("stop-color", light);
+  $("ringStop1").setAttribute("stop-color", dark);
+  $("ringNum").textContent = val;
 }
 
 function renderDist(dist) {
