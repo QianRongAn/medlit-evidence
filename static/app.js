@@ -160,22 +160,24 @@ function renderPico(pico) {
 /* ---------- 置信度圆环 ---------- */
 const RING_R = 52;
 const RING_C = 2 * Math.PI * RING_R;
-const RING_COLORS = {
-  support: ["#86efac", "#16a34a"],
-  against: ["#fca5a5", "#ef4444"],
-  conflict: ["#fcd34d", "#f59e0b"],
-  neutral: ["#a5b4fc", "#4f46e5"],
-};
+// 按置信度分档配色（高绿 / 中青蓝 / 低黄 / 极低红，无数据灰）
+const RING_GRAY = ["#c9c9c9", "#A7A7A7"];
+function ringColorsFor(val) {
+  if (val >= 80) return ["#57d598", "#038f4a"];
+  if (val >= 60) return ["#82c8e6", "#4b97b8"];
+  if (val >= 40) return ["#f7ea6b", "#d4bc00"];
+  return ["#f69187", "#f0392c"];
+}
 
 function renderRing(confidence, state) {
   const val = Math.max(0, Math.min(100, confidence || 0));
   const ring = $("ringValue");
   ring.style.strokeDasharray = RING_C;
   ring.style.strokeDashoffset = RING_C * (1 - val / 100);
-  const [light, dark] = RING_COLORS[state] || RING_COLORS.neutral;
+  const [light, dark] = confidence ? ringColorsFor(val) : RING_GRAY;
   $("ringStop0").setAttribute("stop-color", light);
   $("ringStop1").setAttribute("stop-color", dark);
-  $("ringNum").textContent = val;
+  $("ringNum").textContent = confidence ? val : "–";
 }
 
 function renderDist(dist) {
