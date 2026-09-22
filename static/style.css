@@ -203,10 +203,10 @@ textarea:focus {
   display: flex; align-items: center; justify-content: center;
   font-size: 12px; font-weight: 700; color: #fff;
 }
-.pico-p { background: #85D485; }
-.pico-i { background: #AD85D5; }
-.pico-c { background: #F9AB7A; color: #1f2430; }
-.pico-o { background: #D45E85; }
+.pico-p { background: #038F49; }
+.pico-i { background: #4B97B8; }
+.pico-c { background: #F5E400; color: #1f2430; }
+.pico-o { background: #F03A2C; }
 .pico-body { font-size: 13px; color: var(--text); line-height: 1.5; }
 
 /* ---------- 撤稿 / 完整性徽章 ---------- */

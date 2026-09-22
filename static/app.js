@@ -2,8 +2,8 @@ const GRADE_ZH = {
   High: "高", Moderate: "中", Low: "低", "Very low": "极低", "N/A": "未分级",
 };
 const GRADE_COLOR = {
-  High: "#85D485", Moderate: "#AD85D5", Low: "#F9AB7A",
-  "Very low": "#D45E85", "N/A": "#5FAFAF",
+  High: "#038F49", Moderate: "#4B97B8", Low: "#F5E400",
+  "Very low": "#F03A2C", "N/A": "#A7A7A7",
 };
 
 // 根据背景亮度自动选深/浅文字，避免亮黄底配白字看不清
@@ -161,7 +161,7 @@ function renderPico(pico) {
 const CONF_TIERS = [
   { min: 80, label: "高", color: "#038f4a", text: "#fff", desc: "结果高度可信，可直接采信" },
   { min: 60, label: "中", color: "#4b97b8", text: "#fff", desc: "结果基本可信，建议复核" },
-  { min: 40, label: "低", color: "#f4e300", text: "#1f2430", desc: "可信度偏低，重点排查" },
+  { min: 40, label: "低", color: "#f5e400", text: "#1f2430", desc: "可信度偏低，重点排查" },
   { min: 0,  label: "极低", color: "#f0392c", text: "#fff", desc: "可信度极低，不建议采用" },
 ];
 const CONF_NA = { label: "未分级", color: "#a7a7a7", text: "#fff", desc: "数据不足，无法评估" };
@@ -211,7 +211,7 @@ function renderDocs(results) {
     div.className = "doc-item";
 
     const grade = GRADE_ZH[d.grade] || "未分级";
-    const color = GRADE_COLOR[d.grade] || "#5FAFAF";
+    const color = GRADE_COLOR[d.grade] || "#A7A7A7";
     const url = d.pmid
       ? `https://pubmed.ncbi.nlm.nih.gov/${d.pmid}/`
       : "#";
