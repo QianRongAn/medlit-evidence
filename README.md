@@ -109,13 +109,30 @@
 
 - 中英文双语提问，70+ 条中文医学术语自动映射成英文检索词（二甲双胍 → metformin，糖尿病 → diabetes）
 - 在线检索 PubMed，覆盖 3800 万+ 篇文献；断网时自动回退内置语料，演示不会断
+- 问题理解（PICO）：把临床问题拆成人群 / 干预 / 对照 / 结局四要素，再结构化检索
 - 9 类研究设计识别（Meta 分析 / 系统综述 / 指南 / 随机对照试验 / 临床试验 / 队列 / 病例对照 / 病例报告 / 综述 / 基础研究）
 - 5 档证据分级，结果页展示等级分布
 - 结论极性识别，回答的每一句都带方向标注
 - 证据冲突检测，有对立结论就明说"存在分歧"，不给假共识
 - 证据置信度评分（0-100）
+- 撤稿 / 存疑 / 更正检测，问题文献红色标注并降权，不参与结论统计
 - 抽取式回答，每个结论句带可点击的 [PMID] 引用
 - 进程内 TTL 缓存，重复提问秒回
+
+## 撤稿检测与风险画像
+
+检索结果里如果混入被撤稿、被标记存疑（Expression of Concern）或已更正的文献，系统会：
+
+1. 解析 PubMed 的 PublicationType 和 CommentsCorrections 元数据，识别三类问题文献
+2. 在结果卡片上给"已撤稿 / 存疑 / 已更正"红色徽章，并弹出告警
+3. 撤稿文献不参与"支持 / 反对"统计，置信度扣 15 分
+
+在这之上，`scripts/` 里还有一个可复现的数据资产管线：
+
+- `collect_retractions.py` 按年份段分层抓取撤稿 / 存疑 / 更正文献 + 正常对照，产出带标签数据集 `data/retraction_dataset.jsonl`
+- `profile_retractions.py` 生成 `data/retraction_profile.md`，统计撤稿耗时分布、期刊分布、研究类型分布
+
+这是把"撤稿检测"从一个规则开关，往"撤稿风险预测"训练地基推进的第一步。数据来自 PubMed 公开元数据，零密钥、可复现。
 
 ## 效果（实测）
 
@@ -128,17 +145,21 @@
 | 证据分级 | 5 档 / 9 类研究设计 |
 | 结论极性 | 支持 / 反对 / 中立 3 类 |
 | 证据置信度 | 0-100 分 |
-| 单元测试 | 18 个全部通过 |
+| 问题理解 | PICO 四要素 |
+| 完整性检测 | 撤稿 / 存疑 / 更正 |
+| 单元测试 | 30 个全部通过 |
 | 后端依赖 | 3 个（fastapi / uvicorn / httpx） |
 
 ## 技术选型
 
 - 后端：FastAPI + Uvicorn（异步）
 - 检索：BM25 纯 Python 实现，无 scikit-learn / nltk
-- 数据源：PubMed E-utilities（esearch + efetch，免费无密钥）
+- 数据源：PubMed E-utilities（esearch + efetch + elink，免费无密钥）
 - 分词：英文按词 + 停用词过滤，中文单字 + bigram，无需 jieba
+- 问题理解：PICO 四要素，规则驱动中英文双向词典匹配
 - 研究设计识别：标题 + 摘要 + 发表类型的规则匹配，按优先级判定
 - 结论极性 / 冲突检测 / 置信度：强短语优先 + 否定词感知，显式建模证据分歧
+- 完整性检测：PublicationType + CommentsCorrections 元数据解析
 - 答案合成：默认抽取式（证据等级 + 关键词密度 + 结论句加权）；接 OpenAI 兼容接口后升级为生成式
 - 前端：原生 HTML / CSS / JS，无框架，无构建
 
@@ -192,10 +213,16 @@ medlit-evidence/
 │   ├── tokenizer.py     # 中英文分词
 │   ├── translate.py     # 中文医学术语 → 英文检索词
 │   ├── study_type.py    # 研究设计识别 + 证据分级
+│   ├── pico.py          # PICO 问题结构化（人群/干预/对照/结局）
 │   ├── evidence.py      # 结论极性 + 冲突检测 + 置信度评分
 │   └── synthesizer.py   # 抽取式 / LLM 回答合成
 ├── data/
-│   └── sample_corpus.json  # 离线 fallback 语料（11 篇 landmark 研究）
+│   ├── sample_corpus.json      # 离线 fallback 语料（11 篇 landmark 研究）
+│   ├── retraction_dataset.jsonl  # 撤稿/存疑/更正带标签数据集
+│   └── retraction_profile.md     # 撤稿风险画像报告
+├── scripts/
+│   ├── collect_retractions.py   # 采集撤稿文献数据集
+│   └── profile_retractions.py   # 生成风险画像报告
 ├── static/
 │   ├── index.html
 │   ├── style.css
@@ -203,7 +230,9 @@ medlit-evidence/
 ├── tests/
 │   ├── test_retrieval.py
 │   ├── test_study_type.py
-│   └── test_evidence.py
+│   ├── test_evidence.py
+│   ├── test_pico.py
+│   └── test_integrity.py
 ├── requirements.txt
 └── README.md
 ```
