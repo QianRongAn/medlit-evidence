@@ -2,8 +2,8 @@ const GRADE_ZH = {
   High: "高", Moderate: "中", Low: "低", "Very low": "极低", "N/A": "未分级",
 };
 const GRADE_COLOR = {
-  High: "#3572A5", Moderate: "#563d7c", Low: "#f1e05a",
-  "Very low": "#e34c26", "N/A": "#94a3b8",
+  High: "#85D485", Moderate: "#AD85D5", Low: "#F9AB7A",
+  "Very low": "#D45E85", "N/A": "#94a3b8",
 };
 
 // 根据背景亮度自动选深/浅文字，避免亮黄底配白字看不清
