@@ -3,7 +3,7 @@ const GRADE_ZH = {
 };
 const GRADE_COLOR = {
   High: "#85D485", Moderate: "#AD85D5", Low: "#F9AB7A",
-  "Very low": "#D45E85", "N/A": "#94a3b8",
+  "Very low": "#D45E85", "N/A": "#5FAFAF",
 };
 
 // 根据背景亮度自动选深/浅文字，避免亮黄底配白字看不清
@@ -210,7 +210,7 @@ function renderDocs(results) {
     div.className = "doc-item";
 
     const grade = GRADE_ZH[d.grade] || "未分级";
-    const color = GRADE_COLOR[d.grade] || "#94a3b8";
+    const color = GRADE_COLOR[d.grade] || "#5FAFAF";
     const url = d.pmid
       ? `https://pubmed.ncbi.nlm.nih.gov/${d.pmid}/`
       : "#";
