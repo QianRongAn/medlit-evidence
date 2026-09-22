@@ -128,20 +128,11 @@
             <div class="card-head"><h2>证据等级分布</h2></div>
             <div class="dist-bar" id="distBar"></div>
             <div class="dist-legend" id="distLegend"></div>
-            <div class="ring-wrap">
-              <svg class="ring" viewBox="0 0 120 120">
-                <defs>
-                  <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop id="ringStop0" offset="0%" stop-color="#a5b4fc"/>
-                    <stop id="ringStop1" offset="100%" stop-color="#4f46e5"/>
-                  </linearGradient>
-                </defs>
-                <circle class="ring-track" cx="60" cy="60" r="52"/>
-                <circle class="ring-value" id="ringValue" cx="60" cy="60" r="52"/>
-              </svg>
-              <div class="ring-center">
-                <span class="ring-num" id="ringNum">–</span>
-                <span class="ring-label">置信度</span>
+            <div class="conf-badge" id="confBadge">
+              <div class="conf-tag" id="confTag">未分级</div>
+              <div class="conf-body">
+                <div class="conf-score" id="confScore">–</div>
+                <div class="conf-desc" id="confDesc">数据不足，无法评估</div>
               </div>
             </div>
           </div>

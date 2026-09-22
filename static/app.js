@@ -142,7 +142,7 @@ function renderStats(data, elapsedMs, ev) {
     warn.classList.add("hidden");
   }
 
-  renderRing(ev ? ev.confidence : 0, state);
+  renderConfidence(ev ? ev.confidence : 0);
 }
 
 /* ---------- PICO 问题理解 ---------- */
@@ -157,27 +157,26 @@ function renderPico(pico) {
   set("picoO", pico.outcome);
 }
 
-/* ---------- 置信度圆环 ---------- */
-const RING_R = 52;
-const RING_C = 2 * Math.PI * RING_R;
-// 按置信度分档配色（高绿 / 中青蓝 / 低黄 / 极低红，无数据灰）
-const RING_GRAY = ["#c9c9c9", "#A7A7A7"];
-function ringColorsFor(val) {
-  if (val >= 80) return ["#57d598", "#038f4a"];
-  if (val >= 60) return ["#82c8e6", "#4b97b8"];
-  if (val >= 40) return ["#f7ea6b", "#d4bc00"];
-  return ["#f69187", "#f0392c"];
-}
+/* ---------- 置信度等级标签 ---------- */
+const CONF_TIERS = [
+  { min: 80, label: "高", color: "#038f4a", text: "#fff", desc: "结果高度可信，可直接采信" },
+  { min: 60, label: "中", color: "#4b97b8", text: "#fff", desc: "结果基本可信，建议复核" },
+  { min: 40, label: "低", color: "#f4e300", text: "#1f2430", desc: "可信度偏低，重点排查" },
+  { min: 0,  label: "极低", color: "#f0392c", text: "#fff", desc: "可信度极低，不建议采用" },
+];
+const CONF_NA = { label: "未分级", color: "#a7a7a7", text: "#fff", desc: "数据不足，无法评估" };
 
-function renderRing(confidence, state) {
-  const val = Math.max(0, Math.min(100, confidence || 0));
-  const ring = $("ringValue");
-  ring.style.strokeDasharray = RING_C;
-  ring.style.strokeDashoffset = RING_C * (1 - val / 100);
-  const [light, dark] = confidence ? ringColorsFor(val) : RING_GRAY;
-  $("ringStop0").setAttribute("stop-color", light);
-  $("ringStop1").setAttribute("stop-color", dark);
-  $("ringNum").textContent = confidence ? val : "–";
+function renderConfidence(confidence) {
+  const tag = $("confTag");
+  const score = $("confScore");
+  const desc = $("confDesc");
+  const tier = confidence ? CONF_TIERS.find((t) => confidence >= t.min) : CONF_NA;
+  tag.textContent = tier.label;
+  tag.style.background = tier.color;
+  tag.style.color = tier.text;
+  score.textContent = confidence ? confidence : "–";
+  score.style.color = tier.color;
+  desc.textContent = tier.desc;
 }
 
 function renderDist(dist) {
