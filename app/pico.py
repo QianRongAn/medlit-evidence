@@ -56,6 +56,7 @@ OUTCOME = [
     ("progression-free survival", ["progression-free survival", "无进展生存期"]),
     ("cardiovascular risk", ["cardiovascular risk", "cardiovascular events", "major adverse cardiovascular", "心血管风险", "心血管事件"]),
     ("myocardial infarction", ["myocardial infarction", "心肌梗死", "心梗"]),
+    ("myocarditis", ["myocarditis", "心肌炎"]),
     ("stroke", ["stroke", "脑卒中", "卒中"]),
     ("incident diabetes", ["incident diabetes", "new-onset diabetes", "新发糖尿病"]),
     ("adverse events", ["adverse events", "adverse event", "副作用", "不良反应"]),
