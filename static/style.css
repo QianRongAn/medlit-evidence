@@ -222,6 +222,12 @@ textarea:focus {
   border-radius: 11px; padding: 10px 14px; margin-top: 12px; font-size: 13px;
 }
 
+/* ---------- 撤稿风险徽章（模型预测） ---------- */
+.risk-badge {
+  font-size: 11px; padding: 2px 9px; border-radius: 999px;
+  font-weight: 700; letter-spacing: 0.02em;
+}
+
 
 .stat-grid {
   display: grid;

@@ -16,6 +16,7 @@ from .evidence import analyze_evidence
 from .pico import extract_pico
 from .pubmed import efetch, esearch, load_corpus
 from .retrieval import rank
+from .risk import predict_risk
 from .study_type import classify
 from .synthesizer import extractive_answer, llm_answer
 from .tokenizer import tokenize
@@ -116,6 +117,7 @@ async def search(q: Query):
                 "relevance": d.get("relevance"),
                 "source": d.get("source"),
                 "integrity": d.get("integrity", "ok"),
+                "risk": predict_risk(d),
             }
             for d in docs
         ],
@@ -181,6 +183,7 @@ async def answer(q: Query):
                 "relevance": d.get("relevance"),
                 "source": d.get("source"),
                 "integrity": d.get("integrity", "ok"),
+                "risk": predict_risk(d),
             }
             for d in docs
         ],

@@ -134,6 +134,12 @@ def parse_efetch_xml(xml_text):
             if ln:
                 authors.append(f"{fn} {ln}".strip())
 
+        affiliations = set()
+        for aff in art.findall(".//AffiliationInfo/Affiliation"):
+            t = "".join(aff.itertext()).strip()
+            if t:
+                affiliations.add(t.lower())
+
         pubtypes = [_find_text(pt, ".") for pt in art.findall(".//PublicationType")]
         reftypes = [
             cc.get("RefType") for cc in art.findall(".//CommentsCorrectionsList/CommentsCorrections")
@@ -148,6 +154,11 @@ def parse_efetch_xml(xml_text):
             "year": year,
             "pubtypes": pubtypes,
             "authors": authors[:6],
+            "n_authors": len(authors),
+            "n_affiliations": len(affiliations),
+            "n_grants": len(art.findall(".//GrantList/Grant")),
+            "n_references": len(art.findall(".//ReferenceList/Reference")),
+            "language": _find_text(art, ".//Language"),
             "source": "pubmed",
             "integrity": _detect_integrity(pubtypes, reftypes),
         })
@@ -163,4 +174,9 @@ def load_corpus(path):
         d.setdefault("authors", [])
         d.setdefault("pubtypes", [])
         d.setdefault("integrity", "ok")
+        d.setdefault("n_authors", len(d.get("authors", [])))
+        d.setdefault("n_affiliations", 0)
+        d.setdefault("n_grants", 0)
+        d.setdefault("n_references", 0)
+        d.setdefault("language", "eng")
     return data

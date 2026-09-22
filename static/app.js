@@ -229,11 +229,23 @@ function renderDocs(results) {
       ? `<span class="integrity-badge integrity-${integrity}">${INTEGRITY_ZH[integrity]}</span>`
       : "";
 
+    // 撤稿风险徽章（LightGBM 模型预测，score 为 0-1 概率）
+    const RISK_COLOR = { "高": "#F03A2C", "中高": "#F5E400", "中低": "#4B97B8", "低": "#038F49" };
+    let riskBadge = "";
+    if (d.risk && typeof d.risk.score === "number") {
+      const pct = Math.round(d.risk.score * 100);
+      const lvl = d.risk.level || (pct >= 60 ? "高" : pct >= 40 ? "中高" : pct >= 20 ? "中低" : "低");
+      const rc = RISK_COLOR[lvl] || "#A7A7A7";
+      const txt = rc === "#F5E400" ? "#1f2430" : "#fff";
+      riskBadge = `<span class="risk-badge" style="background:${rc};color:${txt}" title="撤稿风险模型预测（仅供参考）">风险 ${pct}%</span>`;
+    }
+
     div.innerHTML = `
       <p class="doc-title"><a href="${url}" target="_blank" rel="noopener">${esc(d.title)}</a></p>
       <div class="doc-meta">
         <span class="badge" style="background:${color};color:${contrastText(color)}">${grade}</span>
         ${integBadge}
+        ${riskBadge}
         <span>${esc(metaParts)}</span>
         ${d.pmid ? `<span>PMID ${esc(d.pmid)}</span>` : ""}
       </div>
