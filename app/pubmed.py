@@ -71,7 +71,7 @@ async def efetch(pmids):
     async with _client() as c:
         r = await c.get(url, params=params)
         r.raise_for_status()
-        docs = parse_efetch_xml(r.text)
+        docs = parse_efetch_xml(r.content)  # 用字节流解析，尊重 XML 声明的编码
         _cache_set(key, docs)
         return docs
 
@@ -81,6 +81,25 @@ def _find_text(el, path):
     if node is None:
         return ""
     return "".join(node.itertext()).strip()
+
+
+def _detect_integrity(pubtypes, reftypes):
+    """判断文献的完整性状态：retracted / concern / corrected / ok。
+
+    依据 PubMed 的 PublicationType 与 CommentsCorrections 的 RefType：
+    - Retracted Publication / RetractionIn        -> retracted（已撤稿，结论不可采信）
+    - Expression of Concern                       -> concern（存疑）
+    - Corrected and Republished / Published Erratum -> corrected（已更正）
+    """
+    pts = {p.lower() for p in pubtypes}
+    rt = {r.lower() for r in reftypes}
+    if "retracted publication" in pts or "retractionin" in rt:
+        return "retracted"
+    if "expression of concern" in pts:
+        return "concern"
+    if "corrected and republished article" in pts or "published erratum" in pts:
+        return "corrected"
+    return "ok"
 
 
 def parse_efetch_xml(xml_text):
@@ -115,15 +134,22 @@ def parse_efetch_xml(xml_text):
             if ln:
                 authors.append(f"{fn} {ln}".strip())
 
+        pubtypes = [_find_text(pt, ".") for pt in art.findall(".//PublicationType")]
+        reftypes = [
+            cc.get("RefType") for cc in art.findall(".//CommentsCorrectionsList/CommentsCorrections")
+            if cc.get("RefType")
+        ]
+
         docs.append({
             "pmid": pmid,
             "title": _find_text(art, ".//ArticleTitle"),
             "abstract": "\n".join(abstract_parts),
             "journal": _find_text(art, ".//Journal/Title"),
             "year": year,
-            "pubtypes": [_find_text(pt, ".") for pt in art.findall(".//PublicationType")],
+            "pubtypes": pubtypes,
             "authors": authors[:6],
             "source": "pubmed",
+            "integrity": _detect_integrity(pubtypes, reftypes),
         })
     return docs
 
@@ -136,4 +162,5 @@ def load_corpus(path):
         d.setdefault("source", "offline")
         d.setdefault("authors", [])
         d.setdefault("pubtypes", [])
+        d.setdefault("integrity", "ok")
     return data

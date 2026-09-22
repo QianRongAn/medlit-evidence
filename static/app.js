@@ -133,7 +133,28 @@ function renderStats(data, elapsedMs, ev) {
 
   $("resultMeta").textContent = `「${data.query}」`;
 
+  // 完整性告警（撤稿 / 存疑 / 更正）
+  const warn = $("integrityWarning");
+  if (ev && ev.integrity_warning) {
+    warn.textContent = "注意：" + ev.integrity_warning;
+    warn.classList.remove("hidden");
+  } else {
+    warn.classList.add("hidden");
+  }
+
   renderRing(ev ? ev.confidence : 0, state);
+}
+
+/* ---------- PICO 问题理解 ---------- */
+function renderPico(pico) {
+  if (!pico) return;
+  const set = (id, arr) => {
+    $(id).textContent = arr && arr.length ? arr.join(" · ") : "未明确";
+  };
+  set("picoP", pico.population);
+  set("picoI", pico.intervention);
+  set("picoC", pico.comparison);
+  set("picoO", pico.outcome);
 }
 
 /* ---------- 置信度圆环 ---------- */
@@ -201,10 +222,17 @@ function renderDocs(results) {
       authors,
     ].filter(Boolean).join(" · ");
 
+    const INTEGRITY_ZH = { retracted: "已撤稿", concern: "存疑", corrected: "已更正" };
+    const integrity = d.integrity && d.integrity !== "ok" ? d.integrity : null;
+    const integBadge = integrity
+      ? `<span class="integrity-badge integrity-${integrity}">${INTEGRITY_ZH[integrity]}</span>`
+      : "";
+
     div.innerHTML = `
       <p class="doc-title"><a href="${url}" target="_blank" rel="noopener">${esc(d.title)}</a></p>
       <div class="doc-meta">
         <span class="badge" style="background:${color};color:${contrastText(color)}">${grade}</span>
+        ${integBadge}
         <span>${esc(metaParts)}</span>
         ${d.pmid ? `<span>PMID ${esc(d.pmid)}</span>` : ""}
       </div>
@@ -238,6 +266,7 @@ async function ask(query) {
     const elapsed = performance.now() - started;
     setStatus(data.online);
     renderStats(data, elapsed, data.evidence);
+    renderPico(data.pico);
     renderAnswer(data);
     renderDist(data.evidence_distribution || {});
     renderDocs(data.results || []);

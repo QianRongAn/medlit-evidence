@@ -13,6 +13,7 @@ from pydantic import BaseModel
 
 from .config import CORPUS_FILE, LLM_API_KEY, RETMAX, STATIC_DIR
 from .evidence import analyze_evidence
+from .pico import extract_pico
 from .pubmed import efetch, esearch, load_corpus
 from .retrieval import rank
 from .study_type import classify
@@ -114,6 +115,7 @@ async def search(q: Query):
                 "grade": d.get("grade"),
                 "relevance": d.get("relevance"),
                 "source": d.get("source"),
+                "integrity": d.get("integrity", "ok"),
             }
             for d in docs
         ],
@@ -163,6 +165,7 @@ async def answer(q: Query):
         "mode": mode,
         "answer": answer_text,
         "sentences": sentences,
+        "pico": extract_pico(query),
         "evidence": evidence,
         "evidence_distribution": {k: dist.get(k, 0) for k in ["High", "Moderate", "Low", "Very low", "N/A"]},
         "results": [
@@ -177,6 +180,7 @@ async def answer(q: Query):
                 "grade": d.get("grade"),
                 "relevance": d.get("relevance"),
                 "source": d.get("source"),
+                "integrity": d.get("integrity", "ok"),
             }
             for d in docs
         ],

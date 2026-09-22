@@ -105,10 +105,24 @@ def compute_confidence(docs, conflict):
 
 
 def analyze_evidence(docs):
-    """对 top docs 做结论极性、冲突检测、置信度评分。"""
+    """对 top docs 做结论极性、冲突检测、置信度评分。
+
+    撤稿文献（integrity=retracted）不参与结论方向统计，避免把已失效的
+    结论计入"支持/反对"；存疑（concern）与更正（corrected）保留但计入告警。
+    """
     items = []
+    retracted = 0
+    concern = 0
+    corrected = 0
     for d in docs:
         concl = extract_conclusion(d)
+        integ = d.get("integrity", "ok")
+        if integ == "retracted":
+            retracted += 1
+        elif integ == "concern":
+            concern += 1
+        elif integ == "corrected":
+            corrected += 1
         items.append({
             "pmid": d.get("pmid"),
             "title": d.get("title"),
@@ -116,11 +130,14 @@ def analyze_evidence(docs):
             "conclusion": concl,
             "grade": d.get("grade"),
             "year": d.get("year"),
+            "integrity": integ,
         })
 
-    support = sum(1 for it in items if it["polarity"] == "support")
-    against = sum(1 for it in items if it["polarity"] == "against")
-    neutral = len(items) - support - against
+    # 撤稿文献的结论不可采信，不参与方向统计
+    valid = [it for it in items if it["integrity"] != "retracted"]
+    support = sum(1 for it in valid if it["polarity"] == "support")
+    against = sum(1 for it in valid if it["polarity"] == "against")
+    neutral = len(valid) - support - against
     conflict = support > 0 and against > 0
 
     if conflict:
@@ -132,7 +149,17 @@ def analyze_evidence(docs):
     else:
         verdict = "证据不足或未明确"
 
-    confidence = compute_confidence(docs, conflict)
+    confidence = compute_confidence(valid, conflict)
+    if retracted:
+        confidence = max(0, confidence - 15)
+
+    integrity_warning = None
+    if retracted:
+        integrity_warning = f"有 {retracted} 篇文献已撤稿，其结论未计入"
+    elif concern:
+        integrity_warning = f"有 {concern} 篇文献被标记存疑（Expression of Concern）"
+    elif corrected:
+        integrity_warning = f"有 {corrected} 篇文献已更正/再发表"
 
     return {
         "verdict": verdict,
@@ -142,4 +169,8 @@ def analyze_evidence(docs):
         "against_count": against,
         "neutral_count": neutral,
         "conclusions": items,
+        "retracted_count": retracted,
+        "concern_count": concern,
+        "corrected_count": corrected,
+        "integrity_warning": integrity_warning,
     }
