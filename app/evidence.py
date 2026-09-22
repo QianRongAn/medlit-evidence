@@ -89,18 +89,23 @@ def _year_int(d):
 
 
 def compute_confidence(docs, conflict):
-    """0-100 分：证据等级 + 结论一致性 + 文献量 + 时效。"""
-    best = max((GRADE_BASE.get(d.get("grade", "N/A"), 40) for d in docs), default=40)
-    score = float(best)
-    score += -15 if conflict else 10
+    """0-100 分：证据整体质量（等级加权平均）+ 结论一致性 + 文献量 + 时效。
+
+    关键：不取"最高等级那一篇"的分数，而是按全部文献的等级加权平均，
+    极低/未分级文献会真实地拉低分数，避免"一篇 meta 分析掩盖所有烂证据"。
+    """
+    grades = [GRADE_BASE.get(d.get("grade", "N/A"), 40) for d in docs]
+    quality = sum(grades) / len(grades) if grades else 40
+    score = float(quality)
+    score += -10 if conflict else 6
     n = len(docs)
     if n >= 6:
-        score += 8
+        score += 4
     elif n >= 3:
-        score += 5
+        score += 2
     cur = date.today().year
     if any(_year_int(d) and _year_int(d) >= cur - 5 for d in docs):
-        score += 5
+        score += 4
     return max(0, min(100, int(round(score))))
 
 
