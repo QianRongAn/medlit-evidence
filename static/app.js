@@ -118,11 +118,12 @@ function renderStats(data, elapsedMs, ev) {
   // 卡 1：证据置信度
   $("confidenceNum").textContent = ev ? ev.confidence : "–";
 
-  // 卡 2：证据判定（用马卡龙色调表达结论方向：支持=薄荷，反对=橙红，对立=米黄，中立=粉）
-  $("verdictText").textContent = ev ? ev.verdict : "–";
+  // 卡 2：证据判定（马卡龙色调表达结论方向：支持=粉，反对=橙红，对立=米黄，中立=薄荷）
+  // 值去掉「证据」前缀：标签已叫「证据判定」，避免重复（与参考稿一致显示「倾向支持」）
+  $("verdictText").textContent = ev ? ev.verdict.replace(/^证据/, "") : "–";
   const verdictCard = $("statVerdict");
   verdictCard.classList.remove("tone-cream", "tone-pink", "tone-salmon", "tone-mint");
-  const TONE_BY_STATE = { support: "tone-mint", against: "tone-salmon", conflict: "tone-cream", neutral: "tone-pink" };
+  const TONE_BY_STATE = { support: "tone-pink", against: "tone-salmon", conflict: "tone-cream", neutral: "tone-mint" };
   verdictCard.classList.add(TONE_BY_STATE[state] || "tone-pink");
   $("verdictSub").textContent = ev && ev.conflict ? "文献结论存在对立，采信需谨慎" : "";
   $("polarityLine").textContent = ev

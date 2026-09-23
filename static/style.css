@@ -26,11 +26,19 @@
 
 * { box-sizing: border-box; }
 
+/* 参考稿数字/西文字体：Jost（几何无衬线，开放顶 4、平切端点） */
+@font-face {
+  font-family: "Jost";
+  src: url("/static/fonts/Jost-var.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
 html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+  font-family: "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
     "Microsoft YaHei", "Helvetica Neue", sans-serif;
   background: var(--bg);
   color: var(--text);
@@ -169,7 +177,7 @@ textarea:focus {
 }
 
 .ask-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 12px; }
-.hint { color: var(--muted); font-size: 12.5px; }
+.hint { color: var(--muted); font-size: 13px; }
 
 #askBtn {
   display: inline-flex; align-items: center; gap: 8px;
@@ -221,19 +229,20 @@ textarea:focus {
 .tone-mint   { background: var(--mint); }
 
 .tone-cream  .stat-label { color: #a5830f; }
-.tone-pink   .stat-label { color: #c2447e; }
+.tone-pink   .stat-label { color: #600060; }
 .tone-salmon .stat-label { color: #c04b3e; }
 .tone-mint   .stat-label { color: #0e8f80; }
-.tone-cream  .stat-sub, .tone-pink .stat-sub, .tone-salmon .stat-sub, .tone-mint .stat-sub { color: rgba(27, 27, 29, 0.55); }
+.tone-cream  .stat-sub, .tone-salmon .stat-sub, .tone-mint .stat-sub { color: rgba(27, 27, 29, 0.55); }
+.tone-pink   .stat-sub { color: #600060; }
 
-.stat-label { font-size: 12.5px; font-weight: 650; letter-spacing: 0.02em; margin-bottom: 4px; }
+.stat-label { font-size: 14px; font-weight: 650; letter-spacing: 0.02em; margin-bottom: 4px; }
 .stat-num {
-  font-size: 37px; font-weight: 800; line-height: 1.15;
+  font-size: 46px; font-weight: 620; line-height: 1.15;
   letter-spacing: -0.02em; color: var(--ink);
   word-break: break-all;
 }
-.stat-num.stat-text { font-size: 21px; line-height: 1.3; padding: 5px 0 4px; }
-.stat-sub { font-size: 12px; color: var(--muted); margin-top: auto; padding-top: 8px; min-height: 26px; }
+.stat-num.stat-text { font-size: 28px; font-weight: 700; line-height: 1.3; padding: 5px 0 4px; }
+.stat-sub { font-size: 13px; color: var(--muted); margin-top: auto; padding-top: 8px; min-height: 26px; }
 
 /* ---------- 通用白卡 ---------- */
 .card {
@@ -255,9 +264,9 @@ textarea:focus {
   content: ""; width: 4px; height: 15px; border-radius: 2px;
   background: var(--yellow);
 }
-.count { color: var(--muted); font-size: 12.5px; }
+.count { color: var(--muted); font-size: 13.5px; }
 
-.result-meta { color: var(--muted); font-size: 13px; margin: 2px 0 14px; }
+.result-meta { color: var(--muted); font-size: 13.5px; margin: 2px 0 14px; }
 
 /* ---------- PICO 问题理解（米黄大卡） ---------- */
 .pico-card {
@@ -268,7 +277,7 @@ textarea:focus {
 }
 .pico-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .pico-head h2 { margin: 0; font-size: 15px; font-weight: 800; color: var(--ink); }
-.pico-note { font-size: 12px; color: #a5830f; font-weight: 600; }
+.pico-note { font-size: 12.5px; color: #a5830f; font-weight: 600; }
 .pico-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 .pico-item {
   display: flex; align-items: center; gap: 11px;
@@ -284,7 +293,7 @@ textarea:focus {
 .pico-c { background: var(--yellow); color: var(--black); }
 .pico-o { background: #f24726; }
 .pico-meta { display: flex; flex-direction: column; min-width: 0; }
-.pico-cap { font-size: 11px; color: #9a9686; line-height: 1.3; }
+.pico-cap { font-size: 12px; color: #9a9686; line-height: 1.3; }
 .pico-val { font-size: 13.5px; font-weight: 650; color: var(--ink); line-height: 1.4; word-break: break-word; }
 
 /* ---------- 撤稿 / 完整性徽章 ---------- */
@@ -341,7 +350,7 @@ textarea:focus {
 }
 .dist-seg { height: 100%; transition: filter 0.15s; }
 .dist-seg:hover { filter: brightness(0.92); }
-.dist-legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 12.5px; color: var(--muted); }
+.dist-legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13.5px; color: var(--muted); }
 .dist-legend span { display: flex; align-items: center; gap: 6px; }
 .swatch { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 
@@ -354,18 +363,18 @@ textarea:focus {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
 }
 .conf-left { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.conf-cap { font-size: 12px; color: #8e8e88; }
+.conf-cap { font-size: 12.5px; color: #8e8e88; }
 .conf-tag {
-  font-size: 26px; font-weight: 800; line-height: 1.2;
+  font-size: 28px; font-weight: 800; line-height: 1.2;
   letter-spacing: 0.04em;
 }
 .conf-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
 .conf-score {
-  font-size: 38px; font-weight: 800; line-height: 1;
+  font-size: 46px; font-weight: 620; line-height: 1;
   letter-spacing: -0.02em;
   color: var(--yellow);
 }
-.conf-desc { font-size: 12px; color: #8e8e88; line-height: 1.35; }
+.conf-desc { font-size: 13px; color: #8e8e88; line-height: 1.35; }
 
 /* ---------- 文献列表（两列网格） ---------- */
 .doc-grid {
@@ -389,7 +398,7 @@ textarea:focus {
 .doc-title { font-weight: 650; font-size: 13.5px; margin: 0 0 7px; line-height: 1.45; }
 .doc-title a { color: var(--ink); text-decoration: none; }
 .doc-title a:hover { color: var(--link); }
-.doc-meta { color: var(--muted); font-size: 12px; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.doc-meta { color: var(--muted); font-size: 12.5px; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
 .badge {
   font-size: 11px; padding: 2px 9px; border-radius: 999px; color: #fff;
   font-weight: 700; letter-spacing: 0.02em;
