@@ -16,7 +16,8 @@ import xml.etree.ElementTree as ET
 import httpx
 
 BASE = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
-PROXY = os.environ.get("PUBMED_PROXY", "http://127.0.0.1:7890")
+# PubMed 直连稳定（走代理 efetch 会 SSL EOF）；设 PUBMED_PROXY 才走代理
+PROXY = os.environ.get("PUBMED_PROXY", "") or None
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 

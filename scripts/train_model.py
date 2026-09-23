@@ -40,7 +40,7 @@ FEATURE_COLS = [
     "title_len", "abstract_len", "n_sentences", "avg_sentence_len",
     "n_authors", "n_affiliations", "n_grants", "n_references",
     "is_english", "year", "n_exaggeration", "n_certainty", "n_hedge",
-    "n_stats", "digit_ratio", "single_author",
+    "n_stats", "digits_per_1000", "single_author",
     "design_meta", "design_rct", "design_case_report", "design_cohort",
     "design_basic", "design_review",
 ]
@@ -50,7 +50,7 @@ FEATURE_NAMES_ZH = {
     "avg_sentence_len": "平均句长", "n_authors": "作者数", "n_affiliations": "机构数",
     "n_grants": "资助数", "n_references": "参考文献数", "is_english": "英语文献",
     "year": "发表年份", "n_exaggeration": "夸张词数", "n_certainty": "确定性措辞数",
-    "n_hedge": "模糊限定词数", "n_stats": "统计术语数", "digit_ratio": "数字密度",
+    "n_hedge": "模糊限定词数", "n_stats": "统计术语数", "digits_per_1000": "每千字数字数",
     "single_author": "单作者", "design_meta": "Meta/系统综述", "design_rct": "RCT",
     "design_case_report": "病例报告", "design_cohort": "队列/观察",
     "design_basic": "基础研究", "design_review": "综述",
@@ -107,20 +107,22 @@ def temporal_split_evaluate(model, X, y, df):
     Xtr = sc.fit_transform(X[tr]); Xte = sc.transform(X[te])
     model.fit(Xtr, y[tr])
     proba = model.predict_proba(Xte)[:, 1]
+    p, r, _ = precision_recall_curve(y[te], proba)
     return {
         "train_n": len(tr), "test_n": len(te), "cutoff_year": cutoff,
         "AUC": roc_auc_score(y[te], proba),
-        "PR-AUC": auc(*precision_recall_curve(y[te], proba)[:2]),
+        "PR-AUC": auc(r, p),
     }
 
 
-def main():
-    df = pd.read_csv(FEAT)
+def main(features_path=FEAT, report_path=REPORT, shap_path=SHAP_PNG,
+         models_dir=MODELS, neg_desc="同期同刊 matched control"):
+    df = pd.read_csv(features_path)
     X = df[FEATURE_COLS].values.astype(float)
     y = df["label"].values.astype(int)
     print(f"样本 {len(df)}，正样本 {int(y.sum())}，负样本 {int((1 - y).sum())}")
 
-    os.makedirs(MODELS, exist_ok=True)
+    os.makedirs(models_dir, exist_ok=True)
     results = {}
     for name, model in get_models().items():
         results[name] = cv_evaluate(model, X, y)
@@ -133,14 +135,14 @@ def main():
     sc = StandardScaler()
     Xs = sc.fit_transform(X)
     lgb_full.fit(Xs, y)
-    joblib.dump(lgb_full, os.path.join(MODELS, "lgb.joblib"))
+    joblib.dump(lgb_full, os.path.join(models_dir, "lgb.joblib"))
 
     lr_full = get_models()["逻辑回归"]
     lr_full.fit(Xs, y)
-    joblib.dump(lr_full, os.path.join(MODELS, "lr.joblib"))
-    joblib.dump(sc, os.path.join(MODELS, "scaler.joblib"))
+    joblib.dump(lr_full, os.path.join(models_dir, "lr.joblib"))
+    joblib.dump(sc, os.path.join(models_dir, "scaler.joblib"))
 
-    # SHAP
+    # SHAP（大样本时采样，避免 summary_plot 卡死）
     try:
         explainer = shap.TreeExplainer(lgb_full)
         shap_values = explainer.shap_values(Xs)
@@ -150,13 +152,20 @@ def main():
             zip(FEATURE_COLS, np.abs(shap_values).mean(axis=0)),
             key=lambda t: -t[1],
         )
+        # 画图采样最多 2500 个点
+        if Xs.shape[0] > 2500:
+            idx = np.random.choice(Xs.shape[0], 2500, replace=False)
+            sv_plot = shap_values[idx]
+            xs_plot = Xs[idx]
+        else:
+            sv_plot, xs_plot = shap_values, Xs
         plt.figure(figsize=(9, 7))
-        shap.summary_plot(shap_values, Xs, feature_names=FEATURE_COLS, show=False,
+        shap.summary_plot(sv_plot, xs_plot, feature_names=FEATURE_COLS, show=False,
                           max_display=15)
         plt.tight_layout()
-        plt.savefig(SHAP_PNG, dpi=140, bbox_inches="tight")
+        plt.savefig(shap_path, dpi=140, bbox_inches="tight")
         plt.close()
-        print(f"\nSHAP 图已写入 {SHAP_PNG}")
+        print(f"\nSHAP 图已写入 {shap_path}")
     except Exception as e:  # noqa: BLE001
         print(f"SHAP 失败: {e}")
         feat_imp = []
@@ -172,7 +181,7 @@ def main():
     # 生成报告
     lines = ["# 撤稿风险预测模型 · 实验报告\n"]
     lines.append(f"样本：{len(df)} 篇（正样本 {int(y.sum())} / 负样本 {int((1-y).sum())}），"
-                 f"负样本为同期同刊 matched control。\n")
+                 f"负样本为{neg_desc}。\n")
     lines.append("## 模型对比（5 折分层交叉验证，均值 ± 标准差）\n")
     lines.append("| 模型 | AUC | PR-AUC | F1 | Brier |")
     lines.append("| --- | --- | --- | --- | --- |")
@@ -191,7 +200,7 @@ def main():
         for i, (f, v) in enumerate(feat_imp, 1):
             lines.append(f"| {i} | {FEATURE_NAMES_ZH.get(f, f)} | {v:.4f} |")
         lines.append("")
-        lines.append("![SHAP 特征重要性](shap_summary.png)\n")
+        lines.append(f"![SHAP 特征重要性]({os.path.basename(shap_path)})\n")
 
         # 方向解读：正负样本中位数对比（SHAP 只给大小，方向要看原始分布）
         lines.append("## 关键特征的方向（翻车组 vs 对照组的中位数）\n")
@@ -204,11 +213,8 @@ def main():
             b = df[df.label == 0][f].median()
             lines.append(f"| {FEATURE_NAMES_ZH.get(f, f)} | {a} | {b} |")
         lines.append("")
-        lines.append("模式高度一致：翻车文献的题录信息整体「更瘦」——标题更短、摘要更短、"
-                     "句子更短碎、摘要里的数字密度大约只有对照的一半。由于对照组是同刊同年匹配，"
-                     "这排除了期刊格式和年代差异的解释，更像是写作信息密度不足的信号。"
-                     "而语言风格词（夸张词/确定性措辞/模糊限定词）单项贡献都不大——"
-                     "预示翻车的不是「话说得太满」，而是「内容说得太少」。\n")
+        lines.append("上表为翻车组与对照组的中位数对比：哪一侧更高，即该特征在翻车组里"
+                     "倾向更大（SHAP 给的是影响大小，方向看这里）。\n")
 
     if temporal:
         lines.append("## 时序验证（用更早年份预测更晚年份）\n")
@@ -225,15 +231,30 @@ def main():
                      "验证需要重新按年份分层采样早年对照，列为下一版工作。\n")
 
     lines.append("## 诚实声明（局限）\n")
-    lines.append("- 样本仅 360 篇，结论是「相关性」而非「因果」，不能用于判断某篇具体文献是否会被撤稿。")
+    lines.append(f"- 样本 {len(df)} 篇，结论是「相关性」而非「因果」，不能用于判断某篇具体文献是否会被撤稿。")
     lines.append("- 特征全部来自题录与摘要文本，拿不到全文、图表、审稿记录这些真正强的信号（图像重复、数据伪造多在正文）。")
     lines.append("- 正样本依赖 PubMed 已标注的撤稿/存疑记录，存在检索偏倚；未被发现的撤稿仍被算作「正常」。")
+    lines.append("- **发表年份是 SHAP 第一大特征，属于删失伪迹（censoring）**：老论文有更长的时间窗口暴露撤稿，"
+                 "新论文「还没来得及翻车」。这解释了时序验证 PR-AUC（0.32~0.34）远低于交叉验证（0.81）——"
+                 "预测「未来才发生的撤稿」本质上更难。产品给出风险分时应弱化年份的解释权重。")
+    lines.append("- 小样本（360 篇）阶段「翻车文献题录更瘦」的结论在干净大样本下**不成立**：标题长度方向反转"
+                 "（翻车组中位数 120 vs 对照 110，反而更长），说明小样本的差异主要来自撤稿记录元数据残缺，不是写作风格。")
+    lines.append("- 数据清洗：过滤摘要过短（4345 篇）与摘要被替换成撤稿声明的记录（277 篇），"
+                 "前者污染长度特征，后者本身就是标签泄漏。")
     lines.append("- 模型的价值在于「发现可疑描述模式」，作为人工审查的排序辅助，不是自动化判定。\n")
 
-    with open(REPORT, "w", encoding="utf-8") as f:
+    with open(report_path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
-    print(f"\n报告已写入 {REPORT}")
+    print(f"\n报告已写入 {report_path}")
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--features", default=FEAT)
+    ap.add_argument("--report", default=REPORT)
+    ap.add_argument("--shap", default=SHAP_PNG)
+    ap.add_argument("--models-dir", default=MODELS)
+    ap.add_argument("--neg-desc", default="同期同刊 matched control")
+    a = ap.parse_args()
+    main(a.features, a.report, a.shap, a.models_dir, a.neg_desc)

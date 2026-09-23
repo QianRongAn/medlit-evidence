@@ -42,7 +42,7 @@ FEATURE_COLS = [
     "title_len", "abstract_len", "n_sentences", "avg_sentence_len",
     "n_authors", "n_affiliations", "n_grants", "n_references",
     "is_english", "year", "n_exaggeration", "n_certainty", "n_hedge",
-    "n_stats", "digit_ratio", "single_author",
+    "n_stats", "digits_per_1000", "single_author",
     "design_meta", "design_rct", "design_case_report", "design_cohort",
     "design_basic", "design_review",
 ]
@@ -87,7 +87,9 @@ def build_feature_row(rec):
         "n_certainty": count_words(text, CERTAINTY),
         "n_hedge": count_words(text, HEDGE),
         "n_stats": count_words(text, STAT_TERMS),
-        "digit_ratio": round(sum(c.isdigit() for c in abstract) / max(len(abstract), 1), 4),
+        "digits_per_1000": round(
+            sum(c.isdigit() for c in abstract) * 1000 / max(len(abstract), 1), 1
+        ),
         "single_author": 1 if n_authors == 1 else 0,
     }
     row.update(design_flags(text))
