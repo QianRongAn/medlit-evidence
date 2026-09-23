@@ -1,9 +1,10 @@
 const GRADE_ZH = {
   High: "高", Moderate: "中", Low: "低", "Very low": "极低", "N/A": "未分级",
 };
+// Miro 风格证据等级配色：青绿 / 蓝 / 黄 / 橙红 / 灰
 const GRADE_COLOR = {
-  High: "#038F49", Moderate: "#4B97B8", Low: "#F5E400",
-  "Very low": "#F03A2C", "N/A": "#A7A7A7",
+  High: "#12A594", Moderate: "#4262FF", Low: "#FFD02E",
+  "Very low": "#FFA3A0", "N/A": "#C3C2BC",
 };
 
 // 根据背景亮度自动选深/浅文字，避免亮黄底配白字看不清
@@ -66,9 +67,9 @@ function esc(s) {
 }
 
 const POLARITY = {
-  support: { label: "支持", mark: "✓", color: "#16a34a" },
-  against: { label: "反对", mark: "✗", color: "#ef4444" },
-  neutral: { label: "中立", mark: "·", color: "#94a3b8" },
+  support: { label: "支持", mark: "✓", color: "#12b76a" },
+  against: { label: "反对", mark: "✗", color: "#f24726" },
+  neutral: { label: "中立", mark: "·", color: "#c3c2bc" },
 };
 
 function renderAnswer(data) {
@@ -83,12 +84,16 @@ function renderAnswer(data) {
       mark.className = "pol-mark";
       mark.style.color = pol.color;
       mark.title = "结论方向：" + pol.label;
-      mark.textContent = pol.mark + " ";
       p.appendChild(mark);
       p.appendChild(document.createTextNode(s.sentence + " "));
-      const cite = document.createElement("span");
+      const cite = document.createElement("a");
       cite.className = "cite";
-      cite.textContent = `[PMID ${s.pmid}]`;
+      cite.textContent = "PMID " + s.pmid;
+      if (s.pmid) {
+        cite.href = "https://pubmed.ncbi.nlm.nih.gov/" + s.pmid + "/";
+        cite.target = "_blank";
+        cite.rel = "noopener";
+      }
       p.appendChild(cite);
       body.appendChild(p);
     });
@@ -113,12 +118,12 @@ function renderStats(data, elapsedMs, ev) {
   // 卡 1：证据置信度
   $("confidenceNum").textContent = ev ? ev.confidence : "–";
 
-  // 卡 2：证据判定
+  // 卡 2：证据判定（用马卡龙色调表达结论方向：支持=薄荷，反对=橙红，对立=米黄，中立=粉）
   $("verdictText").textContent = ev ? ev.verdict : "–";
-  const statCards = document.querySelectorAll("#result .stat-card");
-  const verdictCard = statCards[1];
-  verdictCard.classList.remove("verdict-support", "verdict-against", "verdict-conflict");
-  if (state !== "neutral") verdictCard.classList.add("verdict-" + state);
+  const verdictCard = $("statVerdict");
+  verdictCard.classList.remove("tone-cream", "tone-pink", "tone-salmon", "tone-mint");
+  const TONE_BY_STATE = { support: "tone-mint", against: "tone-salmon", conflict: "tone-cream", neutral: "tone-pink" };
+  verdictCard.classList.add(TONE_BY_STATE[state] || "tone-pink");
   $("verdictSub").textContent = ev && ev.conflict ? "文献结论存在对立，采信需谨慎" : "";
   $("polarityLine").textContent = ev
     ? `支持 ${ev.support_count} · 反对 ${ev.against_count} · 中立 ${ev.neutral_count}`
@@ -159,7 +164,7 @@ function renderHomeStatus(h) {
   const online = !!(h && h.pubmed_online);
   const svc = $("homeSvc");
   svc.textContent = online ? "在线" : "离线";
-  svc.style.color = online ? "#038f4a" : "#b45309";
+  svc.style.color = online ? "#0e8f80" : "#c04b3e";
   $("homeSvcSub").textContent = online
     ? "PubMed E-utilities 实时检索已连通"
     : "联网失败 · 自动回退内置示例语料";
@@ -167,7 +172,7 @@ function renderHomeStatus(h) {
   const loaded = !!(h && h.model_loaded);
   const model = $("homeModel");
   model.textContent = loaded ? "已加载" : "未加载";
-  model.style.color = loaded ? "var(--ink)" : "#b45309";
+  model.style.color = loaded ? "#1B1B1D" : "#c04b3e";
   $("homeModelSub").textContent = loaded
     ? "LightGBM 撤稿风险 · AUC 0.856"
     : "模型文件缺失 · 风险徽章已停用";
@@ -202,10 +207,10 @@ function renderRecent() {
   h.slice(0, 6).forEach((it) => {
     const div = document.createElement("div");
     div.className = "recent-item";
-    let color = "#a7b0bf";
-    if (it.conflict) color = "#f59e0b";
-    else if (it.verdict === "证据倾向支持") color = "#16a34a";
-    else if (it.verdict === "证据倾向不支持") color = "#ef4444";
+    let color = "#a6a6a0";
+    if (it.conflict) color = "#f5a800";
+    else if (it.verdict === "证据倾向支持") color = "#12b76a";
+    else if (it.verdict === "证据倾向不支持") color = "#f24726";
     const t = new Date(it.time);
     const hh = String(t.getHours()).padStart(2, "0");
     const mm = String(t.getMinutes()).padStart(2, "0");
@@ -348,25 +353,25 @@ function renderPico(pico) {
   set("picoO", pico.outcome);
 }
 
-/* ---------- 置信度等级标签 ---------- */
+/* ---------- 置信度等级标签（黑色综合等级卡用，Miro 配色） ---------- */
 const CONF_TIERS = [
-  { min: 80, label: "高", color: "#038f4a", text: "#fff", desc: "结果高度可信，可直接采信" },
-  { min: 60, label: "中", color: "#4b97b8", text: "#fff", desc: "结果基本可信，建议复核" },
-  { min: 40, label: "低", color: "#f5e400", text: "#1f2430", desc: "可信度偏低，重点排查" },
-  { min: 0,  label: "极低", color: "#f0392c", text: "#fff", desc: "可信度极低，不建议采用" },
+  { min: 80, label: "高", color: "#2DD4BF", desc: "结果高度可信，可直接采信" },
+  { min: 60, label: "中", color: "#7B9AFF", desc: "结果基本可信，建议复核" },
+  { min: 40, label: "低", color: "#FFD02E", desc: "可信度偏低，重点排查" },
+  { min: 0,  label: "极低", color: "#FF7A6E", desc: "可信度极低，不建议采用" },
 ];
-const CONF_NA = { label: "未分级", color: "#a7a7a7", text: "#fff", desc: "数据不足，无法评估" };
+const CONF_NA = { label: "未分级", color: "#9C9C96", desc: "数据不足，无法评估" };
 
 function renderConfidence(confidence) {
+  // 黑色综合等级卡：左侧等级名用分档色，右侧分数用 Miro 黄
   const tag = $("confTag");
   const score = $("confScore");
   const desc = $("confDesc");
   const tier = confidence ? CONF_TIERS.find((t) => confidence >= t.min) : CONF_NA;
   tag.textContent = tier.label;
-  tag.style.background = tier.color;
-  tag.style.color = tier.text;
+  tag.style.color = tier.color;
   score.textContent = confidence ? confidence : "–";
-  score.style.color = tier.color;
+  score.style.color = "#FFD02E";
   desc.textContent = tier.desc;
 }
 
@@ -402,10 +407,7 @@ function renderDocs(results) {
     div.className = "doc-item";
 
     const grade = GRADE_ZH[d.grade] || "未分级";
-    const color = GRADE_COLOR[d.grade] || "#A7A7A7";
-    const url = d.pmid
-      ? `https://pubmed.ncbi.nlm.nih.gov/${d.pmid}/`
-      : "#";
+    const color = GRADE_COLOR[d.grade] || "#C3C2BC";
 
     const authors = (d.authors || []).slice(0, 2).join(", ");
     const metaParts = [
@@ -420,27 +422,28 @@ function renderDocs(results) {
       ? `<span class="integrity-badge integrity-${integrity}">${INTEGRITY_ZH[integrity]}</span>`
       : "";
 
-    // 撤稿风险徽章（LightGBM 模型预测，score 为 0-1 概率）
-    const RISK_COLOR = { "高": "#F03A2C", "中高": "#F5E400", "中低": "#4B97B8", "低": "#038F49" };
+    // 撤稿风险徽章（LightGBM 模型预测，score 为 0-1 概率）—— Miro 配色
+    const RISK_COLOR = { "高": "#F24726", "中高": "#FFD02E", "中低": "#4262FF", "低": "#12A594" };
     let riskBadge = "";
     if (d.risk && typeof d.risk.score === "number") {
       const pct = Math.round(d.risk.score * 100);
       const lvl = d.risk.level || (pct >= 60 ? "高" : pct >= 40 ? "中高" : pct >= 20 ? "中低" : "低");
-      const rc = RISK_COLOR[lvl] || "#A7A7A7";
-      const txt = rc === "#F5E400" ? "#1f2430" : "#fff";
+      const rc = RISK_COLOR[lvl] || "#C3C2BC";
+      const txt = contrastText(rc);
       riskBadge = `<span class="risk-badge" style="background:${rc};color:${txt}" title="撤稿风险模型预测（仅供参考）">风险 ${pct}%</span>`;
     }
 
+    const pmidUrl = d.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${d.pmid}/` : "";
     div.innerHTML = `
-      <p class="doc-title"><a href="${url}" target="_blank" rel="noopener">${esc(d.title)}</a></p>
+      <p class="doc-title"><a href="${pmidUrl || "#"}" target="_blank" rel="noopener">${esc(d.title)}</a></p>
       <div class="doc-meta">
         <span class="badge" style="background:${color};color:${contrastText(color)}">${grade}</span>
         ${integBadge}
         ${riskBadge}
-        <span>${esc(metaParts)}</span>
-        ${d.pmid ? `<span>PMID ${esc(d.pmid)}</span>` : ""}
       </div>
+      <div class="doc-meta">${esc(metaParts)}</div>
       ${d.abstract ? `<div class="doc-abstract">${esc(d.abstract)}</div>` : ""}
+      ${d.pmid ? `<a class="doc-pmid" href="${pmidUrl}" target="_blank" rel="noopener">PMID ${esc(d.pmid)}</a>` : ""}
       <div class="rel-bar"><div class="rel-fill" style="width:${Math.max(2, d.relevance || 0)}%"></div></div>
     `;
     list.appendChild(div);
@@ -450,6 +453,7 @@ function renderDocs(results) {
 async function ask(query) {
   if (!query.trim()) return;
   $("query").value = query;
+  $("topQuery").value = query;
   $("askBtn").disabled = true;
   $("result").classList.add("hidden");
   $("error").classList.add("hidden");
@@ -587,8 +591,7 @@ function renderHistory() {
   h.forEach((it) => {
     const div = document.createElement("div");
     div.className = "notif-item";
-    const cls = it.conflict ? "conflict" : (it.verdict === "证据倾向支持" ? "support" : "neutral");
-    const color = it.conflict ? "#f59e0b" : (it.verdict === "证据倾向支持" ? "#16a34a" : "#8a93a3");
+    const color = it.conflict ? "#f5a800" : (it.verdict === "证据倾向支持" ? "#12b76a" : "#8f8f88");
     const t = new Date(it.time);
     const hh = String(t.getHours()).padStart(2, "0");
     const mm = String(t.getMinutes()).padStart(2, "0");
@@ -639,18 +642,27 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-/* ---------- 左侧栏 ---------- */
+/* ---------- 顶栏 ---------- */
 $("navHome").addEventListener("click", () => {
   showDashboard();
   $("query").focus();
 });
 $("navNew").addEventListener("click", () => {
   $("query").value = "";
+  $("topQuery").value = "";
   showDashboard();
   $("query").focus();
 });
 $("navSettings").addEventListener("click", () => openDrawer("settings"));
 $("navNotifications").addEventListener("click", () => openDrawer("notif"));
+
+/* 顶栏搜索框：回车直接提问 */
+$("topQuery").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    const q = $("topQuery").value.trim();
+    if (q) ask(q);
+  }
+});
 
 /* 最近提问：今日 / 全部 切换 */
 document.querySelectorAll("#recentSeg button").forEach((b) =>
