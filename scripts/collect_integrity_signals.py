@@ -24,10 +24,14 @@ DEMO_PMIDS = os.path.join(DATA, "demo_pmids.json")
 OUT = os.path.join(DATA, "integrity_signals.jsonl")
 
 OA_BASE = "https://api.openalex.org"
+MAILTO = os.environ.get("OPENALEX_MAILTO", "").strip()  # OpenAlex 礼貌池（无 key 也能用，带 mailto 提速）
 
 
 def _get(url, params=None, timeout=40):
-    for a in range(4):
+    if params is None:
+        params = {}
+    params["mailto"] = MAILTO
+    for a in range(5):
         try:
             r = httpx.get(url, params=params, timeout=timeout, proxy=None, trust_env=False)
             if r.status_code == 200:
@@ -90,7 +94,7 @@ def main():
         sig["pmid"] = p
         sig["crossref_retracted"] = crossref_retracted(p)
         got[p] = sig
-        if (i + 1) % 100 == 0:
+        if (i + 1) % 50 == 0:
             # 落盘
             tmp = OUT + ".tmp"
             with open(tmp, "w", encoding="utf-8") as f:

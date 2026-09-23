@@ -14,3 +14,12 @@ data/demo_risk.db
 data/demo_corpus.jsonl
 data/demo_features.csv
 data/demo_pmids.json
+
+# 敏感凭证与本地密钥（绝不入库）
+secrets.local.json
+*.local.json
+
+# 采集中间产物（可重新生成，不入库）
+data/integrity_signals.jsonl
+data/all_pmids_for_signals.txt
+oa_key1.json
