@@ -8,3 +8,9 @@ venv/
 .DS_Store
 .idea/
 .vscode/
+
+# demo 风险库的大体积中间产物（可重新生成，不入库）
+data/demo_risk.db
+data/demo_corpus.jsonl
+data/demo_features.csv
+data/demo_pmids.json
