@@ -52,8 +52,10 @@ async function checkHealth() {
     const r = await fetch("/health");
     const d = await r.json();
     setStatus(!!d.pubmed_online);
+    renderHomeStatus(d);
   } catch {
     setStatus(false);
+    renderHomeStatus(null);
   }
 }
 
@@ -113,7 +115,7 @@ function renderStats(data, elapsedMs, ev) {
 
   // 卡 2：证据判定
   $("verdictText").textContent = ev ? ev.verdict : "–";
-  const statCards = document.querySelectorAll(".stat-card");
+  const statCards = document.querySelectorAll("#result .stat-card");
   const verdictCard = statCards[1];
   verdictCard.classList.remove("verdict-support", "verdict-against", "verdict-conflict");
   if (state !== "neutral") verdictCard.classList.add("verdict-" + state);
@@ -145,7 +147,196 @@ function renderStats(data, elapsedMs, ev) {
   renderConfidence(ev ? ev.confidence : 0);
 }
 
-/* ---------- PICO 问题理解 ---------- */
+/* ---------- 首页仪表盘 ---------- */
+const ASKCOUNT_KEY = "medlit.askCount";
+
+function getAskCount() {
+  return Number(localStorage.getItem(ASKCOUNT_KEY) || 0);
+}
+
+/* 由 /health 数据填充首页四张状态卡 */
+function renderHomeStatus(h) {
+  const online = !!(h && h.pubmed_online);
+  const svc = $("homeSvc");
+  svc.textContent = online ? "在线" : "离线";
+  svc.style.color = online ? "#038f4a" : "#b45309";
+  $("homeSvcSub").textContent = online
+    ? "PubMed E-utilities 实时检索已连通"
+    : "联网失败 · 自动回退内置示例语料";
+
+  const loaded = !!(h && h.model_loaded);
+  const model = $("homeModel");
+  model.textContent = loaded ? "已加载" : "未加载";
+  model.style.color = loaded ? "var(--ink)" : "#b45309";
+  $("homeModelSub").textContent = loaded
+    ? "LightGBM 撤稿风险 · AUC 0.856"
+    : "模型文件缺失 · 风险徽章已停用";
+
+  $("homeHist").textContent = getAskCount();
+
+  const lib = $("homeLib");
+  if (online) {
+    lib.textContent = "3800万+";
+    $("homeLibSub").textContent = "PubMed 收录 · 实时检索";
+  } else {
+    lib.textContent = (h && h.corpus_size) || "11";
+    $("homeLibSub").textContent = "离线语料篇数 · 断网可用";
+  }
+}
+
+/* 最近提问列表（支持 今日 / 全部 切换） */
+let recentMode = "all";
+
+function renderRecent() {
+  const list = $("recentList");
+  list.innerHTML = "";
+  let h = getHistory();
+  if (recentMode === "today") {
+    const t = new Date(); t.setHours(0, 0, 0, 0);
+    h = h.filter((it) => it.time >= t.getTime());
+  }
+  if (!h.length) {
+    list.innerHTML = '<p class="recent-empty">暂无提问，从上方搜索框开始</p>';
+    return;
+  }
+  h.slice(0, 6).forEach((it) => {
+    const div = document.createElement("div");
+    div.className = "recent-item";
+    let color = "#a7b0bf";
+    if (it.conflict) color = "#f59e0b";
+    else if (it.verdict === "证据倾向支持") color = "#16a34a";
+    else if (it.verdict === "证据倾向不支持") color = "#ef4444";
+    const t = new Date(it.time);
+    const hh = String(t.getHours()).padStart(2, "0");
+    const mm = String(t.getMinutes()).padStart(2, "0");
+    div.innerHTML = `
+      <span class="recent-dot" style="background:${color}"></span>
+      <span class="recent-q">${esc(it.query)}</span>
+      <span class="recent-meta">
+        <span class="recent-verdict" style="color:${color}">${esc(it.verdict)}</span>
+        <span>${hh}:${mm}</span>
+      </span>
+    `;
+    list.appendChild(div);
+  });
+}
+
+/* 使用统计（累计次数独立计数，不受历史 20 条上限影响） */
+function renderUsage() {
+  const h = getHistory();
+  $("usageTotal").textContent = getAskCount();
+  if (h.length) {
+    const avgMs = h.reduce((a, b) => a + (b.elapsedMs || 0), 0) / h.length;
+    $("usageAvg").textContent = avgMs >= 1000 ? (avgMs / 1000).toFixed(1) + "s" : Math.round(avgMs) + "ms";
+    const confs = h.map((x) => Number(x.confidence)).filter((n) => !isNaN(n) && n > 0);
+    $("usageConf").textContent = confs.length ? Math.round(confs.reduce((a, b) => a + b, 0) / confs.length) : "–";
+    const cf = h.filter((x) => x.conflict).length;
+    $("usageConflict").textContent = cf ? cf + " 次" : "无";
+  } else {
+    $("usageAvg").textContent = "–";
+    $("usageConf").textContent = "–";
+    $("usageConflict").textContent = "–";
+  }
+}
+
+/* 问答活动热力图：近 52 周，GitHub 风格绿色格子 */
+function renderHeatmap() {
+  const wrap = $("heatmap");
+  wrap.innerHTML = "";
+  const counts = {};
+  getHistory().forEach((it) => {
+    const d = new Date(it.time);
+    const key = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+    counts[key] = (counts[key] || 0) + 1;
+  });
+
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const dow = (today.getDay() + 6) % 7; // 周一=0
+  const monday = new Date(today); monday.setDate(today.getDate() - dow);
+  const WEEKS = 52;
+  const start = new Date(monday); start.setDate(monday.getDate() - (WEEKS - 1) * 7);
+
+  const level = (n) => (n >= 5 ? 4 : n >= 3 ? 3 : n >= 2 ? 2 : n >= 1 ? 1 : 0);
+
+  // 月份标签行
+  const top = document.createElement("div");
+  top.className = "heat-top";
+  const CELL = 17; // 14px 格子 + 3px 间隙
+  let lastMonth = -1;
+  for (let w = 0; w < WEEKS; w++) {
+    const colDate = new Date(start); colDate.setDate(start.getDate() + w * 7);
+    if (colDate.getMonth() !== lastMonth) {
+      lastMonth = colDate.getMonth();
+      const m = document.createElement("span");
+      m.className = "heat-month";
+      m.style.left = 40 + w * CELL + "px";
+      m.textContent = colDate.getMonth() + 1 + "月";
+      top.appendChild(m);
+    }
+  }
+  wrap.appendChild(top);
+
+  // 主区：左侧星期标签 + 周列
+  const main = document.createElement("div");
+  main.className = "heat-main";
+  const labels = document.createElement("div");
+  labels.className = "heat-labels";
+  ["周一", "", "周三", "", "周五", "", ""].forEach((txt) => {
+    const s = document.createElement("span");
+    s.className = "heat-label";
+    s.textContent = txt;
+    labels.appendChild(s);
+  });
+  main.appendChild(labels);
+
+  const cols = document.createElement("div");
+  cols.className = "heat-cols";
+  for (let w = 0; w < WEEKS; w++) {
+    const col = document.createElement("div");
+    col.className = "heat-col";
+    for (let r = 0; r < 7; r++) {
+      const day = new Date(start);
+      day.setDate(start.getDate() + w * 7 + r);
+      const cell = document.createElement("div");
+      cell.className = "heat-cell";
+      if (day <= today) {
+        const key = day.getFullYear() + "-" + day.getMonth() + "-" + day.getDate();
+        const n = counts[key] || 0;
+        if (n > 0) cell.classList.add("l" + level(n));
+        cell.title = `${day.getMonth() + 1}月${day.getDate()}日 · ${n} 次提问`;
+      } else {
+        cell.style.visibility = "hidden";
+      }
+      col.appendChild(cell);
+    }
+    cols.appendChild(col);
+  }
+  main.appendChild(cols);
+  wrap.appendChild(main);
+}
+
+function renderHome() {
+  const histEl = $("homeHist");
+  if (histEl) histEl.textContent = getAskCount();
+  renderRecent();
+  renderUsage();
+  renderHeatmap();
+}
+
+/* 首页仪表盘与结果区互斥显示 */
+function syncHome() {
+  const busy = !$("loading").classList.contains("hidden");
+  const hasResult = !$("result").classList.contains("hidden");
+  $("homeDash").classList.toggle("hidden", busy || hasResult);
+}
+
+function showDashboard() {
+  $("result").classList.add("hidden");
+  $("error").classList.add("hidden");
+  $("loading").classList.add("hidden");
+  syncHome();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
 function renderPico(pico) {
   if (!pico) return;
   const set = (id, arr) => {
@@ -263,6 +454,8 @@ async function ask(query) {
   $("result").classList.add("hidden");
   $("error").classList.add("hidden");
   $("loading").classList.remove("hidden");
+  syncHome();
+  window.scrollTo({ top: 0, behavior: "smooth" });
   const started = performance.now();
 
   try {
@@ -286,10 +479,12 @@ async function ask(query) {
     recordHistory(query, data.evidence, elapsed);
     $("loading").classList.add("hidden");
     $("result").classList.remove("hidden");
+    syncHome();
   } catch (err) {
     $("loading").classList.add("hidden");
     $("error").textContent = "出错了：" + err.message;
     $("error").classList.remove("hidden");
+    syncHome();
   } finally {
     $("askBtn").disabled = false;
   }
@@ -365,7 +560,9 @@ function recordHistory(query, ev, elapsedMs) {
     elapsedMs: Math.round(elapsedMs),
   });
   localStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0, 20)));
+  localStorage.setItem(ASKCOUNT_KEY, String(getAskCount() + 1));
   updateNotifBadge();
+  renderHome();
 }
 
 function updateNotifBadge() {
@@ -413,6 +610,7 @@ function renderHistory() {
     localStorage.removeItem(HISTORY_KEY);
     updateNotifBadge();
     renderHistory();
+    renderHome();
   });
   list.appendChild(clear);
 }
@@ -441,18 +639,31 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-/* ---------- 左侧图标栏 ---------- */
+/* ---------- 左侧栏 ---------- */
 $("navHome").addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  showDashboard();
   $("query").focus();
 });
 $("navNew").addEventListener("click", () => {
   $("query").value = "";
+  showDashboard();
   $("query").focus();
 });
 $("navSettings").addEventListener("click", () => openDrawer("settings"));
 $("navNotifications").addEventListener("click", () => openDrawer("notif"));
 
+/* 最近提问：今日 / 全部 切换 */
+document.querySelectorAll("#recentSeg button").forEach((b) =>
+  b.addEventListener("click", () => {
+    recentMode = b.dataset.v;
+    document.querySelectorAll("#recentSeg button").forEach((x) =>
+      x.classList.toggle("active", x === b)
+    );
+    renderRecent();
+  })
+);
+
+renderHome();
 applySettingsUI();
 updateNotifBadge();
 checkHealth();

@@ -16,7 +16,7 @@ from .evidence import analyze_evidence
 from .pico import extract_pico
 from .pubmed import efetch, esearch, load_corpus
 from .retrieval import rank
-from .risk import predict_risk
+from .risk import model_available, predict_risk
 from .study_type import classify
 from .synthesizer import extractive_answer, llm_answer
 from .tokenizer import tokenize
@@ -86,7 +86,12 @@ async def health():
         online = count > 0
     except Exception:
         online = False
-    return {"status": "ok", "pubmed_online": online}
+    return {
+        "status": "ok",
+        "pubmed_online": online,
+        "model_loaded": model_available(),
+        "corpus_size": len(load_corpus(CORPUS_FILE)),
+    }
 
 
 @app.post("/api/search")

@@ -36,6 +36,11 @@ def _load():
         return False
 
 
+def model_available():
+    """模型与标准化器是否就绪（供 /health 与首页仪表盘展示）。"""
+    return _load()
+
+
 def risk_level(score):
     """风险概率 -> 分档（与前端展示配色对应）。"""
     if score >= 0.60:
