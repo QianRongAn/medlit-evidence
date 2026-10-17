@@ -134,3 +134,27 @@ test("LLM validation scope and original quote are visible and invalid citations 
   context.renderAnswer({ mode: "extractive", online: true, answer: "Excerpt", sentences: [] });
   assert.equal(get("answerNotice").textContent, "");
 });
+
+test("multiple integrity flags and notice identity remain visible together", () => {
+  const { context } = loadApp();
+  const badges = context.integrityBadges({ integrity: "concern", integrity_flags: ["concern", "corrected"], is_notice: true });
+  assert.match(badges, /存疑/);
+  assert.match(badges, /有更正\/重发/);
+  assert.match(badges, /学术通知/);
+  assert.doesNotMatch(badges, /已撤稿/);
+});
+
+test("integrity links preserve direction and reject malformed linked IDs", () => {
+  const { context } = loadApp();
+  const links = context.integrityLinks({ integrity_relations: [
+    { ref_type: "RetractionIn", pmid: "201" },
+    { ref_type: "RetractionOf", pmid: "101" },
+    { ref_type: "RetractedandRepublishedFrom", pmid: "104" },
+    { ref_type: "ErratumIn", pmid: '123" onmouseover="x', citation: "<script>bad</script>" },
+  ] });
+  assert.match(links, /撤稿通知 · PMID 201/);
+  assert.match(links, /所涉原文 · PMID 101/);
+  assert.match(links, /已撤稿原版 · PMID 104/);
+  assert.match(links, /&lt;script&gt;/);
+  assert.doesNotMatch(links, /onmouseover|<script>/);
+});

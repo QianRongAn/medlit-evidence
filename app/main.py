@@ -13,6 +13,7 @@ from pydantic import BaseModel, Field
 
 from .config import CORPUS_FILE, LLM_API_KEY, RETMAX, STATIC_DIR
 from .evidence import analyze_evidence
+from .integrity import document_integrity, is_usable_evidence
 from .pico import extract_pico
 from .pubmed import efetch, esearch, load_corpus
 from .retrieval import rank
@@ -22,7 +23,7 @@ from .synthesizer import CitationValidationError, extractive_answer, llm_answer
 from .tokenizer import tokenize
 from .translate import translate_query
 
-app = FastAPI(title="MedLit Evidence", version="0.3.0")
+app = FastAPI(title="MedLit Evidence", version="0.4.0")
 
 
 class Query(BaseModel):
@@ -49,9 +50,12 @@ def _annotate_docs(docs, query_tokens):
 
     max_score = max((s for _, s in ranked), default=0.0) or 1.0
     for d in docs:
-        d["study_type"], d["grade"] = classify(
-            (d.get("abstract") or "") + " " + (d.get("title") or ""), d.get("pubtypes")
-        )
+        d.update(document_integrity(d))
+        if d.get("is_notice") or d.get("integrity") == "notice":
+            d["study_type"], d["grade"] = "notice", "N/A"
+        else:
+            d["study_type"], d["grade"] = classify(
+                d.get("abstract") or "", d.get("pubtypes"), title=d.get("title") or "")
         d["relevance"] = 0.0
 
     for i, s in ranked:
@@ -122,6 +126,10 @@ async def search(q: Query):
                 "relevance": d.get("relevance"),
                 "source": d.get("source"),
                 "integrity": d.get("integrity", "ok"),
+                "integrity_flags": d.get("integrity_flags", []),
+                "is_notice": d.get("is_notice", False),
+                "notice_types": d.get("notice_types", []),
+                "integrity_relations": d.get("integrity_relations", []),
                 "risk": predict_risk(d),
             }
             for d in docs
@@ -141,7 +149,7 @@ async def answer(q: Query):
 
     top = [d for d in docs if d.get("relevance", 0) > 0][:8]
 
-    usable = [d for d in top if d.get("integrity", "ok") != "retracted"]
+    usable = [d for d in top if is_usable_evidence(d)]
     mode = "extractive"
     sentences = None
     fallback_reason = None
@@ -158,7 +166,7 @@ async def answer(q: Query):
         sentences = extractive_answer(usable, query_tokens)
         mode = "extractive"
     answer_text = "\n\n".join(f"{s['sentence']} [PMID {s['pmid']}]" for s in sentences)
-    answer_text = answer_text or "未找到可用于回答的相关证据；已撤稿文献不用于生成回答。"
+    answer_text = answer_text or "未找到可用于回答的相关证据；已撤稿文献及学术通知不用于生成回答。"
 
     evidence = analyze_evidence(top)
 
@@ -195,6 +203,10 @@ async def answer(q: Query):
                 "relevance": d.get("relevance"),
                 "source": d.get("source"),
                 "integrity": d.get("integrity", "ok"),
+                "integrity_flags": d.get("integrity_flags", []),
+                "is_notice": d.get("is_notice", False),
+                "notice_types": d.get("notice_types", []),
+                "integrity_relations": d.get("integrity_relations", []),
                 "risk": predict_risk(d),
             }
             for d in docs

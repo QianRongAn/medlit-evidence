@@ -6,6 +6,7 @@ import unicodedata
 import httpx
 
 from .config import LLM_API_KEY, LLM_BASE_URL, LLM_MODEL
+from .integrity import is_usable_evidence
 from .study_type import GRADE_ORDER
 
 SENT_SPLIT = re.compile(r"(?<=[.!?])\s+")
@@ -58,7 +59,7 @@ def extractive_answer(docs, query_tokens, max_sentences=4):
 
     scored = []
     for d in docs_sorted:
-        if d.get("integrity", "ok") == "retracted":
+        if not is_usable_evidence(d):
             continue
         text = d.get("abstract") or d.get("title") or ""
         for si, s in enumerate(_split_sentences(text)):
@@ -114,7 +115,7 @@ def _build_context(docs, max_docs=6, max_chars=4000):
             break
         pmid = str(d.get("pmid") or "")
         abstract = (d.get("abstract") or "").strip()[:600]
-        if (d.get("integrity", "ok") == "retracted" or not _PMID.fullmatch(pmid)
+        if (not is_usable_evidence(d) or not _PMID.fullmatch(pmid)
                 or pmid in sources or len(abstract) < 20):
             continue
         record = {"pmid": pmid, "title": (d.get("title") or "")[:300], "abstract": abstract}

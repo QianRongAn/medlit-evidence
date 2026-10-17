@@ -2,6 +2,8 @@
 import unittest
 import json
 from copy import deepcopy
+from pathlib import Path
+import xml.etree.ElementTree as ET
 from unittest.mock import AsyncMock, patch
 
 import httpx
@@ -9,6 +11,7 @@ import httpx
 from app import main
 from app.evidence import analyze_evidence
 from app.synthesizer import _build_context, extractive_answer
+from app.pubmed import parse_efetch_xml
 
 
 def doc(pmid="1", integrity="ok", abstract=None):
@@ -217,3 +220,76 @@ class TestAPI(unittest.IsolatedAsyncioTestCase):
                     self.assertNotIn("GENERATED_RESULT_ONLY", data["answer"])
                     self.assertNotIn("PMID 999", data["answer"])
                     self.assertTrue(data["sentences"])
+
+    async def test_pubmed_xml_to_api_preserves_types_roles_and_multiple_warnings(self):
+        root = ET.fromstring((Path(__file__).parent / "fixtures/pubmed_integrity.xml").read_bytes())
+        wanted = {"101", "102", "103", "201", "202", "203"}
+        for article in list(root):
+            if article.findtext("./MedlineCitation/PMID") not in wanted:
+                root.remove(article)
+        xml = ET.tostring(root)
+
+        def client():
+            return httpx.AsyncClient(transport=httpx.MockTransport(
+                lambda request: httpx.Response(200, content=xml)))
+
+        with patch.object(main, "esearch", new_callable=AsyncMock, return_value=(sorted(wanted), len(wanted))), \
+             patch("app.pubmed._client", side_effect=client), patch("app.pubmed._CACHE", {}), \
+             patch.object(main, "LLM_API_KEY", ""):
+            for route in ("search", "answer"):
+                response = await self.client.post("/api/" + route, json={"query": "metformin"})
+                self.assertEqual(response.status_code, 200)
+                data = response.json()
+                docs = {d["pmid"]: d for d in data["results"]}
+                self.assertEqual(set(docs), wanted)
+                self.assertEqual((docs["101"]["study_type"], docs["101"]["grade"]), ("case_report", "Very low"))
+                self.assertEqual((docs["102"]["study_type"], docs["102"]["grade"]), ("cohort", "Low"))
+                self.assertEqual(docs["103"]["study_type"], "randomized_controlled_trial")
+                self.assertEqual(docs["102"]["integrity_flags"], ["concern", "corrected"])
+                self.assertEqual(docs["101"]["integrity_relations"][0]["pmid"], "201")
+                for pmid in ("201", "202", "203"):
+                    self.assertTrue(docs[pmid]["is_notice"])
+                    self.assertEqual(docs[pmid]["study_type"], "notice")
+                    self.assertEqual(docs[pmid]["grade"], "N/A")
+                if route == "answer":
+                    ev = data["evidence"]
+                    self.assertEqual(ev["notice_count"], 3)
+                    self.assertEqual(ev["retracted_count"], 1)
+                    self.assertEqual(ev["concern_count"], 1)
+                    self.assertEqual(ev["corrected_count"], 2)
+                    self.assertEqual(ev["unassessed_count"], 2)
+                    self.assertTrue(data["sentences"])
+                    self.assertTrue({s["pmid"] for s in data["sentences"]} <= {"102", "103"})
+                    for word in ("撤稿", "存疑", "更正", "通知"):
+                        self.assertIn(word, ev["integrity_warning"])
+                # 分类和请求不能修改缓存中的原始元数据。
+                from app.pubmed import _CACHE
+                cached_docs = next(iter(_CACHE.values()))[1]
+                self.assertTrue(all("study_type" not in d for d in cached_docs))
+
+    async def test_only_notices_never_call_llm_and_do_not_become_research_evidence(self):
+        records = parse_efetch_xml((Path(__file__).parent / "fixtures/pubmed_integrity.xml").read_bytes())
+        notices = [d for d in records if d["is_notice"]]
+        with patch.object(main, "_retrieve", new_callable=AsyncMock, return_value=(notices, True, len(notices))), \
+             patch.object(main, "LLM_API_KEY", "test"), \
+             patch.object(main, "llm_answer", new_callable=AsyncMock) as llm:
+            data = (await self.client.post("/api/answer", json={"query": "metformin"})).json()
+            llm.assert_not_awaited()
+            self.assertEqual(data["sentences"], [])
+            self.assertEqual(data["evidence"]["notice_count"], 3)
+            self.assertEqual(data["evidence"]["unassessed_count"], 0)
+            self.assertEqual(data["evidence"]["assessment_status"], "no_usable_evidence")
+            self.assertEqual(data["evidence"]["retracted_count"], 0)
+            self.assertEqual(data["evidence"]["concern_count"], 0)
+            self.assertEqual(data["evidence"]["corrected_count"], 0)
+            self.assertEqual(len(data["results"]), 3)
+
+    async def test_republished_new_version_does_not_inherit_old_retraction(self):
+        records = parse_efetch_xml((Path(__file__).parent / "fixtures/pubmed_integrity.xml").read_bytes())
+        versions = [d for d in records if d["pmid"] in {"104", "105"}]
+        with patch.object(main, "_retrieve", new_callable=AsyncMock, return_value=(versions, True, 2)), \
+             patch.object(main, "LLM_API_KEY", ""):
+            data = (await self.client.post("/api/answer", json={"query": "metformin"})).json()
+            self.assertEqual({s["pmid"] for s in data["sentences"]}, {"105"})
+            self.assertEqual(data["evidence"]["retracted_count"], 1)
+            self.assertEqual(data["evidence"]["corrected_count"], 1)

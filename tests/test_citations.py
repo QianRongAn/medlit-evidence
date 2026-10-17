@@ -55,6 +55,15 @@ class TestCitationValidation(unittest.TestCase):
         with self.assertRaises(CitationValidationError):
             _validate_answer(content(pmid="999"), sources)
 
+    def test_notices_cannot_enter_extractive_answer_or_llm_whitelist(self):
+        from app.synthesizer import extractive_answer
+        notices = [record("201", pubtypes=["Retraction Notice"]),
+                   record("202", is_notice=True, integrity="notice"),
+                   record("203", integrity_relations=[{"ref_type": "ErratumFor"}])]
+        _, sources = _build_context(notices + [record()])
+        self.assertEqual(set(sources), {"123"})
+        self.assertEqual({s["pmid"] for s in extractive_answer(notices + [record()], ["metformin"])}, {"123"})
+
     def test_quote_must_exist_in_the_sent_excerpt_of_the_same_source(self):
         for quote in ("Invented mortality result with sufficient length.", "short", " " * 30):
             with self.subTest(quote=quote), self.assertRaises(CitationValidationError):

@@ -10,9 +10,9 @@
 - 在线 PubMed 检索、BM25 排序及进程内 TTL 缓存。
 - 请求失败时回退 11 篇演示语料；在线零结果保持为空。
 - 规则 PICO 词项提取；尚未用于结构化检索或文献与问题的语义对齐。
-- 根据标题、摘要和 PubMed 发表类型识别研究类型，展示参考分级。
+- 优先按明确的 PubMed 发表类型识别研究类型；缺标时仅用标题设计自述、方法/设计小节或明确自述研究的句子保守补充。背景中提及的研究不会抬高分级，冲突或不明确时保留未分级。
 - 默认抽取与查询词有重叠的摘要句，保留 PMID 供查证；相关性和句子适用性仍需人工核查。
-- 已识别的撤稿文献保留在来源列表，但不进入回答或 LLM 上下文。存疑和更正同时显示告警。
+- 已识别的撤稿文献及撤稿/存疑/更正通知保留在来源列表，但不进入回答或 LLM 上下文。原文章上的存疑和更正标记可同时显示，并提供关联记录链接。
 - 可选 LLM 摘要整理；逐条校验实际上下文中的 PMID 和对应原句，自动生成引用。未通过时回退摘要摘录。生成摘要的语义是否受原文支持仍需人工核对。
 - 可选 LightGBM 研究模型，显示 0–100 的研究分数；未校准，不代表未来撤稿概率。缺少模型或相关依赖时隐藏徽章，演示改写摘要不评分。
 
@@ -70,6 +70,16 @@ LLM 必须返回含 `pmid`、`text`、`quote` 的 JSON 条目。服务端只允�
 - LLM 模式也返回结构化 `sentences`，每项含 `sentence`、`pmid`、`title`、`quote`、`polarity`，引用编号由程序生成。
 - `citation_validation`：LLM 成功时 `status="passed"`、`scope="context_membership_and_quote"`、`content_entailment="unassessed"`；摘录时为 `not_applicable` / `source_excerpts`。
 - `llm_fallback_reason`：引用或格式校验失败为 `citation_validation_failed`，服务或响应异常为 `llm_unavailable`，无回退为 null。页面显示回退说明。
+
+`0.4.0` 新增或变更：
+
+- `study_type="notice"` 表示学术通知，`grade="N/A"`。研究类型判定保持 `(type, grade)` 契约，标题与摘要分开处理；规则仍非完整语义理解，分级也不代表质量评估。
+- `integrity` 新增 `notice`；保留主状态优先级 `retracted > concern > corrected`，多个状态同时保存在 `integrity_flags`。`corrected` 仅提示存在更正/重发，不保证旧版已被替换或更正无误。
+- 结果新增 `is_notice`、`notice_types`（retraction/concern/correction）和 `integrity_relations`（ref_type/pmid/citation）。关联记录缺 PMID 时保留引用信息。
+- `evidence.notice_count` 单列通知数量；多状态计数可能重叠。通知不参与回答、LLM 上下文或模型评分。只有旧 `integrity` 字段的本地记录仍受相同过滤。
+- 已撤稿旧版与修正后重发的新版分开标记；普通评论、更新和重印不直接触发完整性告警。`ok` 只代表当前元数据未命中这些规则，不能证明文章无问题。
+
+规则、关系方向和 NLM 依据见 [分类与完整性说明](docs/classification_and_integrity.md)。
 
 ## 研究资产与边界
 

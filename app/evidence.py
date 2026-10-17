@@ -4,6 +4,7 @@
 正确率。在问题与文献的 PICO 对齐及独立评估就绪前，不计算方向或置信度。
 """
 import re
+from .integrity import document_integrity, is_usable_evidence
 
 ASSESSMENT_VERSION = "2"
 ASSESSMENT_NOTE = (
@@ -41,10 +42,14 @@ def analyze_evidence(docs):
     """
     items = []
     counts = {"retracted": 0, "concern": 0, "corrected": 0}
+    notices = 0
     for d in docs:
-        integrity = d.get("integrity", "ok")
-        if integrity in counts:
-            counts[integrity] += 1
+        details = document_integrity(d)
+        integrity = details["integrity"]
+        flags = set(details["integrity_flags"])
+        for flag in counts:
+            counts[flag] += flag in flags
+        notices += details["is_notice"]
         items.append({
             "pmid": d.get("pmid"),
             "title": d.get("title"),
@@ -53,16 +58,20 @@ def analyze_evidence(docs):
             "grade": d.get("grade"),
             "year": d.get("year"),
             "integrity": integrity,
+            "integrity_flags": [flag for flag in counts if flag in flags],
+            "is_notice": details["is_notice"],
         })
 
-    usable_count = sum(it["integrity"] != "retracted" for it in items)
+    usable_count = sum(is_usable_evidence(it) for it in items)
     warnings = []
     if counts["retracted"]:
         warnings.append(f"有 {counts['retracted']} 篇文献已撤稿，不用于回答")
     if counts["concern"]:
         warnings.append(f"有 {counts['concern']} 篇文献被标记存疑（Expression of Concern）")
     if counts["corrected"]:
-        warnings.append(f"有 {counts['corrected']} 篇文献已更正/再发表")
+        warnings.append(f"有 {counts['corrected']} 篇文献存在更正/重发记录，请核对关联版本")
+    if notices:
+        warnings.append(f"有 {notices} 篇学术通知，仅供核查关联记录，不用于回答")
 
     return {
         "assessment_version": ASSESSMENT_VERSION,
@@ -79,5 +88,6 @@ def analyze_evidence(docs):
         "retracted_count": counts["retracted"],
         "concern_count": counts["concern"],
         "corrected_count": counts["corrected"],
+        "notice_count": notices,
         "integrity_warning": "；".join(warnings) or None,
     }

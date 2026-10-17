@@ -9,6 +9,7 @@ import os
 import math
 
 from .risk_features import feature_vector
+from .integrity import is_usable_evidence
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -45,8 +46,8 @@ def model_available():
 
 def predict_risk(rec):
     """返回 0–100 研究模型分数及未校准说明；模型不可用时返回 None。"""
-    if rec.get("source") == "offline":
-        return None  # 演示改写摘要不用于模型评分。
+    if rec.get("source") == "offline" or not is_usable_evidence(rec):
+        return None  # 演示摘要、已撤稿原文及通知不用于研究模型评分。
     if not _load():
         return None
     try:

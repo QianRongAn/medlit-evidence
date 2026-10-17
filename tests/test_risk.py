@@ -24,6 +24,13 @@ class TestResearchScore(unittest.TestCase):
             self.assertIsNone(risk.predict_risk({"source": "offline"}))
             load.assert_not_called()
 
+    def test_notices_and_retracted_articles_are_not_scored(self):
+        for record in ({"integrity": "notice"}, {"is_notice": True}, {"integrity": "retracted"},
+                       {"pubtypes": ["Published Erratum"]}):
+            with self.subTest(record=record), patch.object(risk, "_load") as load:
+                self.assertIsNone(risk.predict_risk(record))
+                load.assert_not_called()
+
     def test_unavailable_model_returns_no_score(self):
         with patch.object(risk, "_load", return_value=False):
             self.assertIsNone(risk.predict_risk({}))

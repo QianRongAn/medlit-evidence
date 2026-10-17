@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 import httpx
 
 from .config import PUBMED_BASE, PUBMED_PROXY, PUBMED_TIMEOUT, RETMAX
+from .integrity import document_integrity, integrity_details
 
 _CACHE = {}  # key -> (expire_at, value)
 _CACHE_TTL = 300  # 秒
@@ -84,29 +85,15 @@ def _find_text(el, path):
 
 
 def _detect_integrity(pubtypes, reftypes):
-    """判断文献的完整性状态：retracted / concern / corrected / ok。
-
-    依据 PubMed 的 PublicationType 与 CommentsCorrections 的 RefType：
-    - Retracted Publication / RetractionIn        -> retracted（已撤稿，结论不可采信）
-    - Expression of Concern                       -> concern（存疑）
-    - Corrected and Republished / Published Erratum -> corrected（已更正）
-    """
-    pts = {p.lower() for p in pubtypes}
-    rt = {r.lower() for r in reftypes}
-    if "retracted publication" in pts or "retractionin" in rt:
-        return "retracted"
-    if "expression of concern" in pts:
-        return "concern"
-    if "corrected and republished article" in pts or "published erratum" in pts:
-        return "corrected"
-    return "ok"
+    """兼容旧调用：返回主状态；完整标记与通知身份见 integrity_details。"""
+    return integrity_details(pubtypes, reftypes)["integrity"]
 
 
 def parse_efetch_xml(xml_text):
     root = ET.fromstring(xml_text)
     docs = []
     for art in root.findall(".//PubmedArticle"):
-        pmid = _find_text(art, ".//PMID")
+        pmid = _find_text(art, "./MedlineCitation/PMID")
 
         abstract_parts = []
         for ab in art.findall(".//Abstract/AbstractText"):
@@ -140,11 +127,14 @@ def parse_efetch_xml(xml_text):
             if t:
                 affiliations.add(t.lower())
 
-        pubtypes = [_find_text(pt, ".") for pt in art.findall(".//PublicationType")]
-        reftypes = [
-            cc.get("RefType") for cc in art.findall(".//CommentsCorrectionsList/CommentsCorrections")
-            if cc.get("RefType")
-        ]
+        pubtypes = [_find_text(pt, ".") for pt in art.findall(
+            "./MedlineCitation/Article/PublicationTypeList/PublicationType")]
+        relations = [{
+            "ref_type": cc.get("RefType", "").strip(),
+            "pmid": _find_text(cc, "./PMID") or None,
+            "citation": _find_text(cc, "./RefSource"),
+        } for cc in art.findall("./MedlineCitation/CommentsCorrectionsList/CommentsCorrections")]
+        details = integrity_details(pubtypes, [r["ref_type"] for r in relations])
 
         docs.append({
             "pmid": pmid,
@@ -160,7 +150,8 @@ def parse_efetch_xml(xml_text):
             "n_references": len(art.findall(".//ReferenceList/Reference")),
             "language": _find_text(art, ".//Language"),
             "source": "pubmed",
-            "integrity": _detect_integrity(pubtypes, reftypes),
+            **details,
+            "integrity_relations": relations,
         })
     return docs
 
@@ -173,7 +164,8 @@ def load_corpus(path):
         d.setdefault("source", "offline")
         d.setdefault("authors", [])
         d.setdefault("pubtypes", [])
-        d.setdefault("integrity", "ok")
+        d.update(document_integrity(d))
+        d.setdefault("integrity_relations", [])
         d.setdefault("n_authors", len(d.get("authors", [])))
         d.setdefault("n_affiliations", 0)
         d.setdefault("n_grants", 0)

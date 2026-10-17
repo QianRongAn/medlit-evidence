@@ -29,6 +29,7 @@ const STYPE_ZH = {
   review: "综述",
   basic: "基础研究",
   other: "其他",
+  notice: "学术通知",
 };
 const GRADE_ORDER = ["High", "Moderate", "Low", "Very low", "N/A"];
 
@@ -399,6 +400,33 @@ function modelScoreBadge(score) {
   return `<span class="risk-badge" style="background:#e8edf7;color:#32415e" title="仅供人工排序；未校准，不代表未来撤稿概率">研究分数 ${score.score.toFixed(1)} / 100</span>`;
 }
 
+function integrityBadges(doc) {
+  const labels = { retracted: "已撤稿", concern: "存疑", corrected: "有更正/重发", notice: "学术通知" };
+  const flags = new Set(doc.integrity_flags || []);
+  if (doc.integrity && doc.integrity !== "ok") flags.add(doc.integrity);
+  if (doc.is_notice) flags.add("notice");
+  return Object.keys(labels).filter((key) => flags.has(key)).map((key) =>
+    `<span class="integrity-badge integrity-${key}">${labels[key]}</span>`
+  ).join("");
+}
+
+function integrityLinks(doc) {
+  const labels = {
+    RetractionIn: "撤稿通知", RetractionOf: "所涉原文",
+    ExpressionOfConcernIn: "存疑通知", ExpressionOfConcernFor: "所涉原文",
+    ErratumIn: "更正通知", ErratumFor: "所涉原文",
+    CorrectedandRepublishedIn: "更正重发版", CorrectedandRepublishedFrom: "更正前版本",
+    RetractedandRepublishedIn: "重发版", RetractedandRepublishedFrom: "已撤稿原版",
+  };
+  return (doc.integrity_relations || []).filter((r) => labels[r.ref_type]).map((r) => {
+    const label = labels[r.ref_type];
+    const pmid = String(r.pmid || "");
+    return /^[1-9][0-9]{0,9}$/.test(pmid)
+      ? `<a class="doc-pmid" href="https://pubmed.ncbi.nlm.nih.gov/${pmid}/" target="_blank" rel="noopener">${label} · PMID ${pmid}</a>`
+      : `<span class="doc-meta">${label}：${esc(r.citation || "未提供关联 PMID")}</span>`;
+  }).join(" · ");
+}
+
 function renderDocs(results) {
   const list = $("docList");
   list.innerHTML = "";
@@ -417,11 +445,7 @@ function renderDocs(results) {
       authors,
     ].filter(Boolean).join(" · ");
 
-    const INTEGRITY_ZH = { retracted: "已撤稿", concern: "存疑", corrected: "已更正" };
-    const integrity = d.integrity && d.integrity !== "ok" ? d.integrity : null;
-    const integBadge = integrity
-      ? `<span class="integrity-badge integrity-${integrity}">${INTEGRITY_ZH[integrity]}</span>`
-      : "";
+    const integBadge = integrityBadges(d);
 
     const riskBadge = modelScoreBadge(d.risk);
 
@@ -436,6 +460,7 @@ function renderDocs(results) {
       <div class="doc-meta">${esc(metaParts)}</div>
       ${d.abstract ? `<div class="doc-abstract">${esc(d.abstract)}</div>` : ""}
       ${d.pmid ? `<a class="doc-pmid" href="${pmidUrl}" target="_blank" rel="noopener">PMID ${esc(d.pmid)}</a>` : ""}
+      <div>${integrityLinks(d)}</div>
       <div class="rel-bar"><div class="rel-fill" style="width:${Math.max(2, d.relevance || 0)}%"></div></div>
     `;
     list.appendChild(div);

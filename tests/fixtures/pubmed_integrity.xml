@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic regression records; not real PubMed citations. -->
+<PubmedArticleSet>
+  <PubmedArticle><MedlineCitation><PMID>101</PMID><Article>
+    <ArticleTitle>Metformin: a case report</ArticleTitle>
+    <Abstract><AbstractText Label="BACKGROUND">A previous meta-analysis reported benefit.</AbstractText><AbstractText Label="METHODS">We report a case of metformin treatment.</AbstractText><AbstractText Label="CONCLUSIONS">Metformin reduced mortality in this study.</AbstractText></Abstract>
+    <PublicationTypeList><PublicationType>Journal Article</PublicationType><PublicationType>Case Reports</PublicationType></PublicationTypeList>
+  </Article><CommentsCorrectionsList><CommentsCorrections RefType="RetractionIn"><RefSource>Journal. Retraction notice.</RefSource><PMID>201</PMID></CommentsCorrections></CommentsCorrectionsList></MedlineCitation></PubmedArticle>
+  <PubmedArticle><MedlineCitation><PMID>102</PMID><Article>
+    <ArticleTitle>Metformin: a prospective cohort study</ArticleTitle>
+    <Abstract><AbstractText Label="BACKGROUND">Previous randomized controlled trials reported benefit.</AbstractText><AbstractText Label="METHODS">We conducted a prospective cohort study.</AbstractText><AbstractText Label="CONCLUSIONS">Metformin reduced mortality in the cohort.</AbstractText></Abstract>
+    <PublicationTypeList><PublicationType>Journal Article</PublicationType><PublicationType>Observational Study</PublicationType></PublicationTypeList>
+  </Article><CommentsCorrectionsList><CommentsCorrections RefType="ExpressionOfConcernIn"><RefSource>Journal. Concern notice.</RefSource><PMID>202</PMID></CommentsCorrections><CommentsCorrections RefType="ErratumIn"><RefSource>Journal. Correction.</RefSource><PMID>203</PMID></CommentsCorrections></CommentsCorrectionsList></MedlineCitation></PubmedArticle>
+  <PubmedArticle><MedlineCitation><PMID>103</PMID><Article>
+    <ArticleTitle>Metformin treatment study</ArticleTitle>
+    <Abstract><AbstractText Label="BACKGROUND">A systematic review suggested benefit.</AbstractText><AbstractText Label="METHODS">Patients were randomly assigned to treatment.</AbstractText><AbstractText Label="CONCLUSIONS">Metformin reduced mortality in the trial.</AbstractText></Abstract>
+    <PublicationTypeList><PublicationType>Journal Article</PublicationType><PublicationType>Clinical Trial</PublicationType><PublicationType>Randomized Controlled Trial</PublicationType></PublicationTypeList>
+  </Article><CommentsCorrectionsList><CommentsCorrections RefType="ErratumIn"><RefSource>Journal. Correction.</RefSource><PMID>203</PMID></CommentsCorrections></CommentsCorrectionsList></MedlineCitation></PubmedArticle>
+  <PubmedArticle><MedlineCitation><PMID>104</PMID><Article>
+    <ArticleTitle>Metformin original study</ArticleTitle><Abstract><AbstractText>Metformin reduced mortality in the original analysis.</AbstractText></Abstract>
+    <PublicationTypeList><PublicationType>Journal Article</PublicationType></PublicationTypeList>
+  </Article><CommentsCorrectionsList><CommentsCorrections RefType="RetractedandRepublishedIn"><RefSource>Journal. Corrected version.</RefSource><PMID>105</PMID></CommentsCorrections></CommentsCorrectionsList></MedlineCitation></PubmedArticle>
+  <PubmedArticle><MedlineCitation><PMID>105</PMID><Article>
+    <ArticleTitle>Metformin corrected study</ArticleTitle><Abstract><AbstractText>Metformin results are reported in this corrected analysis.</AbstractText></Abstract>
+    <PublicationTypeList><PublicationType>Journal Article</PublicationType><PublicationType>Corrected and Republished Article</PublicationType></PublicationTypeList>
+  </Article><CommentsCorrectionsList><CommentsCorrections RefType="RetractedandRepublishedFrom"><RefSource>Journal. Retracted original.</RefSource><PMID>104</PMID></CommentsCorrections></CommentsCorrectionsList></MedlineCitation></PubmedArticle>
+  <PubmedArticle><MedlineCitation><PMID>106</PMID><Article>
+    <ArticleTitle>Metformin original report</ArticleTitle><Abstract><AbstractText>Metformin results are reported in the original study.</AbstractText></Abstract>
+    <PublicationTypeList><PublicationType>Journal Article</PublicationType></PublicationTypeList>
+  </Article><CommentsCorrectionsList><CommentsCorrections RefType="CorrectedandRepublishedIn"><RefSource>Journal. Corrected version.</RefSource><PMID>107</PMID></CommentsCorrections></CommentsCorrectionsList></MedlineCitation></PubmedArticle>
+  <PubmedArticle><MedlineCitation><PMID>107</PMID><Article>
+    <ArticleTitle>Metformin corrected report</ArticleTitle><Abstract><AbstractText>Metformin results are reported in the corrected study.</AbstractText></Abstract>
+    <PublicationTypeList><PublicationType>Journal Article</PublicationType></PublicationTypeList>
+  </Article><CommentsCorrectionsList><CommentsCorrections RefType="CorrectedandRepublishedFrom"><RefSource>Journal. Original version.</RefSource><PMID>106</PMID></CommentsCorrections></CommentsCorrectionsList></MedlineCitation></PubmedArticle>
+  <PubmedArticle><MedlineCitation><PMID>201</PMID><Article>
+    <ArticleTitle>Retraction: Metformin case report and meta-analysis</ArticleTitle><Abstract><AbstractText>Metformin reduced mortality, according to the article being retracted.</AbstractText></Abstract>
+    <PublicationTypeList><PublicationType>Retraction Notice</PublicationType></PublicationTypeList>
+  </Article><CommentsCorrectionsList><CommentsCorrections RefType="RetractionOf"><RefSource>Journal. Original article.</RefSource><PMID>101</PMID></CommentsCorrections></CommentsCorrectionsList></MedlineCitation></PubmedArticle>
+  <PubmedArticle><MedlineCitation><PMID>202</PMID><Article>
+    <ArticleTitle>Expression of concern: Metformin cohort</ArticleTitle><Abstract><AbstractText>Metformin reduced mortality, according to the study under investigation.</AbstractText></Abstract>
+    <PublicationTypeList><PublicationType>Expression of Concern</PublicationType></PublicationTypeList>
+  </Article><CommentsCorrectionsList><CommentsCorrections RefType="ExpressionOfConcernFor"><RefSource>Journal. Original article.</RefSource><PMID>102</PMID></CommentsCorrections></CommentsCorrectionsList></MedlineCitation></PubmedArticle>
+  <PubmedArticle><MedlineCitation><PMID>203</PMID><Article>
+    <ArticleTitle>Erratum: Metformin randomized controlled trial</ArticleTitle><Abstract><AbstractText>Metformin reduced mortality, as described in the corrected article.</AbstractText></Abstract>
+    <PublicationTypeList><PublicationType>Published Erratum</PublicationType></PublicationTypeList>
+  </Article><CommentsCorrectionsList><CommentsCorrections RefType="ErratumFor"><RefSource>Journal. Original article.</RefSource><PMID>103</PMID></CommentsCorrections></CommentsCorrectionsList></MedlineCitation></PubmedArticle>
+</PubmedArticleSet>

@@ -304,6 +304,7 @@ textarea:focus {
 .integrity-retracted { background: #f24726; color: #fff; }
 .integrity-concern { background: var(--yellow); color: var(--black); }
 .integrity-corrected { background: #8f8f88; color: #fff; }
+.integrity-notice { background: #e8edf7; color: #32415e; }
 .integrity-warning {
   background: #fff; border: 1px solid #ffd7cc; color: #b3401f;
   border-radius: 11px; padding: 10px 14px; margin-top: 12px; font-size: 13px;
