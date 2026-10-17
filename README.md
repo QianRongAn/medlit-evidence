@@ -13,8 +13,8 @@
 - 根据标题、摘要和 PubMed 发表类型识别研究类型，展示参考分级。
 - 默认抽取与查询词有重叠的摘要句，保留 PMID 供查证；相关性和句子适用性仍需人工核查。
 - 已识别的撤稿文献保留在来源列表，但不进入回答或 LLM 上下文。存疑和更正同时显示告警。
-- 可选 LLM 摘要整理；输出内容与引用仍须核对，尚无逐项蕴含验证。
-- 可选 LightGBM 研究模型。缺少模型或相关依赖时隐藏徽章，不阻断检索。
+- 可选 LLM 摘要整理；逐条校验实际上下文中的 PMID 和对应原句，自动生成引用。未通过时回退摘要摘录。生成摘要的语义是否受原文支持仍需人工核对。
+- 可选 LightGBM 研究模型，显示 0–100 的研究分数；未校准，不代表未来撤稿概率。缺少模型或相关依赖时隐藏徽章，演示改写摘要不评分。
 
 离线摘要是演示用改写，**不是 PMID 对应的 PubMed 原文**。界面会标识演示来源。
 
@@ -38,7 +38,9 @@ python -m pip install -r requirements.txt
 
 配置 `LLM_API_KEY`、`LLM_BASE_URL`（OpenAI 兼容地址）和 `LLM_MODEL` 后启用。请求失败时回退抽取式整理。
 
-LLM 被要求逐篇整理摘要，不推导总体共识或评分；提示词约束不等于输出验证。模型可能生成不准确的表述或引用，详见审查报告。
+LLM 必须返回含 `pmid`、`text`、`quote` 的 JSON 条目。服务端只允许引用实际发送的摘要记录，并检查 `quote` 是该摘要片段中的连续原文。摘要正文不得夹带其他引用或链接，引用统一由服务端附加。任何条目无效则整份输出回退，避免部分无效内容被展示。
+
+页面逐条展示摘要整理、可点击 PMID 与对应原句。校验范围是来源成员关系和原句一致性，**不等于摘要语义正确或临床适用性已验证**。不支持约定输出格式的兼容模型会回退摘录。
 
 ## API 与迁移
 
@@ -61,6 +63,13 @@ LLM 被要求逐篇整理摘要，不推导总体共识或评分；提示词约�
 - `confidence: null`、`conflict: null` 表示未评估，不能转换成 0 分或“无冲突”。
 - `support_count`、`against_count`、`neutral_count` 暂为 0；未评估数量见 `unassessed_count`，不能把未评估当作中立或无效。
 - 摘要句的 `polarity` 为 `"unassessed"`。前端不再展示旧版方向和分数，历史提问保留但旧判定标为停用。
+
+`0.3.0` 新增或变更：
+
+- 保留结果字段名 `risk`；可用时为 `{"kind":"research_model_score","score":73.0,"scale":[0,100],"calibrated":false,"description":"..."}`。`score` 从旧版 0–1 改为 0–100，删除风险 `level`；不能按概率解释。前端拒绝显示旧版概率载荷。不可用或演示语料为 null。
+- LLM 模式也返回结构化 `sentences`，每项含 `sentence`、`pmid`、`title`、`quote`、`polarity`，引用编号由程序生成。
+- `citation_validation`：LLM 成功时 `status="passed"`、`scope="context_membership_and_quote"`、`content_entailment="unassessed"`；摘录时为 `not_applicable` / `source_excerpts`。
+- `llm_fallback_reason`：引用或格式校验失败为 `citation_validation_failed`，服务或响应异常为 `llm_unavailable`，无回退为 null。页面显示回退说明。
 
 ## 研究资产与边界
 

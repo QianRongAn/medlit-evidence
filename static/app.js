@@ -73,6 +73,11 @@ const POLARITY = {
 function renderAnswer(data) {
   const body = $("answerBody");
   body.innerHTML = "";
+  $("answerNotice").textContent = data.mode === "llm"
+    ? "引用来源与对应原句已校验；生成摘要的语义是否受原文支持仍需核对。"
+    : data.llm_fallback_reason === "citation_validation_failed"
+      ? "生成结果未通过引用校验，已改用摘要摘录。"
+      : data.llm_fallback_reason === "llm_unavailable" ? "生成服务不可用，已改用摘要摘录。" : "";
   if (data.sentences && data.sentences.length) {
     data.sentences.forEach((s) => {
       const p = document.createElement("p");
@@ -94,6 +99,12 @@ function renderAnswer(data) {
       }
       p.appendChild(cite);
       body.appendChild(p);
+      if (data.mode === "llm" && s.quote) {
+        const quote = document.createElement("blockquote");
+        quote.className = "source-quote";
+        quote.textContent = "对应摘要原句：" + s.quote;
+        body.appendChild(quote);
+      }
     });
   } else {
     const p = document.createElement("p");
@@ -165,8 +176,8 @@ function renderHomeStatus(h) {
   model.textContent = loaded ? "已加载" : "未加载";
   model.style.color = loaded ? "#1B1B1D" : "#c04b3e";
   $("homeModelSub").textContent = loaded
-    ? "LightGBM 撤稿风险 · AUC 0.856"
-    : "模型文件缺失 · 风险徽章已停用";
+    ? "研究模型分数 · 未校准"
+    : "模型不可用 · 分数未显示";
 
   $("homeHist").textContent = getAskCount();
 
@@ -379,6 +390,15 @@ function renderDist(dist) {
   });
 }
 
+function modelScoreBadge(score) {
+  // 旧版概率载荷也不展示，避免把 0–1 误当作新版 0–100 分数。
+  if (!score || score.kind !== "research_model_score" || score.calibrated !== false
+      || !Array.isArray(score.scale) || score.scale[0] !== 0 || score.scale[1] !== 100
+      || typeof score.score !== "number" || !Number.isFinite(score.score)
+      || score.score < 0 || score.score > 100) return "";
+  return `<span class="risk-badge" style="background:#e8edf7;color:#32415e" title="仅供人工排序；未校准，不代表未来撤稿概率">研究分数 ${score.score.toFixed(1)} / 100</span>`;
+}
+
 function renderDocs(results) {
   const list = $("docList");
   list.innerHTML = "";
@@ -403,16 +423,7 @@ function renderDocs(results) {
       ? `<span class="integrity-badge integrity-${integrity}">${INTEGRITY_ZH[integrity]}</span>`
       : "";
 
-    // 撤稿风险徽章（LightGBM 模型预测，score 为 0-1 概率）—— Miro 配色
-    const RISK_COLOR = { "高": "#F24726", "中高": "#FFD02E", "中低": "#4262FF", "低": "#12A594" };
-    let riskBadge = "";
-    if (d.risk && typeof d.risk.score === "number") {
-      const pct = Math.round(d.risk.score * 100);
-      const lvl = d.risk.level || (pct >= 60 ? "高" : pct >= 40 ? "中高" : pct >= 20 ? "中低" : "低");
-      const rc = RISK_COLOR[lvl] || "#C3C2BC";
-      const txt = contrastText(rc);
-      riskBadge = `<span class="risk-badge" style="background:${rc};color:${txt}" title="撤稿风险模型预测（仅供参考）">风险 ${pct}%</span>`;
-    }
+    const riskBadge = modelScoreBadge(d.risk);
 
     const pmidUrl = d.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${d.pmid}/` : "";
     div.innerHTML = `

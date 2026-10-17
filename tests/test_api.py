@@ -1,5 +1,6 @@
 """接口回归：替换外部服务，验证证据从检索到回答的完整链路。"""
 import unittest
+import json
 from copy import deepcopy
 from unittest.mock import AsyncMock, patch
 
@@ -32,9 +33,10 @@ class TestEvidenceSafety(unittest.TestCase):
         records = [doc("999", "retracted"), doc("123")]
         sentences = extractive_answer(records, ["metformin"])
         self.assertEqual({s["pmid"] for s in sentences}, {"123"})
-        context = _build_context(records)
-        self.assertNotIn("[PMID 999]", context)
-        self.assertIn("[PMID 123]", context)
+        context, sources = _build_context(records)
+        self.assertNotIn('"pmid": "999"', context)
+        self.assertIn('"pmid": "123"', context)
+        self.assertEqual(set(sources), {"123"})
 
     def test_annotation_does_not_mutate_cached_records(self):
         records = [doc()]
@@ -128,7 +130,8 @@ class TestAPI(unittest.IsolatedAsyncioTestCase):
                 if fails:
                     llm.side_effect = RuntimeError("unavailable")
                 else:
-                    llm.return_value = "Metformin reduced mortality. [PMID 123]"
+                    llm.return_value = [{"sentence": "Metformin reduced mortality.", "pmid": "123",
+                                         "polarity": "unassessed", "quote": "Metformin reduced mortality."}]
                 data = (await self.client.post("/api/answer", json={"query": "metformin"})).json()
                 self.assertEqual([d["pmid"] for d in llm.call_args.args[1]], ["123"])
                 self.assertEqual(data["mode"], "extractive" if fails else "llm")
@@ -171,3 +174,46 @@ class TestAPI(unittest.IsolatedAsyncioTestCase):
                     self.assertIn("结局", ev["assessment_note"])
                     self.assertTrue(data["sentences"])
                     self.assertTrue(all(s["polarity"] == "unassessed" for s in data["sentences"]))
+
+    async def test_real_llm_validator_controls_api_success_and_fallback(self):
+        original_client = httpx.AsyncClient
+        quote = "Metformin reduced mortality."
+        base_item = {"pmid": "1", "text": "GENERATED_RESULT_ONLY", "quote": quote}
+        cases = [
+            (base_item, True),
+            ({**base_item, "pmid": "999"}, False),  # 已撤稿、未发送
+            ({**base_item, "pmid": "7"}, False),  # 检索到了，但超出上下文六篇上限
+            ({**base_item, "quote": "Invented source quote with sufficient length."}, False),
+            ({**base_item, "text": "GENERATED_RESULT_ONLY [PMID 999]"}, False),
+            ({"pmid": "1", "text": "Missing quote"}, False),
+            (None, False),
+        ]
+        records = [doc(str(i)) for i in range(1, 9)] + [doc("999", "retracted")]
+        for item, valid in cases:
+            def handler(request):
+                output = json.dumps({"items": [item]}) if item else "uncited free text"
+                return httpx.Response(200, json={"choices": [{"message": {"content": output}}]})
+
+            def client(**kwargs):
+                return original_client(transport=httpx.MockTransport(handler))
+
+            with self.subTest(item=item), \
+                 patch.object(main, "_retrieve", new_callable=AsyncMock, return_value=(records, True, len(records))), \
+                 patch.object(main, "LLM_API_KEY", "test"), \
+                 patch("app.synthesizer.httpx.AsyncClient", side_effect=client):
+                response = await self.client.post("/api/answer", json={"query": "metformin"})
+                self.assertEqual(response.status_code, 200)
+                data = response.json()
+                if valid:
+                    self.assertEqual(data["mode"], "llm")
+                    self.assertEqual(data["citation_validation"]["status"], "passed")
+                    self.assertEqual(data["citation_validation"]["content_entailment"], "unassessed")
+                    self.assertIsNone(data["llm_fallback_reason"])
+                    self.assertEqual(data["answer"], "GENERATED_RESULT_ONLY [PMID 1]")
+                    self.assertEqual(data["sentences"][0]["quote"], quote)
+                else:
+                    self.assertEqual(data["mode"], "extractive")
+                    self.assertEqual(data["llm_fallback_reason"], "citation_validation_failed")
+                    self.assertNotIn("GENERATED_RESULT_ONLY", data["answer"])
+                    self.assertNotIn("PMID 999", data["answer"])
+                    self.assertTrue(data["sentences"])

@@ -331,6 +331,7 @@ textarea:focus {
 
 .answer-body { font-size: 14.5px; }
 .assessment-note { color: var(--muted, #666); font-size: 13px; line-height: 1.7; margin: 0 0 16px; }
+.source-quote { margin: 0 0 18px 18px; padding-left: 12px; border-left: 2px solid #c3c2bc; font-size: 13px; line-height: 1.6; color: var(--muted, #666); }
 .answer-sentence { margin: 0 0 13px; position: relative; padding-left: 18px; }
 .pol-mark {
   position: absolute; left: 0; top: 8.5px;

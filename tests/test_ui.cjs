@@ -106,3 +106,31 @@ test("source sentences retain citations without support or opposition badges", (
   assert.equal(sentence.children[0].title, "结论方向：未评估");
   assert.equal(sentence.children[2].textContent, "PMID 123");
 });
+
+test("research scores have no probability sign or risk bands and legacy payloads are hidden", () => {
+  const { context } = loadApp();
+  const score = { kind: "research_model_score", score: 73, scale: [0, 100], calibrated: false };
+  const badge = context.modelScoreBadge(score);
+  assert.match(badge, /研究分数 73\.0 \/ 100/);
+  assert.match(badge, /未校准，不代表未来撤稿概率/);
+  assert.doesNotMatch(badge, /%|中高|中低|风险 73/);
+  for (const bad of [null, { score: 0.73, level: "高" }, { ...score, calibrated: true },
+      { ...score, score: NaN }, { ...score, score: -1 }, { ...score, score: 101 }]) {
+    assert.equal(context.modelScoreBadge(bad), "");
+  }
+});
+
+test("LLM validation scope and original quote are visible and invalid citations report fallback", () => {
+  const { context, get } = loadApp();
+  context.renderAnswer({ mode: "llm", online: true, sentences: [
+    { sentence: "Summary", pmid: "123", polarity: "unassessed", quote: "Exact original abstract sentence." },
+  ] });
+  assert.match(get("answerNotice").textContent, /引用来源与对应原句已校验/);
+  assert.match(get("answerNotice").textContent, /语义.*仍需核对/);
+  assert.equal(get("answerBody").children[1].textContent, "对应摘要原句：Exact original abstract sentence.");
+  context.renderAnswer({ mode: "extractive", online: true, answer: "Original excerpt",
+    sentences: [], llm_fallback_reason: "citation_validation_failed" });
+  assert.equal(get("answerNotice").textContent, "生成结果未通过引用校验，已改用摘要摘录。");
+  context.renderAnswer({ mode: "extractive", online: true, answer: "Excerpt", sentences: [] });
+  assert.equal(get("answerNotice").textContent, "");
+});

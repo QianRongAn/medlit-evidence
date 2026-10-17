@@ -75,7 +75,7 @@
           <div class="stat-sub" id="homeSvcSub">正在检查 PubMed 连接…</div>
         </div>
         <div class="stat-card tone-pink">
-          <div class="stat-label">撤稿风险模型</div>
+          <div class="stat-label">撤稿研究模型</div>
           <div class="stat-num" id="homeModel">–</div>
           <div class="stat-sub" id="homeModelSub">LightGBM · AUC 0.856</div>
         </div>
@@ -192,6 +192,7 @@
             <span class="mode-badge" id="modeBadge"></span>
           </div>
           <p class="assessment-note" id="assessmentNote"></p>
+          <p class="assessment-note" id="answerNotice"></p>
           <div class="answer-body" id="answerBody"></div>
         </div>
 
@@ -215,6 +216,7 @@
       <!-- 证据来源 -->
       <div class="card">
         <div class="card-head"><h2>证据来源</h2><span class="count" id="docCount"></span></div>
+        <p class="assessment-note">研究模型分数仅供人工排序，未校准，不代表未来撤稿概率；演示改写摘要不评分。</p>
         <div id="docList" class="doc-grid"></div>
       </div>
     </section>

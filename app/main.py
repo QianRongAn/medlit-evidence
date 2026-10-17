@@ -18,11 +18,11 @@ from .pubmed import efetch, esearch, load_corpus
 from .retrieval import rank
 from .risk import model_available, predict_risk
 from .study_type import classify
-from .synthesizer import extractive_answer, llm_answer
+from .synthesizer import CitationValidationError, extractive_answer, llm_answer
 from .tokenizer import tokenize
 from .translate import translate_query
 
-app = FastAPI(title="MedLit Evidence", version="0.2.0")
+app = FastAPI(title="MedLit Evidence", version="0.3.0")
 
 
 class Query(BaseModel):
@@ -143,22 +143,22 @@ async def answer(q: Query):
 
     usable = [d for d in top if d.get("integrity", "ok") != "retracted"]
     mode = "extractive"
-    answer_text = None
+    sentences = None
+    fallback_reason = None
     if LLM_API_KEY and usable:
         try:
-            answer_text = await llm_answer(query, usable)
+            sentences = await llm_answer(query, usable)
             mode = "llm"
+        except CitationValidationError:
+            fallback_reason = "citation_validation_failed"
         except Exception:
-            answer_text = None
+            fallback_reason = "llm_unavailable"
 
-    sentences = None
-    if answer_text is None:
+    if sentences is None:
         sentences = extractive_answer(usable, query_tokens)
-        parts = []
-        for s in sentences:
-            parts.append(f"{s['sentence']} [PMID {s['pmid']}]")
-        answer_text = "\n\n".join(parts) or "未找到可用于回答的相关证据；已撤稿文献不用于生成回答。"
         mode = "extractive"
+    answer_text = "\n\n".join(f"{s['sentence']} [PMID {s['pmid']}]" for s in sentences)
+    answer_text = answer_text or "未找到可用于回答的相关证据；已撤稿文献不用于生成回答。"
 
     evidence = analyze_evidence(top)
 
@@ -173,6 +173,12 @@ async def answer(q: Query):
         "mode": mode,
         "answer": answer_text,
         "sentences": sentences,
+        "citation_validation": {
+            "status": "passed" if mode == "llm" else "not_applicable",
+            "scope": "context_membership_and_quote" if mode == "llm" else "source_excerpts",
+            "content_entailment": "unassessed",
+        },
+        "llm_fallback_reason": fallback_reason,
         "pico": extract_pico(query),
         "evidence": evidence,
         "evidence_distribution": {k: dist.get(k, 0) for k in ["High", "Moderate", "Low", "Very low", "N/A"]},
