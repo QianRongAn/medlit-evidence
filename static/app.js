@@ -103,7 +103,7 @@ function renderAnswer(data) {
     body.appendChild(p);
   }
   $("modeBadge").textContent =
-    data.mode === "llm" ? "生成式回答（LLM）" : "抽取式回答（离线）";
+    data.mode === "llm" ? "生成式回答（LLM）" : `抽取式回答（${data.online ? "PubMed" : "演示语料"}）`;
 }
 
 function renderStats(data, elapsedMs, ev) {
@@ -150,7 +150,8 @@ function renderStats(data, elapsedMs, ev) {
     warn.classList.add("hidden");
   }
 
-  renderConfidence(ev ? ev.confidence : 0);
+  const evidenceCount = ev ? ev.support_count + ev.against_count + ev.neutral_count : 0;
+  renderConfidence(evidenceCount ? ev.confidence : null);
 }
 
 /* ---------- 首页仪表盘 ---------- */
@@ -356,7 +357,7 @@ function renderPico(pico) {
 
 /* ---------- 置信度等级标签（黑色综合等级卡用，Miro 配色） ---------- */
 const CONF_TIERS = [
-  { min: 80, label: "高", color: "#2DD4BF", desc: "结果高度可信，可直接采信" },
+  { min: 80, label: "高", color: "#2DD4BF", desc: "规则评分较高，仍需核对原文与适用结局" },
   { min: 60, label: "中", color: "#7B9AFF", desc: "结果基本可信，建议复核" },
   { min: 40, label: "低", color: "#FFD02E", desc: "可信度偏低，重点排查" },
   { min: 0,  label: "极低", color: "#FF7A6E", desc: "可信度极低，不建议采用" },
@@ -368,10 +369,11 @@ function renderConfidence(confidence) {
   const tag = $("confTag");
   const score = $("confScore");
   const desc = $("confDesc");
-  const tier = confidence ? CONF_TIERS.find((t) => confidence >= t.min) : CONF_NA;
+  const hasScore = typeof confidence === "number" && Number.isFinite(confidence);
+  const tier = hasScore ? CONF_TIERS.find((t) => confidence >= t.min) : CONF_NA;
   tag.textContent = tier.label;
   tag.style.color = tier.color;
-  score.textContent = confidence ? confidence : "–";
+  score.textContent = hasScore ? confidence : "–";
   score.style.color = "#FFD02E";
   desc.textContent = tier.desc;
 }

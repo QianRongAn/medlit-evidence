@@ -57,6 +57,8 @@ def extractive_answer(docs, query_tokens, max_sentences=4):
 
     scored = []
     for d in docs_sorted:
+        if d.get("integrity", "ok") == "retracted":
+            continue
         text = d.get("abstract") or d.get("title") or ""
         for si, s in enumerate(_split_sentences(text)):
             label, body = _strip_label(s)
@@ -96,7 +98,8 @@ def extractive_answer(docs, query_tokens, max_sentences=4):
 
 def _build_context(docs, max_docs=6, max_chars=4000):
     parts = []
-    for d in docs[:max_docs]:
+    eligible = [d for d in docs if d.get("integrity", "ok") != "retracted"]
+    for d in eligible[:max_docs]:
         ab = (d.get("abstract") or "").strip().replace("\n", " ")
         if len(ab) > 600:
             ab = ab[:600] + "..."

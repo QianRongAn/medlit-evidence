@@ -94,6 +94,8 @@ def compute_confidence(docs, conflict):
     关键：不取"最高等级那一篇"的分数，而是按全部文献的等级加权平均，
     极低/未分级文献会真实地拉低分数，避免"一篇 meta 分析掩盖所有烂证据"。
     """
+    if not docs:
+        return 0
     grades = [GRADE_BASE.get(d.get("grade", "N/A"), 40) for d in docs]
     quality = sum(grades) / len(grades) if grades else 40
     score = float(quality)

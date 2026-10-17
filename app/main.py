@@ -3,13 +3,13 @@
 用法：
     python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 """
-import asyncio
 import os
+from copy import deepcopy
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from .config import CORPUS_FILE, LLM_API_KEY, RETMAX, STATIC_DIR
 from .evidence import analyze_evidence
@@ -26,8 +26,8 @@ app = FastAPI(title="MedLit Evidence", version="0.1.0")
 
 
 class Query(BaseModel):
-    query: str
-    retmax: int = RETMAX
+    query: str = Field(..., max_length=2000)
+    retmax: int = Field(default=RETMAX, ge=1, le=100)
 
 
 def _search_text(query):
@@ -43,6 +43,7 @@ def _query_tokens(query):
 
 def _annotate_docs(docs, query_tokens):
     """分类 + BM25 打分 + 归一化，按相关性降序返回。"""
+    docs = deepcopy(docs)  # PubMed 缓存由多次请求共享，标注不得污染缓存。
     doc_tokens = [tokenize((d.get("title") or "") + " " + (d.get("abstract") or "")) for d in docs]
     ranked = rank(doc_tokens, query_tokens)
 
@@ -61,13 +62,12 @@ def _annotate_docs(docs, query_tokens):
 
 
 async def _retrieve(query, retmax):
-    """在线 PubMed 优先，失败或空则回退离线语料。返回 (docs, online, count)。"""
+    """在线 PubMed 优先，仅请求失败时回退演示语料。返回 (docs, online, count)。"""
     search_text = _search_text(query)
     try:
         pmids, count = await esearch(search_text, retmax)
         docs = await efetch(pmids) if pmids else []
-        if docs:
-            return docs, True, count
+        return docs, True, count
     except Exception:
         docs = []
 
@@ -141,25 +141,26 @@ async def answer(q: Query):
 
     top = [d for d in docs if d.get("relevance", 0) > 0][:8]
 
+    usable = [d for d in top if d.get("integrity", "ok") != "retracted"]
     mode = "extractive"
     answer_text = None
-    if LLM_API_KEY and top:
+    if LLM_API_KEY and usable:
         try:
-            answer_text = await llm_answer(query, top)
+            answer_text = await llm_answer(query, usable)
             mode = "llm"
         except Exception:
             answer_text = None
 
     sentences = None
     if answer_text is None:
-        sentences = extractive_answer(top or docs, query_tokens)
+        sentences = extractive_answer(usable, query_tokens)
         parts = []
         for s in sentences:
             parts.append(f"{s['sentence']} [PMID {s['pmid']}]")
-        answer_text = "\n\n".join(parts)
+        answer_text = "\n\n".join(parts) or "未找到可用于回答的相关证据；已撤稿文献不用于生成回答。"
         mode = "extractive"
 
-    evidence = analyze_evidence(top or docs)
+    evidence = analyze_evidence(top)
 
     # 证据等级分布
     from collections import Counter
