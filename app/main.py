@@ -22,7 +22,7 @@ from .synthesizer import extractive_answer, llm_answer
 from .tokenizer import tokenize
 from .translate import translate_query
 
-app = FastAPI(title="MedLit Evidence", version="0.1.0")
+app = FastAPI(title="MedLit Evidence", version="0.2.0")
 
 
 class Query(BaseModel):

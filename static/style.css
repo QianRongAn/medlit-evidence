@@ -330,6 +330,7 @@ textarea:focus {
 }
 
 .answer-body { font-size: 14.5px; }
+.assessment-note { color: var(--muted, #666); font-size: 13px; line-height: 1.7; margin: 0 0 16px; }
 .answer-sentence { margin: 0 0 13px; position: relative; padding-left: 18px; }
 .pol-mark {
   position: absolute; left: 0; top: 8.5px;

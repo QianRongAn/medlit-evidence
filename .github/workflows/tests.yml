@@ -18,3 +18,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: python -m pip install fastapi httpx
       - run: python -m unittest discover -s tests -v
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --test tests/test_ui.cjs

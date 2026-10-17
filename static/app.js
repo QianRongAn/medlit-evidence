@@ -67,9 +67,7 @@ function esc(s) {
 }
 
 const POLARITY = {
-  support: { label: "支持", mark: "✓", color: "#12b76a" },
-  against: { label: "反对", mark: "✗", color: "#f24726" },
-  neutral: { label: "中立", mark: "·", color: "#c3c2bc" },
+  unassessed: { label: "未评估", color: "#8f8f88" },
 };
 
 function renderAnswer(data) {
@@ -79,7 +77,7 @@ function renderAnswer(data) {
     data.sentences.forEach((s) => {
       const p = document.createElement("p");
       p.className = "answer-sentence";
-      const pol = POLARITY[s.polarity] || POLARITY.neutral;
+      const pol = POLARITY.unassessed;
       const mark = document.createElement("span");
       mark.className = "pol-mark";
       mark.style.color = pol.color;
@@ -103,31 +101,23 @@ function renderAnswer(data) {
     body.appendChild(p);
   }
   $("modeBadge").textContent =
-    data.mode === "llm" ? "生成式回答（LLM）" : `抽取式回答（${data.online ? "PubMed" : "演示语料"}）`;
+    data.mode === "llm" ? "LLM 摘要整理（待核对）" : `摘要摘录（${data.online ? "PubMed" : "演示语料"}）`;
 }
 
 function renderStats(data, elapsedMs, ev) {
-  // 判定状态：support / against / conflict / neutral
-  let state = "neutral";
-  if (ev) {
-    if (ev.conflict) state = "conflict";
-    else if (ev.verdict === "证据倾向支持") state = "support";
-    else if (ev.verdict === "证据倾向不支持") state = "against";
-  }
-
-  // 卡 1：证据置信度
-  $("confidenceNum").textContent = ev ? ev.confidence : "–";
+  // 未经验证的方向与置信度不显示为数字或无冲突。
+  $("confidenceNum").textContent = "–";
 
   // 卡 2：证据判定（马卡龙色调表达结论方向：支持=粉，反对=橙红，对立=米黄，中立=薄荷）
   // 值去掉「证据」前缀：标签已叫「证据判定」，避免重复（与参考稿一致显示「倾向支持」）
-  $("verdictText").textContent = ev ? ev.verdict.replace(/^证据/, "") : "–";
+  $("verdictText").textContent = ev ? ev.verdict.replace(/^证据/, "") : "待核对";
   const verdictCard = $("statVerdict");
   verdictCard.classList.remove("tone-cream", "tone-pink", "tone-salmon", "tone-mint");
-  const TONE_BY_STATE = { support: "tone-pink", against: "tone-salmon", conflict: "tone-cream", neutral: "tone-mint" };
-  verdictCard.classList.add(TONE_BY_STATE[state] || "tone-pink");
-  $("verdictSub").textContent = ev && ev.conflict ? "文献结论存在对立，采信需谨慎" : "";
+  verdictCard.classList.add("tone-mint");
+  $("verdictSub").textContent = "尚未验证，暂不评分";
+  $("assessmentNote").textContent = ev ? ev.assessment_note : "证据方向尚未评估";
   $("polarityLine").textContent = ev
-    ? `支持 ${ev.support_count} · 反对 ${ev.against_count} · 中立 ${ev.neutral_count}`
+    ? `方向未评估 ${ev.unassessed_count || 0} 篇`
     : "";
 
   // 卡 3：文献命中
@@ -150,8 +140,7 @@ function renderStats(data, elapsedMs, ev) {
     warn.classList.add("hidden");
   }
 
-  const evidenceCount = ev ? ev.support_count + ev.against_count + ev.neutral_count : 0;
-  renderConfidence(evidenceCount ? ev.confidence : null);
+  renderConfidence();
 }
 
 /* ---------- 首页仪表盘 ---------- */
@@ -238,7 +227,7 @@ function renderUsage() {
     const confs = h.map((x) => Number(x.confidence)).filter((n) => !isNaN(n) && n > 0);
     $("usageConf").textContent = confs.length ? Math.round(confs.reduce((a, b) => a + b, 0) / confs.length) : "–";
     const cf = h.filter((x) => x.conflict).length;
-    $("usageConflict").textContent = cf ? cf + " 次" : "无";
+    $("usageConflict").textContent = cf ? cf + " 次" : "未评估";
   } else {
     $("usageAvg").textContent = "–";
     $("usageConf").textContent = "–";
@@ -355,27 +344,16 @@ function renderPico(pico) {
   set("picoO", pico.outcome);
 }
 
-/* ---------- 置信度等级标签（黑色综合等级卡用，Miro 配色） ---------- */
-const CONF_TIERS = [
-  { min: 80, label: "高", color: "#2DD4BF", desc: "规则评分较高，仍需核对原文与适用结局" },
-  { min: 60, label: "中", color: "#7B9AFF", desc: "结果基本可信，建议复核" },
-  { min: 40, label: "低", color: "#FFD02E", desc: "可信度偏低，重点排查" },
-  { min: 0,  label: "极低", color: "#FF7A6E", desc: "可信度极低，不建议采用" },
-];
-const CONF_NA = { label: "未分级", color: "#9C9C96", desc: "数据不足，无法评估" };
-
-function renderConfidence(confidence) {
-  // 黑色综合等级卡：左侧等级名用分档色，右侧分数用 Miro 黄
+/* 未完成语义对齐与独立验证前，不渲染旧版置信度。 */
+function renderConfidence() {
   const tag = $("confTag");
   const score = $("confScore");
   const desc = $("confDesc");
-  const hasScore = typeof confidence === "number" && Number.isFinite(confidence);
-  const tier = hasScore ? CONF_TIERS.find((t) => confidence >= t.min) : CONF_NA;
-  tag.textContent = tier.label;
-  tag.style.color = tier.color;
-  score.textContent = hasScore ? confidence : "–";
+  tag.textContent = "未评估";
+  tag.style.color = "#9C9C96";
+  score.textContent = "–";
   score.style.color = "#FFD02E";
-  desc.textContent = tier.desc;
+  desc.textContent = "研究类型不等于结论可信度";
 }
 
 function renderDist(dist) {
@@ -550,7 +528,14 @@ const HISTORY_KEY = "medlit.history";
 
 function getHistory() {
   try {
-    return JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+    const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+    if (!Array.isArray(history)) return [];
+    return history.filter((it) => it && typeof it === "object").map((it) => ({
+      ...it,
+      verdict: it.assessment_version === "2" ? it.verdict : "旧版判定已停用",
+      confidence: null,
+      conflict: null,
+    }));
   } catch {
     return [];
   }
@@ -561,8 +546,9 @@ function recordHistory(query, ev, elapsedMs) {
   h.unshift({
     query,
     verdict: ev ? ev.verdict : "–",
-    confidence: ev ? ev.confidence : "–",
-    conflict: ev ? !!ev.conflict : false,
+    assessment_version: ev ? ev.assessment_version : null,
+    confidence: null,
+    conflict: null,
     time: Date.now(),
     elapsedMs: Math.round(elapsedMs),
   });
@@ -602,7 +588,7 @@ function renderHistory() {
       <p class="notif-query">${esc(it.query)}</p>
       <div class="notif-meta">
         <span class="notif-verdict" style="color:${color}">${esc(it.verdict)}</span>
-        <span>置信度 ${it.confidence}</span>
+        <span>置信度未评估</span>
         <span>${it.elapsedMs}ms</span>
         <span>${hh}:${mm}</span>
       </div>
