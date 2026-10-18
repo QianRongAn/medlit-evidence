@@ -71,6 +71,26 @@ const POLARITY = {
   unassessed: { label: "未评估", color: "#8f8f88" },
 };
 
+function motionBehavior() {
+  return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ? "auto" : "smooth";
+}
+
+function focusSource(pmid) {
+  const target = $(pmid ? "source-" + pmid : "sourcePanel");
+  if (!target) return;
+  target.scrollIntoView({ behavior: motionBehavior(), block: "center" });
+  target.focus({ preventScroll: true });
+  target.classList.add("source-highlight");
+  setTimeout(() => target.classList.remove("source-highlight"), 2400);
+}
+
+function toggleReadingMode() {
+  const enabled = !$("result").classList.contains("reading-mode");
+  $("result").classList.toggle("reading-mode", enabled);
+  $("readingMode").ariaPressed = String(enabled);
+  $("readingMode").textContent = enabled ? "退出舒适阅读" : "舒适阅读";
+}
+
 function renderAnswer(data) {
   const body = $("answerBody");
   body.innerHTML = "";
@@ -99,6 +119,14 @@ function renderAnswer(data) {
         cite.rel = "noopener";
       }
       p.appendChild(cite);
+      if (/^[1-9][0-9]*$/.test(String(s.pmid || ""))) {
+        const locate = document.createElement("button");
+        locate.className = "locate-source";
+        locate.textContent = "定位文献 ↘";
+        locate.title = "定位本页文献 PMID " + s.pmid;
+        locate.addEventListener("click", () => focusSource(s.pmid));
+        p.appendChild(locate);
+      }
       body.appendChild(p);
       if (data.mode === "llm" && s.quote) {
         const quote = document.createElement("blockquote");
@@ -341,11 +369,12 @@ function syncHome() {
 }
 
 function showDashboard() {
+  cancelSearch();
   $("result").classList.add("hidden");
   $("error").classList.add("hidden");
   $("loading").classList.add("hidden");
   syncHome();
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: motionBehavior() });
 }
 function renderPico(pico) {
   if (!pico) return;
@@ -477,9 +506,12 @@ function renderDocs(results) {
   const list = $("docList");
   list.innerHTML = "";
   $("docCount").textContent = `${results.length} 篇文献`;
-  results.forEach((d) => {
+  results.forEach((d, index) => {
     const div = document.createElement("div");
     div.className = "doc-item";
+    if (/^[1-9][0-9]*$/.test(String(d.pmid || ""))) div.id = "source-" + d.pmid;
+    div.tabIndex = -1;
+    div.style.setProperty?.("--entry-delay", Math.min(index, 5) * 45 + "ms");
 
     const grade = GRADE_ZH[d.grade] || "未分级";
     const color = GRADE_COLOR[d.grade] || "#C3C2BC";
@@ -497,6 +529,7 @@ function renderDocs(results) {
 
     const pmidUrl = d.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${d.pmid}/` : "";
     div.innerHTML = `
+      <div class="doc-topline"><span>文献 ${String(index + 1).padStart(2, "0")}</span><span>PUBLICATION</span></div>
       <p class="doc-title"><a href="${pmidUrl || "#"}" target="_blank" rel="noopener">${esc(d.title)}</a></p>
       <div class="doc-meta">
         <span class="badge" style="background:${color};color:${contrastText(color)}">${grade}</span>
@@ -504,7 +537,7 @@ function renderDocs(results) {
         ${riskBadge}
       </div>
       <div class="doc-meta">${esc(metaParts)}</div>
-      ${d.abstract ? `<div class="doc-abstract">${esc(d.abstract)}</div>` : ""}
+      ${d.abstract ? `<div class="abstract-block"><div class="doc-abstract abstract-preview" aria-hidden="true">${esc(d.abstract)}</div><details class="abstract-details"><summary><span class="when-closed">阅读完整摘要</span><span class="when-open">收起摘要</span><span class="abstract-plus" aria-hidden="true">+</span></summary><div class="doc-abstract abstract-full">${esc(d.abstract)}</div></details></div>` : ""}
       ${d.pmid ? `<a class="doc-pmid" href="${pmidUrl}" target="_blank" rel="noopener">PMID ${esc(d.pmid)}</a>` : ""}
       <div>${integrityLinks(d)}</div>
       <div class="doc-meta">查询词项覆盖 ${Number(d.relevance || 0).toFixed(1)}% · 不代表临床适用性</div>
@@ -514,29 +547,59 @@ function renderDocs(results) {
   });
 }
 
+let activeRequest = null;
+let loadingTimer = null;
+
+function setSearchBusy(busy) {
+  $("askBtn").disabled = busy;
+  $("askBtn").classList.toggle("is-loading", busy);
+  $("askLabel").textContent = busy ? "检索中…" : "检索证据";
+  $("searchComposer").ariaBusy = String(busy);
+}
+
+function cancelSearch() {
+  if (!activeRequest) return;
+  const request = activeRequest;
+  activeRequest = null;
+  request.abort();
+  clearInterval(loadingTimer);
+  loadingTimer = null;
+  $("loading").classList.add("hidden");
+  setSearchBusy(false);
+  syncHome();
+}
+
 async function ask(query) {
-  if (!query.trim()) return;
+  if (!query.trim() || activeRequest) return;
+  const controller = new AbortController();
+  activeRequest = controller;
   $("query").value = query;
   $("topQuery").value = query;
-  $("askBtn").disabled = true;
+  setSearchBusy(true);
   $("result").classList.add("hidden");
   $("error").classList.add("hidden");
   $("loading").classList.remove("hidden");
   syncHome();
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: motionBehavior() });
   const started = performance.now();
+  $("loadingElapsed").textContent = "0s";
+  loadingTimer = setInterval(() => {
+    $("loadingElapsed").textContent = Math.floor((performance.now() - started) / 1000) + "s";
+  }, 1000);
 
   try {
     const r = await fetch("/api/answer", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query, retmax: settings.retmax }),
+      signal: controller.signal,
     });
     if (!r.ok) {
       const e = await r.json().catch(() => ({}));
       throw new Error(e.detail || `请求失败（${r.status}）`);
     }
     const data = await r.json();
+    if (activeRequest !== controller) return;
     const elapsed = performance.now() - started;
     setStatus(data.online);
     renderStats(data, elapsed, data.evidence);
@@ -550,12 +613,18 @@ async function ask(query) {
     $("result").classList.remove("hidden");
     syncHome();
   } catch (err) {
+    if (activeRequest !== controller || controller.signal.aborted) return;
     $("loading").classList.add("hidden");
     $("error").textContent = "出错了：" + err.message;
     $("error").classList.remove("hidden");
     syncHome();
   } finally {
-    $("askBtn").disabled = false;
+    if (activeRequest === controller) {
+      clearInterval(loadingTimer);
+      loadingTimer = null;
+      activeRequest = null;
+      setSearchBusy(false);
+    }
   }
 }
 
@@ -783,3 +852,7 @@ checkHealth();
 $("railHome").addEventListener("click", () => { showDashboard(); $("query").focus(); });
 $("railHistory").addEventListener("click", () => openDrawer("notif"));
 $("railSettings").addEventListener("click", () => openDrawer("settings"));
+
+$("readingMode").addEventListener("click", toggleReadingMode);
+$("jumpSources").addEventListener("click", () => focusSource(null));
+$("cancelSearch").addEventListener("click", () => { cancelSearch(); $("query").focus(); });

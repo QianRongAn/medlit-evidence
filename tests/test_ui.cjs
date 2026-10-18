@@ -19,7 +19,8 @@ function loadApp(history = []) {
         toggle: (name, enabled) => enabled ? classes.add(name) : classes.delete(name),
       },
       appendChild(child) { this.children.push(child); },
-      addEventListener() {}, focus() {},
+      addEventListener() {}, focus() { this.focused = true; },
+      scrollIntoView(options) { this.scrollOptions = options; },
     };
   }
   const get = (id) => {
@@ -175,4 +176,85 @@ test("screening results expose counts and exclusions without calling them clinic
     excluded_count: 0, issues: ["unsupported_numeric_constraint"], note: "" }, excluded_results: [] });
   assert.match(get("screeningNote").textContent, /尚不能解析数字条件/);
   assert.equal(get("excludedSources").classList.contains("hidden"), true);
+});
+
+
+test("comfortable reading toggles layout and exposes its state", () => {
+  const {context, get} = loadApp();
+  context.toggleReadingMode();
+  assert.equal(get("result").classList.contains("reading-mode"), true);
+  assert.equal(get("readingMode").ariaPressed, "true");
+  context.toggleReadingMode();
+  assert.equal(get("result").classList.contains("reading-mode"), false);
+  assert.equal(get("readingMode").ariaPressed, "false");
+});
+
+test("full abstracts use native details and preserve escaped source text", () => {
+  const {context, get} = loadApp();
+  context.renderDocs([{pmid:"123", title:"A clinical study", grade:"High", abstract:"<script>unsafe()</script> Actual source."}]);
+  const card = get("docList").children[0];
+  assert.equal(card.id, "source-123");
+  assert.match(card.innerHTML, /<details class="abstract-details">/);
+  assert.match(card.innerHTML, /阅读完整摘要/);
+  assert.match(card.innerHTML, /&lt;script&gt;unsafe\(\)&lt;\/script&gt;/);
+  assert.doesNotMatch(card.innerHTML, /<script>/);
+});
+
+test("source location respects reduced motion and focuses the source", () => {
+  const {context,get} = loadApp();
+  context.window.matchMedia = () => ({matches:true});
+  context.setTimeout = () => 0;
+  context.focusSource("123");
+  assert.equal(get("source-123").scrollOptions.behavior, "auto");
+  assert.equal(get("source-123").focused, true);
+  assert.equal(get("source-123").classList.contains("source-highlight"), true);
+});
+
+function requestRuntime(context) {
+  context.AbortController = AbortController;
+  context.setInterval = () => 1;
+  context.clearInterval = () => {};
+}
+function emptyAnswer(query) {
+  return {query, total:0, results:[], excluded_results:[], pico:{}, mode:"extractive",
+    online:false, sentences:[], answer:"No source found.", evidence_distribution:{}};
+}
+
+test("cancelled responses cannot overwrite a newer query and duplicate submits are ignored", async () => {
+  const {context,get} = loadApp();
+  requestRuntime(context);
+  const pending=[];
+  context.fetch = (_url,options) => new Promise(resolve => pending.push({resolve,options}));
+  const first=context.ask("first pending query");
+  await context.ask("duplicate ignored query");
+  assert.equal(pending.length,1);
+  assert.equal(get("askBtn").disabled,true);
+  context.cancelSearch();
+  assert.equal(pending[0].options.signal.aborted,true);
+  assert.equal(get("askBtn").disabled,false);
+  const second=context.ask("newer query");
+  pending[0].resolve({ok:true,json:async()=>emptyAnswer("stale query")});
+  await first;
+  assert.equal(get("askBtn").disabled,true);
+  assert.equal(get("resultMeta").textContent,"");
+  pending[1].resolve({ok:true,json:async()=>emptyAnswer("newer query")});
+  await second;
+  assert.equal(get("resultMeta").textContent,"「newer query」");
+  assert.equal(get("askBtn").disabled,false);
+  assert.equal(get("searchComposer").ariaBusy,"false");
+});
+
+test("request failure restores controls and permits another search", async () => {
+  const {context,get} = loadApp();
+  requestRuntime(context);
+  context.fetch=async()=>({ok:false,status:503,json:async()=>({detail:"Service unavailable"})});
+  await context.ask("failed query");
+  assert.match(get("error").textContent,/Service unavailable/);
+  assert.equal(get("error").classList.contains("hidden"),false);
+  assert.equal(get("askBtn").disabled,false);
+  assert.equal(get("askLabel").textContent,"检索证据");
+  context.fetch=async()=>({ok:true,json:async()=>emptyAnswer("recovered query")});
+  await context.ask("recovered query");
+  assert.equal(get("resultMeta").textContent,"「recovered query」");
+  assert.equal(get("error").classList.contains("hidden"),true);
 });

@@ -67,7 +67,7 @@
     </section>
     <div class="section-overline"><span>01 / 提出问题</span><span>RESEARCH WORKSPACE</span></div>
     <!-- 临床问题输入 -->
-    <section class="ask-card" aria-label="临床问题输入">
+    <section class="ask-card" id="searchComposer" aria-label="临床问题输入" aria-busy="false">
       <label class="query-label" for="query">你想了解什么？<span>从人群、干预、对照或结局开始</span></label>
       <textarea id="query" rows="2" maxlength="2000" placeholder="例如：二甲双胍对2型糖尿病患者的死亡率有何影响？" aria-describedby="queryHint"></textarea>
       <div class="ask-row">
@@ -76,7 +76,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/>
           </svg>
-          检索证据 <span class="button-arrow" aria-hidden="true">↗</span>
+          <span id="askLabel">检索证据</span> <span class="button-arrow" aria-hidden="true">↗</span>
         </button>
       </div>
       <div class="examples">
@@ -155,7 +155,13 @@
 
     <!-- ========== 结果区（参考图顺序：问题理解 → 统计卡 → 回答+分布 → 来源） ========== -->
     <section id="result" class="hidden">
-      <p class="result-meta" id="resultMeta"></p>
+      <div class="result-toolbar">
+        <p class="result-meta" id="resultMeta"></p>
+        <div class="reading-actions">
+          <button id="readingMode" class="reading-button" aria-pressed="false">舒适阅读</button>
+          <button id="jumpSources" class="reading-button">证据来源 <span aria-hidden="true">↓</span></button>
+        </div>
+      </div>
 
       <!-- 问题理解 · PICO（米黄大卡） -->
       <div class="pico-card">
@@ -240,7 +246,7 @@
       </div>
 
       <!-- 证据来源 -->
-      <div class="card">
+      <div class="card" id="sourcePanel" tabindex="-1">
         <div class="card-head"><h2>证据来源</h2><span class="count" id="docCount"></span></div>
         <p class="assessment-note">研究模型分数仅供人工排序，未校准，不代表未来撤稿概率；演示改写摘要不评分。</p>
         <div id="docList" class="doc-grid"></div>
@@ -252,8 +258,9 @@
     </section>
 
     <section id="loading" class="hidden" role="status" aria-live="polite">
-      <div class="spinner"></div>
-      <p>正在连接问题与文献…</p>
+      <div class="loading-header"><div class="spinner"></div><div><h2>正在检索与整理文献</h2><p>等待文献服务响应，请稍候。已等待 <span id="loadingElapsed" aria-live="off">0s</span></p></div><button id="cancelSearch" class="reading-button">取消检索</button></div>
+      <div class="skeleton-card" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="skeleton-grid" aria-hidden="true"><div class="skeleton-card"><span></span><span></span></div><div class="skeleton-card"><span></span><span></span></div></div>
     </section>
 
     <section id="error" class="hidden error-box" role="alert"></section>
