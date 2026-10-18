@@ -1,0 +1,734 @@
+[
+  {
+    "pmid": "37952131",
+    "title": "Semaglutide and Cardiovascular Outcomes in Obesity without Diabetes.",
+    "abstract": "BACKGROUND: Semaglutide, a glucagon-like peptide-1 receptor agonist, has been shown to reduce the risk of adverse cardiovascular events in patients with diabetes. Whether semaglutide can reduce cardiovascular risk associated with overweight and obesity in the absence of diabetes is unknown.\nMETHODS: In a multicenter, double-blind, randomized, placebo-controlled, event-driven superiority trial, we enrolled patients 45 years of age or older who had preexisting cardiovascular disease and a body-mass index (the weight in kilograms divided by the square of the height in meters) of 27 or greater but no history of diabetes. Patients were randomly assigned in a 1:1 ratio to receive once-weekly subcutaneous semaglutide at a dose of 2.4 mg or placebo. The primary cardiovascular end point was a composite of death from cardiovascular causes, nonfatal myocardial infarction, or nonfatal stroke in a time-to-first-event analysis. Safety was also assessed.\nRESULTS: A total of 17,604 patients were enrolled; 8803 were assigned to receive semaglutide and 8801 to receive placebo. The mean (±SD) duration of exposure to semaglutide or placebo was 34.2±13.7 months, and the mean duration of follow-up was 39.8±9.4 months. A primary cardiovascular end-point event occurred in 569 of the 8803 patients (6.5%) in the semaglutide group and in 701 of the 8801 patients (8.0%) in the placebo group (hazard ratio, 0.80; 95% confidence interval, 0.72 to 0.90; P<0.001). Adverse events leading to permanent discontinuation of the trial product occurred in 1461 patients (16.6%) in the semaglutide group and 718 patients (8.2%) in the placebo group (P<0.001).\nCONCLUSIONS: In patients with preexisting cardiovascular disease and overweight or obesity but without diabetes, weekly subcutaneous semaglutide at a dose of 2.4 mg was superior to placebo in reducing the incidence of death from cardiovascular causes, nonfatal myocardial infarction, or nonfatal stroke at a mean follow-up of 39.8 months. (Funded by Novo Nordisk; SELECT ClinicalTrials.gov number, NCT03574597.).",
+    "journal": "The New England journal of medicine",
+    "year": "2023",
+    "pubtypes": [
+      "Equivalence Trial",
+      "Journal Article",
+      "Multicenter Study",
+      "Randomized Controlled Trial"
+    ],
+    "authors": [
+      "A Michael Lincoff",
+      "Kirstine Brown-Frandsen",
+      "Helen M Colhoun",
+      "John Deanfield",
+      "Scott S Emerson",
+      "Sille Esbjerg"
+    ],
+    "n_authors": 16,
+    "n_affiliations": 1,
+    "n_grants": 0,
+    "n_references": 0,
+    "language": "eng",
+    "source": "pubmed",
+    "integrity": "ok",
+    "integrity_flags": [],
+    "is_notice": false,
+    "notice_types": [],
+    "integrity_relations": [
+      {
+        "ref_type": "CommentIn",
+        "pmid": "38036669",
+        "citation": "Nat Rev Cardiol. 2024 Feb;21(2):69. doi: 10.1038/s41569-023-00970-3."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "38381682",
+        "citation": "N Engl J Med. 2024 Feb 22;390(8):766. doi: 10.1056/NEJMc2400414."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "38381683",
+        "citation": "N Engl J Med. 2024 Feb 22;390(8):766-767. doi: 10.1056/NEJMc2400414."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "38381684",
+        "citation": "N Engl J Med. 2024 Feb 22;390(8):767. doi: 10.1056/NEJMc2400414."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "38381685",
+        "citation": "N Engl J Med. 2024 Feb 22;390(8):767. doi: 10.1056/NEJMc2400414."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "38381686",
+        "citation": "N Engl J Med. 2024 Feb 22;390(8):767-768. doi: 10.1056/NEJMc2400414."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "38381687",
+        "citation": "N Engl J Med. 2024 Feb 22;390(8):768-769. doi: 10.1056/NEJMc2400414."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "38437690",
+        "citation": "Ann Intern Med. 2024 Mar;177(3):JC31. doi: 10.7326/J24-0008."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "38581499",
+        "citation": "MMW Fortschr Med. 2024 Apr;166(6):22-23. doi: 10.1007/s15006-024-3771-0."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "38706104",
+        "citation": "Diabetes Obes Metab. 2024 Aug;26(8):3003-3005. doi: 10.1111/dom.15631."
+      }
+    ]
+  },
+  {
+    "pmid": "38912654",
+    "title": "Tirzepatide for the Treatment of Obstructive Sleep Apnea and Obesity.",
+    "abstract": "BACKGROUND: Obstructive sleep apnea is characterized by disordered breathing during sleep and is associated with major cardiovascular complications; excess adiposity is an etiologic risk factor. Tirzepatide may be a potential treatment.\nMETHODS: We conducted two phase 3, double-blind, randomized, controlled trials involving adults with moderate-to-severe obstructive sleep apnea and obesity. Participants who were not receiving treatment with positive airway pressure (PAP) at baseline were enrolled in trial 1, and those who were receiving PAP therapy at baseline were enrolled in trial 2. The participants were assigned in a 1:1 ratio to receive either the maximum tolerated dose of tirzepatide (10 mg or 15 mg) or placebo for 52 weeks. The primary end point was the change in the apnea-hypopnea index (AHI, the number of apneas and hypopneas during an hour of sleep) from baseline. Key multiplicity-controlled secondary end points included the percent change in AHI and body weight and changes in hypoxic burden, patient-reported sleep impairment and disturbance, high-sensitivity C-reactive protein (hsCRP) concentration, and systolic blood pressure.\nRESULTS: At baseline, the mean AHI was 51.5 events per hour in trial 1 and 49.5 events per hour in trial 2, and the mean body-mass index (BMI, the weight in kilograms divided by the square of the height in meters) was 39.1 and 38.7, respectively. In trial 1, the mean change in AHI at week 52 was -25.3 events per hour (95% confidence interval [CI], -29.3 to -21.2) with tirzepatide and -5.3 events per hour (95% CI, -9.4 to -1.1) with placebo, for an estimated treatment difference of -20.0 events per hour (95% CI, -25.8 to -14.2) (P<0.001). In trial 2, the mean change in AHI at week 52 was -29.3 events per hour (95% CI, -33.2 to -25.4) with tirzepatide and -5.5 events per hour (95% CI, -9.9 to -1.2) with placebo, for an estimated treatment difference of -23.8 events per hour (95% CI, -29.6 to -17.9) (P<0.001). Significant improvements in the measurements for all prespecified key secondary end points were observed with tirzepatide as compared with placebo. The most frequently reported adverse events with tirzepatide were gastrointestinal in nature and mostly mild to moderate in severity.\nCONCLUSIONS: Among persons with moderate-to-severe obstructive sleep apnea and obesity, tirzepatide reduced the AHI, body weight, hypoxic burden, hsCRP concentration, and systolic blood pressure and improved sleep-related patient-reported outcomes. (Funded by Eli Lilly; SURMOUNT-OSA ClinicalTrials.gov number, NCT05412004.).",
+    "journal": "The New England journal of medicine",
+    "year": "2024",
+    "pubtypes": [
+      "Journal Article",
+      "Randomized Controlled Trial",
+      "Clinical Trial, Phase III",
+      "Multicenter Study"
+    ],
+    "authors": [
+      "Atul Malhotra",
+      "Ronald R Grunstein",
+      "Ingo Fietze",
+      "Terri E Weaver",
+      "Susan Redline",
+      "Ali Azarbarzin"
+    ],
+    "n_authors": 12,
+    "n_affiliations": 1,
+    "n_grants": 6,
+    "n_references": 40,
+    "language": "eng",
+    "source": "pubmed",
+    "integrity": "corrected",
+    "integrity_flags": [
+      "corrected"
+    ],
+    "is_notice": false,
+    "notice_types": [],
+    "integrity_relations": [
+      {
+        "ref_type": "ErratumIn",
+        "pmid": "39413392",
+        "citation": "N Engl J Med. 2024 Oct 17;391(15):1464. doi: 10.1056/NEJMx240005."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "39576525",
+        "citation": "MMW Fortschr Med. 2024 Nov;166(20):30-31. doi: 10.1007/s15006-024-4479-x."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "39836399",
+        "citation": "Am J Respir Crit Care Med. 2025 Apr;211(4):637-639. doi: 10.1164/rccm.202408-1542RR."
+      }
+    ]
+  },
+  {
+    "pmid": "39225278",
+    "title": "Finerenone in Heart Failure with Mildly Reduced or Preserved Ejection Fraction.",
+    "abstract": "BACKGROUND: Steroidal mineralocorticoid receptor antagonists reduce morbidity and mortality among patients with heart failure and reduced ejection fraction, but their efficacy in those with heart failure and mildly reduced or preserved ejection fraction has not been established. Data regarding the efficacy and safety of the nonsteroidal mineralocorticoid receptor antagonist finerenone in patients with heart failure and mildly reduced or preserved ejection fraction are needed.\nMETHODS: In this international, double-blind trial, we randomly assigned patients with heart failure and a left ventricular ejection fraction of 40% or greater, in a 1:1 ratio, to receive finerenone (at a maximum dose of 20 mg or 40 mg once daily) or matching placebo, in addition to usual therapy. The primary outcome was a composite of total worsening heart failure events (with an event defined as a first or recurrent unplanned hospitalization or urgent visit for heart failure) and death from cardiovascular causes. The components of the primary outcome and safety were also assessed.\nRESULTS: Over a median follow-up of 32 months, 1083 primary-outcome events occurred in 624 of 3003 patients in the finerenone group, and 1283 primary-outcome events occurred in 719 of 2998 patients in the placebo group (rate ratio, 0.84; 95% confidence interval [CI], 0.74 to 0.95; P = 0.007). The total number of worsening heart failure events was 842 in the finerenone group and 1024 in the placebo group (rate ratio, 0.82; 95% CI, 0.71 to 0.94; P = 0.006). The percentage of patients who died from cardiovascular causes was 8.1% and 8.7%, respectively (hazard ratio, 0.93; 95% CI, 0.78 to 1.11). Finerenone was associated with an increased risk of hyperkalemia and a reduced risk of hypokalemia.\nCONCLUSIONS: In patients with heart failure and mildly reduced or preserved ejection fraction, finerenone resulted in a significantly lower rate of a composite of total worsening heart failure events and death from cardiovascular causes than placebo. (Funded by Bayer; FINEARTS-HF ClinicalTrials.gov number, NCT04435626.).",
+    "journal": "The New England journal of medicine",
+    "year": "2024",
+    "pubtypes": [
+      "Clinical Trial, Phase III",
+      "Journal Article",
+      "Multicenter Study",
+      "Randomized Controlled Trial"
+    ],
+    "authors": [
+      "Scott D Solomon",
+      "John J V McMurray",
+      "Muthiah Vaduganathan",
+      "Brian Claggett",
+      "Pardeep S Jhund",
+      "Akshay S Desai"
+    ],
+    "n_authors": 59,
+    "n_affiliations": 1,
+    "n_grants": 0,
+    "n_references": 0,
+    "language": "eng",
+    "source": "pubmed",
+    "integrity": "ok",
+    "integrity_flags": [],
+    "is_notice": false,
+    "notice_types": [],
+    "integrity_relations": [
+      {
+        "ref_type": "CommentIn",
+        "pmid": "39300251",
+        "citation": "Nat Rev Cardiol. 2024 Nov;21(11):739. doi: 10.1038/s41569-024-01087-x."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "39813655",
+        "citation": "N Engl J Med. 2025 Jan 16;392(3):308-309. doi: 10.1056/NEJMc2414955."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "39813656",
+        "citation": "N Engl J Med. 2025 Jan 16;392(3):309. doi: 10.1056/NEJMc2414955."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "39813657",
+        "citation": "N Engl J Med. 2025 Jan 16;392(3):309-310. doi: 10.1056/NEJMc2414955."
+      }
+    ]
+  },
+  {
+    "pmid": "38767614",
+    "title": "Dupilumab for COPD with Blood Eosinophil Evidence of Type 2 Inflammation.",
+    "abstract": "BACKGROUND: Dupilumab, a fully human monoclonal antibody that blocks the shared receptor component for interleukin-4 and interleukin-13, key and central drivers of type 2 inflammation, has shown efficacy and safety in a phase 3 trial involving patients with chronic obstructive pulmonary disease (COPD) and type 2 inflammation and an elevated risk of exacerbation. Whether the findings would be confirmed in a second phase 3 trial was unclear.\nMETHODS: In a phase 3, double-blind, randomized trial, we assigned patients with COPD who had a blood eosinophil count of 300 cells per microliter or higher to receive subcutaneous dupilumab (300 mg) or placebo every 2 weeks. The primary end point was the annualized rate of moderate or severe exacerbations. Key secondary end points, analyzed in a hierarchical manner to adjust for multiplicity, included the changes from baseline in the prebronchodilator forced expiratory volume in 1 second (FEV1) at weeks 12 and 52 and in the St. George's Respiratory Questionnaire (SGRQ; scores range from 0 to 100, with lower scores indicating better quality of life) total score at week 52.\nRESULTS: A total of 935 patients underwent randomization: 470 were assigned to the dupilumab group and 465 to the placebo group. As prespecified, the primary analysis was performed after a positive interim analysis and included all available data for the 935 participants, 721 of whom were included in the analysis at week 52. The annualized rate of moderate or severe exacerbations was 0.86 (95% confidence interval [CI], 0.70 to 1.06) with dupilumab and 1.30 (95% CI, 1.05 to 1.60) with placebo; the rate ratio as compared with placebo was 0.66 (95% CI, 0.54 to 0.82; P<0.001). The prebronchodilator FEV1 increased from baseline to week 12 with dupilumab (least-squares mean change, 139 ml [95% CI, 105 to 173]) as compared with placebo (least-squares mean change, 57 ml [95% CI, 23 to 91]), with a significant least-squares mean difference at week 12 of 82 ml (P<0.001) and at week 52 of 62 ml (P = 0.02). No significant between-group difference was observed in the change in SGRQ scores from baseline to 52 weeks. The incidence of adverse events was similar in the two groups and consistent with the established profile of dupilumab.\nCONCLUSIONS: In patients with COPD and type 2 inflammation as indicated by elevated blood eosinophil counts, dupilumab was associated with fewer exacerbations and better lung function than placebo. (Funded by Sanofi and Regeneron Pharmaceuticals; NOTUS ClinicalTrials.gov number, NCT04456673.).",
+    "journal": "The New England journal of medicine",
+    "year": "2024",
+    "pubtypes": [
+      "Journal Article",
+      "Randomized Controlled Trial",
+      "Clinical Trial, Phase III",
+      "Multicenter Study"
+    ],
+    "authors": [
+      "Surya P Bhatt",
+      "Klaus F Rabe",
+      "Nicola A Hanania",
+      "Claus F Vogelmeier",
+      "Mona Bafadhel",
+      "Stephanie A Christenson"
+    ],
+    "n_authors": 18,
+    "n_affiliations": 1,
+    "n_grants": 2,
+    "n_references": 0,
+    "language": "eng",
+    "source": "pubmed",
+    "integrity": "ok",
+    "integrity_flags": [],
+    "is_notice": false,
+    "notice_types": [],
+    "integrity_relations": [
+      {
+        "ref_type": "CommentIn",
+        "pmid": "39321373",
+        "citation": "N Engl J Med. 2024 Sep 26;391(12):1163-1164. doi: 10.1056/NEJMc2409963."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "39321374",
+        "citation": "N Engl J Med. 2024 Sep 26;391(12):1164. doi: 10.1056/NEJMc2409963."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "39482512",
+        "citation": "MMW Fortschr Med. 2024 Nov;166(Suppl 3):17. doi: 10.1007/s15006-024-4418-x."
+      }
+    ]
+  },
+  {
+    "pmid": "36449413",
+    "title": "Lecanemab in Early Alzheimer's Disease.",
+    "abstract": "BACKGROUND: The accumulation of soluble and insoluble aggregated amyloid-beta (Aβ) may initiate or potentiate pathologic processes in Alzheimer's disease. Lecanemab, a humanized IgG1 monoclonal antibody that binds with high affinity to Aβ soluble protofibrils, is being tested in persons with early Alzheimer's disease.\nMETHODS: We conducted an 18-month, multicenter, double-blind, phase 3 trial involving persons 50 to 90 years of age with early Alzheimer's disease (mild cognitive impairment or mild dementia due to Alzheimer's disease) with evidence of amyloid on positron-emission tomography (PET) or by cerebrospinal fluid testing. Participants were randomly assigned in a 1:1 ratio to receive intravenous lecanemab (10 mg per kilogram of body weight every 2 weeks) or placebo. The primary end point was the change from baseline at 18 months in the score on the Clinical Dementia Rating-Sum of Boxes (CDR-SB; range, 0 to 18, with higher scores indicating greater impairment). Key secondary end points were the change in amyloid burden on PET, the score on the 14-item cognitive subscale of the Alzheimer's Disease Assessment Scale (ADAS-cog14; range, 0 to 90; higher scores indicate greater impairment), the Alzheimer's Disease Composite Score (ADCOMS; range, 0 to 1.97; higher scores indicate greater impairment), and the score on the Alzheimer's Disease Cooperative Study-Activities of Daily Living Scale for Mild Cognitive Impairment (ADCS-MCI-ADL; range, 0 to 53; lower scores indicate greater impairment).\nRESULTS: A total of 1795 participants were enrolled, with 898 assigned to receive lecanemab and 897 to receive placebo. The mean CDR-SB score at baseline was approximately 3.2 in both groups. The adjusted least-squares mean change from baseline at 18 months was 1.21 with lecanemab and 1.66 with placebo (difference, -0.45; 95% confidence interval [CI], -0.67 to -0.23; P<0.001). In a substudy involving 698 participants, there were greater reductions in brain amyloid burden with lecanemab than with placebo (difference, -59.1 centiloids; 95% CI, -62.6 to -55.6). Other mean differences between the two groups in the change from baseline favoring lecanemab were as follows: for the ADAS-cog14 score, -1.44 (95% CI, -2.27 to -0.61; P<0.001); for the ADCOMS, -0.050 (95% CI, -0.074 to -0.027; P<0.001); and for the ADCS-MCI-ADL score, 2.0 (95% CI, 1.2 to 2.8; P<0.001). Lecanemab resulted in infusion-related reactions in 26.4% of the participants and amyloid-related imaging abnormalities with edema or effusions in 12.6%.\nCONCLUSIONS: Lecanemab reduced markers of amyloid in early Alzheimer's disease and resulted in moderately less decline on measures of cognition and function than placebo at 18 months but was associated with adverse events. Longer trials are warranted to determine the efficacy and safety of lecanemab in early Alzheimer's disease. (Funded by Eisai and Biogen; Clarity AD ClinicalTrials.gov number, NCT03887455.).",
+    "journal": "The New England journal of medicine",
+    "year": "2023",
+    "pubtypes": [
+      "Clinical Trial, Phase III",
+      "Journal Article",
+      "Multicenter Study",
+      "Randomized Controlled Trial",
+      "Research Support, Non-U.S. Gov't"
+    ],
+    "authors": [
+      "Christopher H van Dyck",
+      "Chad J Swanson",
+      "Paul Aisen",
+      "Randall J Bateman",
+      "Christopher Chen",
+      "Michelle Gee"
+    ],
+    "n_authors": 19,
+    "n_affiliations": 1,
+    "n_grants": 0,
+    "n_references": 0,
+    "language": "eng",
+    "source": "pubmed",
+    "integrity": "ok",
+    "integrity_flags": [],
+    "is_notice": false,
+    "notice_types": [],
+    "integrity_relations": [
+      {
+        "ref_type": "CommentIn",
+        "pmid": "36456815",
+        "citation": "Nature. 2022 Dec;612(7939):197-198. doi: 10.1038/d41586-022-04240-z."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "36599061",
+        "citation": "N Engl J Med. 2023 Feb 2;388(5):478-479. doi: 10.1056/NEJMc2215148."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "36599066",
+        "citation": "N Engl J Med. 2023 Jan 5;388(1):80-81. doi: 10.1056/NEJMe2214981."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "36599073",
+        "citation": "N Engl J Med. 2023 Feb 2;388(5):480. doi: 10.1056/NEJMc2215907."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "36609712",
+        "citation": "Nat Rev Neurol. 2023 Mar;19(3):132-133. doi: 10.1038/s41582-022-00768-w."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "36627422",
+        "citation": "Nature. 2023 Jan;613(7943):227-228. doi: 10.1038/d41586-023-00030-3."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "36781970",
+        "citation": "Nature. 2023 Mar;615(7950):42-43. doi: 10.1038/d41586-023-00393-7."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "36869178",
+        "citation": "Eur J Nucl Med Mol Imaging. 2023 May;50(6):1553-1555. doi: 10.1007/s00259-023-06177-5."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "37081342",
+        "citation": "MMW Fortschr Med. 2023 Apr;165(8):26-27. doi: 10.1007/s15006-023-2589-5."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "37099351",
+        "citation": "N Engl J Med. 2023 Apr 27;388(17):1630. doi: 10.1056/NEJMc2301380."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "37099352",
+        "citation": "N Engl J Med. 2023 Apr 27;388(17):1630. doi: 10.1056/NEJMc2301380."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "37099353",
+        "citation": "N Engl J Med. 2023 Apr 27;388(17):1630-1631. doi: 10.1056/NEJMc2301380."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "37099354",
+        "citation": "N Engl J Med. 2023 Apr 27;388(17):1631. doi: 10.1056/NEJMc2301380."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "37099355",
+        "citation": "N Engl J Med. 2023 Apr 27;388(17):1631-1632. doi: 10.1056/NEJMc2301380."
+      }
+    ]
+  },
+  {
+    "pmid": "32970396",
+    "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+    "abstract": "BACKGROUND: Patients with chronic kidney disease have a high risk of adverse kidney and cardiovascular outcomes. The effect of dapagliflozin in patients with chronic kidney disease, with or without type 2 diabetes, is not known.\nMETHODS: We randomly assigned 4304 participants with an estimated glomerular filtration rate (GFR) of 25 to 75 ml per minute per 1.73 m2 of body-surface area and a urinary albumin-to-creatinine ratio (with albumin measured in milligrams and creatinine measured in grams) of 200 to 5000 to receive dapagliflozin (10 mg once daily) or placebo. The primary outcome was a composite of a sustained decline in the estimated GFR of at least 50%, end-stage kidney disease, or death from renal or cardiovascular causes.\nRESULTS: The independent data monitoring committee recommended stopping the trial because of efficacy. Over a median of 2.4 years, a primary outcome event occurred in 197 of 2152 participants (9.2%) in the dapagliflozin group and 312 of 2152 participants (14.5%) in the placebo group (hazard ratio, 0.61; 95% confidence interval [CI], 0.51 to 0.72; P<0.001; number needed to treat to prevent one primary outcome event, 19 [95% CI, 15 to 27]). The hazard ratio for the composite of a sustained decline in the estimated GFR of at least 50%, end-stage kidney disease, or death from renal causes was 0.56 (95% CI, 0.45 to 0.68; P<0.001), and the hazard ratio for the composite of death from cardiovascular causes or hospitalization for heart failure was 0.71 (95% CI, 0.55 to 0.92; P = 0.009). Death occurred in 101 participants (4.7%) in the dapagliflozin group and 146 participants (6.8%) in the placebo group (hazard ratio, 0.69; 95% CI, 0.53 to 0.88; P = 0.004). The effects of dapagliflozin were similar in participants with type 2 diabetes and in those without type 2 diabetes. The known safety profile of dapagliflozin was confirmed.\nCONCLUSIONS: Among patients with chronic kidney disease, regardless of the presence or absence of diabetes, the risk of a composite of a sustained decline in the estimated GFR of at least 50%, end-stage kidney disease, or death from renal or cardiovascular causes was significantly lower with dapagliflozin than with placebo. (Funded by AstraZeneca; DAPA-CKD ClinicalTrials.gov number, NCT03036150.).",
+    "journal": "The New England journal of medicine",
+    "year": "2020",
+    "pubtypes": [
+      "Journal Article",
+      "Multicenter Study",
+      "Randomized Controlled Trial",
+      "Research Support, Non-U.S. Gov't"
+    ],
+    "authors": [
+      "Hiddo J L Heerspink",
+      "Bergur V Stefánsson",
+      "Ricardo Correa-Rotter",
+      "Glenn M Chertow",
+      "Tom Greene",
+      "Fan-Fan Hou"
+    ],
+    "n_authors": 14,
+    "n_affiliations": 1,
+    "n_grants": 0,
+    "n_references": 0,
+    "language": "eng",
+    "source": "pubmed",
+    "integrity": "ok",
+    "integrity_flags": [],
+    "is_notice": false,
+    "notice_types": [],
+    "integrity_relations": [
+      {
+        "ref_type": "CommentIn",
+        "pmid": "33068607",
+        "citation": "Kidney Int. 2020 Dec;98(6):1387-1389. doi: 10.1016/j.kint.2020.10.002."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "33159190",
+        "citation": "Nat Rev Nephrol. 2021 Apr;17(4):223-224. doi: 10.1038/s41581-020-00373-4."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "33503360",
+        "citation": "N Engl J Med. 2021 Jan 28;384(4):388-389. doi: 10.1056/NEJMc2032809."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "33503361",
+        "citation": "N Engl J Med. 2021 Jan 28;384(4):389. doi: 10.1056/NEJMc2032809."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "33524285",
+        "citation": "Ann Intern Med. 2021 Feb;174(2):JC20. doi: 10.7326/ACPJ202102160-020."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "36826674",
+        "citation": "MMW Fortschr Med. 2023 Mar;165(4):66. doi: 10.1007/s15006-023-2422-1."
+      }
+    ]
+  },
+  {
+    "pmid": "35427471",
+    "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+    "abstract": "BACKGROUND: Pembrolizumab has shown improved progression-free survival versus chemotherapy in patients with newly diagnosed microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer. However, the treatment's effect on overall survival in this cohort of patients was unknown. Here, we present the final overall survival analysis of the KEYNOTE-177 study.\nMETHODS: This randomised, open-label, phase 3 study was done in 193 academic medical centres and hospitals in 23 countries. We recruited patients aged at least 18 years, with an Eastern Cooperative Oncology Group performance status of 0 or 1, and who had previously untreated microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer. Patients were randomly assigned (1:1) in blocks of four using an interactive voice response system or integrated web response system to intravenous pembrolizumab 200 mg every 3 weeks or to the investigator's choice of intravenous mFOLFOX6 (oxaliplatin 85 mg/m2 on day 1, leucovorin 400 mg/m2 on day 1, and fluorouracil 400 mg/m2 bolus on day 1 followed by a continuous infusion of 1200 mg/m2 per day for 2 days on days 1-2) or intravenous FOLFIRI (irinotecan 180 mg/m2 on day 1, leucovorin 400 mg/m2 on day 1, and fluorouracil 400 mg/m2 bolus on day 1 followed by a continuous infusion of 1200 mg/m2 per day for 2 days on days 1-2), every 2 weeks with or without intravenous bevacizumab 5 mg/kg every 2 weeks or intravenous weekly cetuximab (first dose 400 mg/m2, then 250 mg/m2 for every subsequent dose). Patients receiving chemotherapy could cross over to pembrolizumab for up to 35 treatment cycles after progression. The co-primary endpoints were overall survival and progression-free survival in the intention-to-treat population. KEYNOTE-177 is registered at ClinicalTrials.gov, NCT02563002, and is no longer enrolling patients.\nFINDINGS: Between Feb 11, 2016, and Feb 19, 2018, 852 patients were screened, of whom 307 (36%) were randomly assigned to pembrolizumab (n=153) or chemotherapy (n=154). 93 (60%) patients crossed over from chemotherapy to anti-PD-1 or anti-PD-L1 therapy (56 patients to on-study pembrolizumab and 37 patients to off-study therapy). At final analysis (median follow-up of 44·5 months [IQR 39·7-49·8]), median overall survival was not reached (NR; 95% CI 49·2-NR) with pembrolizumab vs 36·7 months (27·6-NR) with chemotherapy (hazard ratio [HR] 0·74; 95% CI 0·53-1·03; p=0·036). Superiority of pembrolizumab versus chemotherapy for overall survival was not demonstrated because the prespecified α of 0·025 needed for statistical significance was not achieved. At this updated analysis, median progression-free survival was 16·5 months (95% CI 5·4-38·1) with pembrolizumab versus 8·2 months (6·1-10·2) with chemotherapy (HR 0·59, 95% CI 0·45-0·79). Treatment-related adverse events of grade 3 or worse occurred in 33 (22%) of 153 patients in the pembrolizumab group versus 95 (66%) of 143 patients in the chemotherapy group. Common adverse events of grade 3 or worse that were attributed to pembrolizumab were increased alanine aminotransferase, colitis, diarrhoea, and fatigue in three (2%) patients each, and those attributed to chemotherapy were decreased neutrophil count (in 24 [17%] patients), neutropenia (22 [15%]), diarrhoea (14 [10%]), and fatigue (13 [9%]). Serious adverse events attributed to study treatment occurred in 25 (16%) patients in the pembrolizumab group and in 41 (29%) patients in the chemotherapy group. No deaths attributed to pembrolizumab occurred; one death due to intestinal perforation was attributed to chemotherapy.\nINTERPRETATION: In this updated analysis, although pembrolizumab continued to show durable antitumour activity and fewer treatment-related adverse events compared with chemotherapy, there was no significant difference in overall survival between the two treatment groups. These findings support pembrolizumab as an efficacious first-line therapy in patients with microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer.\nFUNDING: MSD.",
+    "journal": "The Lancet. Oncology",
+    "year": "2022",
+    "pubtypes": [
+      "Clinical Trial, Phase III",
+      "Journal Article",
+      "Randomized Controlled Trial"
+    ],
+    "authors": [
+      "Luis A Diaz",
+      "Kai-Keen Shiu",
+      "Tae-Won Kim",
+      "Benny Vittrup Jensen",
+      "Lars Henrik Jensen",
+      "Cornelis Punt"
+    ],
+    "n_authors": 19,
+    "n_affiliations": 18,
+    "n_grants": 4,
+    "n_references": 25,
+    "language": "eng",
+    "source": "pubmed",
+    "integrity": "ok",
+    "integrity_flags": [],
+    "is_notice": false,
+    "notice_types": [],
+    "integrity_relations": [
+      {
+        "ref_type": "CommentIn",
+        "pmid": "35654062",
+        "citation": "Lancet Oncol. 2022 Jun;23(6):e245. doi: 10.1016/S1470-2045(22)00258-3."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "35654063",
+        "citation": "Lancet Oncol. 2022 Jun;23(6):e246. doi: 10.1016/S1470-2045(22)00299-6."
+      }
+    ]
+  },
+  {
+    "pmid": "31535829",
+    "title": "Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction.",
+    "abstract": "BACKGROUND: In patients with type 2 diabetes, inhibitors of sodium-glucose cotransporter 2 (SGLT2) reduce the risk of a first hospitalization for heart failure, possibly through glucose-independent mechanisms. More data are needed regarding the effects of SGLT2 inhibitors in patients with established heart failure and a reduced ejection fraction, regardless of the presence or absence of type 2 diabetes.\nMETHODS: In this phase 3, placebo-controlled trial, we randomly assigned 4744 patients with New York Heart Association class II, III, or IV heart failure and an ejection fraction of 40% or less to receive either dapagliflozin (at a dose of 10 mg once daily) or placebo, in addition to recommended therapy. The primary outcome was a composite of worsening heart failure (hospitalization or an urgent visit resulting in intravenous therapy for heart failure) or cardiovascular death.\nRESULTS: Over a median of 18.2 months, the primary outcome occurred in 386 of 2373 patients (16.3%) in the dapagliflozin group and in 502 of 2371 patients (21.2%) in the placebo group (hazard ratio, 0.74; 95% confidence interval [CI], 0.65 to 0.85; P<0.001). A first worsening heart failure event occurred in 237 patients (10.0%) in the dapagliflozin group and in 326 patients (13.7%) in the placebo group (hazard ratio, 0.70; 95% CI, 0.59 to 0.83). Death from cardiovascular causes occurred in 227 patients (9.6%) in the dapagliflozin group and in 273 patients (11.5%) in the placebo group (hazard ratio, 0.82; 95% CI, 0.69 to 0.98); 276 patients (11.6%) and 329 patients (13.9%), respectively, died from any cause (hazard ratio, 0.83; 95% CI, 0.71 to 0.97). Findings in patients with diabetes were similar to those in patients without diabetes. The frequency of adverse events related to volume depletion, renal dysfunction, and hypoglycemia did not differ between treatment groups.\nCONCLUSIONS: Among patients with heart failure and a reduced ejection fraction, the risk of worsening heart failure or death from cardiovascular causes was lower among those who received dapagliflozin than among those who received placebo, regardless of the presence or absence of diabetes. (Funded by AstraZeneca; DAPA-HF ClinicalTrials.gov number, NCT03036124.).",
+    "journal": "The New England journal of medicine",
+    "year": "2019",
+    "pubtypes": [
+      "Clinical Trial, Phase III",
+      "Journal Article",
+      "Multicenter Study",
+      "Randomized Controlled Trial",
+      "Research Support, Non-U.S. Gov't"
+    ],
+    "authors": [
+      "John J V McMurray",
+      "Scott D Solomon",
+      "Silvio E Inzucchi",
+      "Lars Køber",
+      "Mikhail N Kosiborod",
+      "Felipe A Martinez"
+    ],
+    "n_authors": 38,
+    "n_affiliations": 1,
+    "n_grants": 0,
+    "n_references": 0,
+    "language": "eng",
+    "source": "pubmed",
+    "integrity": "ok",
+    "integrity_flags": [],
+    "is_notice": false,
+    "notice_types": [],
+    "integrity_relations": [
+      {
+        "ref_type": "CommentIn",
+        "pmid": "31535828",
+        "citation": "N Engl J Med. 2019 Nov 21;381(21):2063-2064. doi: 10.1056/NEJMe1912180."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "31578515",
+        "citation": "Nat Rev Cardiol. 2019 Dec;16(12):700. doi: 10.1038/s41569-019-0291-1."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "32066149",
+        "citation": "Ann Intern Med. 2020 Feb 18;172(4):JC16. doi: 10.7326/ACPJ202002180-016."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "32130820",
+        "citation": "N Engl J Med. 2020 Mar 5;382(10):972. doi: 10.1056/NEJMc1917241."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "32130821",
+        "citation": "N Engl J Med. 2020 Mar 5;382(10):972. doi: 10.1056/NEJMc1917241."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "32130822",
+        "citation": "N Engl J Med. 2020 Mar 5;382(10):972-973. doi: 10.1056/NEJMc1917241."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "33961267",
+        "citation": "MMW Fortschr Med. 2021 May;163(9):65. doi: 10.1007/s15006-021-9952-1."
+      }
+    ]
+  },
+  {
+    "pmid": "30221595",
+    "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+    "abstract": "BACKGROUND: In the primary analysis of the Aspirin in Reducing Events in the Elderly (ASPREE) trial, now published in the Journal, we report that the daily use of aspirin did not provide a benefit with regard to the primary end point of disability-free survival among older adults. A numerically higher rate of the secondary end point of death from any cause was observed with aspirin than with placebo.\nMETHODS: From 2010 through 2014, we enrolled community-dwelling persons in Australia and the United States who were 70 years of age or older (or ≥65 years of age among blacks and Hispanics in the United States) and did not have cardiovascular disease, dementia, or disability. Participants were randomly assigned to receive 100 mg of enteric-coated aspirin or placebo. Deaths were classified according to the underlying cause by adjudicators who were unaware of trial-group assignments. Hazard ratios were calculated to compare mortality between the aspirin group and the placebo group, and post hoc exploratory analyses of specific causes of death were performed.\nRESULTS: Of the 19,114 persons who were enrolled, 9525 were assigned to receive aspirin and 9589 to receive placebo. A total of 1052 deaths occurred during a median of 4.7 years of follow-up. The risk of death from any cause was 12.7 events per 1000 person-years in the aspirin group and 11.1 events per 1000 person-years in the placebo group (hazard ratio, 1.14; 95% confidence interval [CI], 1.01 to 1.29). Cancer was the major contributor to the higher mortality in the aspirin group, accounting for 1.6 excess deaths per 1000 person-years. Cancer-related death occurred in 3.1% of the participants in the aspirin group and in 2.3% of those in the placebo group (hazard ratio, 1.31; 95% CI, 1.10 to 1.56).\nCONCLUSIONS: Higher all-cause mortality was observed among apparently healthy older adults who received daily aspirin than among those who received placebo and was attributed primarily to cancer-related death. In the context of previous studies, this result was unexpected and should be interpreted with caution. (Funded by the National Institute on Aging and others; ASPREE ClinicalTrials.gov number, NCT01038583 .).",
+    "journal": "The New England journal of medicine",
+    "year": "2018",
+    "pubtypes": [
+      "Journal Article",
+      "Multicenter Study",
+      "Randomized Controlled Trial",
+      "Research Support, N.I.H., Extramural",
+      "Research Support, Non-U.S. Gov't"
+    ],
+    "authors": [
+      "John J McNeil",
+      "Mark R Nelson",
+      "Robyn L Woods",
+      "Jessica E Lockery",
+      "Rory Wolfe",
+      "Christopher M Reid"
+    ],
+    "n_authors": 28,
+    "n_affiliations": 1,
+    "n_grants": 3,
+    "n_references": 21,
+    "language": "eng",
+    "source": "pubmed",
+    "integrity": "ok",
+    "integrity_flags": [],
+    "is_notice": false,
+    "notice_types": [],
+    "integrity_relations": [
+      {
+        "ref_type": "CommentIn",
+        "pmid": "30529298",
+        "citation": "Gastroenterology. 2019 Feb;156(3):534-538. doi: 10.1053/j.gastro.2018.11.063."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "30645666",
+        "citation": "Internist (Berl). 2019 Feb;60(2):209-216. doi: 10.1007/s00108-018-0541-z."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "30721495",
+        "citation": "MMW Fortschr Med. 2019 Feb;161(2):35. doi: 10.1007/s15006-019-0127-2."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "31042833",
+        "citation": "N Engl J Med. 2019 May 2;380(18):1775. doi: 10.1056/NEJMc1901774."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "31042834",
+        "citation": "N Engl J Med. 2019 May 2;380(18):1775. doi: 10.1056/NEJMc1901774."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "31042835",
+        "citation": "N Engl J Med. 2019 May 2;380(18):1775-1776. doi: 10.1056/NEJMc1901774."
+      }
+    ]
+  },
+  {
+    "pmid": "30221596",
+    "title": "Effect of Aspirin on Disability-free Survival in the Healthy Elderly.",
+    "abstract": "BACKGROUND: Information on the use of aspirin to increase healthy independent life span in older persons is limited. Whether 5 years of daily low-dose aspirin therapy would extend disability-free life in healthy seniors is unclear.\nMETHODS: From 2010 through 2014, we enrolled community-dwelling persons in Australia and the United States who were 70 years of age or older (or ≥65 years of age among blacks and Hispanics in the United States) and did not have cardiovascular disease, dementia, or physical disability. Participants were randomly assigned to receive 100 mg per day of enteric-coated aspirin or placebo orally. The primary end point was a composite of death, dementia, or persistent physical disability. Secondary end points reported in this article included the individual components of the primary end point and major hemorrhage.\nRESULTS: A total of 19,114 persons with a median age of 74 years were enrolled, of whom 9525 were randomly assigned to receive aspirin and 9589 to receive placebo. A total of 56.4% of the participants were women, 8.7% were nonwhite, and 11.0% reported previous regular aspirin use. The trial was terminated at a median of 4.7 years of follow-up after a determination was made that there would be no benefit with continued aspirin use with regard to the primary end point. The rate of the composite of death, dementia, or persistent physical disability was 21.5 events per 1000 person-years in the aspirin group and 21.2 per 1000 person-years in the placebo group (hazard ratio, 1.01; 95% confidence interval [CI], 0.92 to 1.11; P=0.79). The rate of adherence to the assigned intervention was 62.1% in the aspirin group and 64.1% in the placebo group in the final year of trial participation. Differences between the aspirin group and the placebo group were not substantial with regard to the secondary individual end points of death from any cause (12.7 events per 1000 person-years in the aspirin group and 11.1 events per 1000 person-years in the placebo group), dementia, or persistent physical disability. The rate of major hemorrhage was higher in the aspirin group than in the placebo group (3.8% vs. 2.8%; hazard ratio, 1.38; 95% CI, 1.18 to 1.62; P<0.001).\nCONCLUSIONS: Aspirin use in healthy elderly persons did not prolong disability-free survival over a period of 5 years but led to a higher rate of major hemorrhage than placebo. (Funded by the National Institute on Aging and others; ASPREE ClinicalTrials.gov number, NCT01038583 .).",
+    "journal": "The New England journal of medicine",
+    "year": "2018",
+    "pubtypes": [
+      "Journal Article",
+      "Multicenter Study",
+      "Randomized Controlled Trial",
+      "Research Support, N.I.H., Extramural",
+      "Research Support, Non-U.S. Gov't"
+    ],
+    "authors": [
+      "John J McNeil",
+      "Robyn L Woods",
+      "Mark R Nelson",
+      "Christopher M Reid",
+      "Brenda Kirpach",
+      "Rory Wolfe"
+    ],
+    "n_authors": 27,
+    "n_affiliations": 1,
+    "n_grants": 4,
+    "n_references": 34,
+    "language": "eng",
+    "source": "pubmed",
+    "integrity": "ok",
+    "integrity_flags": [],
+    "is_notice": false,
+    "notice_types": [],
+    "integrity_relations": [
+      {
+        "ref_type": "CommentIn",
+        "pmid": "30529298",
+        "citation": "Gastroenterology. 2019 Feb;156(3):534-538. doi: 10.1053/j.gastro.2018.11.063."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "30641554",
+        "citation": "Ann Intern Med. 2019 Jan 15;170(2):JC3. doi: 10.7326/ACPJC-2019-170-2-003."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "30645666",
+        "citation": "Internist (Berl). 2019 Feb;60(2):209-216. doi: 10.1007/s00108-018-0541-z."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "30721495",
+        "citation": "MMW Fortschr Med. 2019 Feb;161(2):35. doi: 10.1007/s15006-019-0127-2."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "31042833",
+        "citation": "N Engl J Med. 2019 May 2;380(18):1775. doi: 10.1056/NEJMc1901774."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "31042834",
+        "citation": "N Engl J Med. 2019 May 2;380(18):1775. doi: 10.1056/NEJMc1901774."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "31042835",
+        "citation": "N Engl J Med. 2019 May 2;380(18):1775-1776. doi: 10.1056/NEJMc1901774."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "33785286",
+        "citation": "J Geriatr Oncol. 2021 Nov;12(8):1259-1260. doi: 10.1016/j.jgo.2021.03.005."
+      }
+    ]
+  },
+  {
+    "pmid": "39282897",
+    "title": "Final, 10-Year Outcomes with Nivolumab plus Ipilimumab in Advanced Melanoma.",
+    "abstract": "BACKGROUND: Previous results from this trial showed longer overall survival after treatment with nivolumab plus ipilimumab or with nivolumab monotherapy than with ipilimumab monotherapy in patients with advanced melanoma. Given that patients with advanced melanoma are living longer than 7.5 years, longer-term data were needed to address new clinically relevant questions.\nMETHODS: We randomly assigned patients with previously untreated advanced melanoma, in a 1:1:1 ratio, to one of the following regimens: nivolumab (1 mg per kilogram of body weight) plus ipilimumab (3 mg per kilogram) every 3 weeks for four doses, followed by nivolumab (3 mg per kilogram) every 2 weeks; nivolumab (3 mg per kilogram) every 2 weeks plus placebo; or ipilimumab (3 mg per kilogram) every 3 weeks for four doses plus placebo. Treatment was continued until the occurrence of disease progression, unacceptable toxic effects, or withdrawal of consent. Randomization was stratified according to BRAF mutation status, metastasis stage, and programmed death ligand 1 expression. Here, we report the final, 10-year results of this trial, including results for overall survival and melanoma-specific survival, as well as durability of response.\nRESULTS: With a minimum follow-up of 10 years, median overall survival was 71.9 months with nivolumab plus ipilimumab, 36.9 months with nivolumab, and 19.9 months with ipilimumab. The hazard ratio for death was 0.53 (95% confidence interval [CI], 0.44 to 0.65) for nivolumab plus ipilimumab as compared with ipilimumab and was 0.63 (95% CI, 0.52 to 0.76) for nivolumab as compared with ipilimumab. Median melanoma-specific survival was more than 120 months with nivolumab plus ipilimumab (not reached, with 37% of the patients alive at the end of the trial), 49.4 months with nivolumab, and 21.9 months with ipilimumab. Among patients who had been alive and progression-free at 3 years, 10-year melanoma-specific survival was 96% with nivolumab plus ipilimumab, 97% with nivolumab, and 88% with ipilimumab.\nCONCLUSIONS: The final trial results showed a continued, ongoing survival benefit with nivolumab plus ipilimumab and with nivolumab monotherapy, as compared with ipilimumab monotherapy, in patients with advanced melanoma. (Funded by Bristol Myers Squibb and others; CheckMate 067 ClinicalTrials.gov number, NCT01844505.).",
+    "journal": "The New England journal of medicine",
+    "year": "2025",
+    "pubtypes": [
+      "Journal Article",
+      "Randomized Controlled Trial",
+      "Multicenter Study",
+      "Clinical Trial, Phase III",
+      "Comparative Study"
+    ],
+    "authors": [
+      "Jedd D Wolchok",
+      "Vanna Chiarion-Sileni",
+      "Piotr Rutkowski",
+      "C Lance Cowey",
+      "Dirk Schadendorf",
+      "John Wagstaff"
+    ],
+    "n_authors": 32,
+    "n_affiliations": 1,
+    "n_grants": 2,
+    "n_references": 20,
+    "language": "eng",
+    "source": "pubmed",
+    "integrity": "ok",
+    "integrity_flags": [],
+    "is_notice": false,
+    "notice_types": [],
+    "integrity_relations": [
+      {
+        "ref_type": "CommentIn",
+        "pmid": "40138567",
+        "citation": "N Engl J Med. 2025 Mar 27;392(12):1245-1246. doi: 10.1056/NEJMc2501311."
+      },
+      {
+        "ref_type": "CommentIn",
+        "pmid": "40138568",
+        "citation": "N Engl J Med. 2025 Mar 27;392(12):1246. doi: 10.1056/NEJMc2501311."
+      }
+    ]
+  },
+  {
+    "pmid": "38740993",
+    "title": "Long-term weight loss effects of semaglutide in obesity without diabetes in the SELECT trial.",
+    "abstract": "In the SELECT cardiovascular outcomes trial, semaglutide showed a 20% reduction in major adverse cardiovascular events in 17,604 adults with preexisting cardiovascular disease, overweight or obesity, without diabetes. Here in this prespecified analysis, we examined effects of semaglutide on weight and anthropometric outcomes, safety and tolerability by baseline body mass index (BMI). In patients treated with semaglutide, weight loss continued over 65 weeks and was sustained for up to 4 years. At 208 weeks, semaglutide was associated with mean reduction in weight (-10.2%), waist circumference (-7.7 cm) and waist-to-height ratio (-6.9%) versus placebo (-1.5%, -1.3 cm and -1.0%, respectively; P < 0.0001 for all comparisons versus placebo). Clinically meaningful weight loss occurred in both sexes and all races, body sizes and regions. Semaglutide was associated with fewer serious adverse events. For each BMI category (<30, 30 to <35, 35 to <40 and ≥40 kg m-2) there were lower rates (events per 100 years of observation) of serious adverse events with semaglutide (43.23, 43.54, 51.07 and 47.06 for semaglutide and 50.48, 49.66, 52.73 and 60.85 for placebo). Semaglutide was associated with increased rates of trial product discontinuation. Discontinuations increased as BMI class decreased. In SELECT, at 208 weeks, semaglutide produced clinically significant weight loss and improvements in anthropometric measurements versus placebo. Weight loss was sustained over 4 years. ClinicalTrials.gov identifier: NCT03574597 .",
+    "journal": "Nature medicine",
+    "year": "2024",
+    "pubtypes": [
+      "Journal Article",
+      "Randomized Controlled Trial",
+      "Multicenter Study",
+      "Research Support, Non-U.S. Gov't"
+    ],
+    "authors": [
+      "Donna H Ryan",
+      "Ildiko Lingvay",
+      "John Deanfield",
+      "Steven E Kahn",
+      "Eric Barros",
+      "Bartolome Burguera"
+    ],
+    "n_authors": 20,
+    "n_affiliations": 17,
+    "n_grants": 0,
+    "n_references": 32,
+    "language": "eng",
+    "source": "pubmed",
+    "integrity": "ok",
+    "integrity_flags": [],
+    "is_notice": false,
+    "notice_types": [],
+    "integrity_relations": [
+      {
+        "ref_type": "CommentIn",
+        "pmid": "38796654",
+        "citation": "Nat Med. 2024 Jul;30(7):1830-1831. doi: 10.1038/s41591-024-03013-7."
+      }
+    ]
+  }
+]
