@@ -39,6 +39,21 @@ class TestPico(unittest.TestCase):
         self.assertEqual(p["intervention"], [])
         self.assertEqual(p["outcome"], [])
 
+    def test_generic_diabetes_and_incident_diabetes_have_distinct_roles(self):
+        self.assertEqual(extract_pico("糖尿病患者")["population"], ["diabetes"])
+        self.assertEqual(extract_pico("新发糖尿病风险")["population"], [])
+        self.assertEqual(extract_pico("新发糖尿病风险")["outcome"], ["incident diabetes"])
+        self.assertEqual(extract_pico("二甲双胍会增加糖尿病风险吗")["outcome"], ["diabetes"])
+
+    def test_boundaries_and_active_comparator_roles(self):
+        self.assertEqual(extract_pico("nystatin")["intervention"], [])
+        self.assertEqual(extract_pico("metformin versus aspirin")["comparison"], ["aspirin"])
+        self.assertEqual(extract_pico("nivolumab versus pembrolizumab")["intervention"], ["nivolumab"])
+
+    def test_typed_diabetes_and_specific_cancer_do_not_duplicate_generic_terms(self):
+        self.assertEqual(extract_pico("type 2 diabetes patients")["population"], ["type 2 diabetes"])
+        self.assertEqual(extract_pico("patients with lung cancer")["population"], ["lung cancer"])
+
 
 if __name__ == "__main__":
     unittest.main()

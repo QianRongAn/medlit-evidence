@@ -134,7 +134,7 @@ function renderStats(data, elapsedMs, ev) {
 
   // 卡 3：文献命中
   $("hitNum").textContent = data.total.toLocaleString();
-  $("hitSub").textContent = `返回 ${data.results.length} 篇 · ${data.online ? "PubMed 在线" : "离线语料"}`;
+  $("hitSub").textContent = `筛选纳入 ${data.results.length} 篇 · ${data.online ? "PubMed 在线" : "离线语料"}`;
 
   // 卡 4：响应耗时
   const sec = elapsedMs / 1000;
@@ -356,6 +356,50 @@ function renderPico(pico) {
   set("picoO", pico.outcome);
 }
 
+function renderScreening(data) {
+  const screening = data.screening;
+  const excluded = data.excluded_results || [];
+  const note = $("screeningNote");
+  if (!screening) {
+    note.textContent = "";
+  } else {
+    const issues = {
+      unmapped_chinese_terms: "有未映射的中文词项",
+      ambiguous_alternatives: "尚不能解析或者条件",
+      unsupported_numeric_constraint: "尚不能解析数字条件",
+      negated_population_query: "尚不能解析排除人群条件",
+      unparsed_exclusion: "尚不能解析排除条件",
+      no_content_terms: "缺少可检索的医学词项",
+    };
+    const detail = (screening.issues || []).map((key) => issues[key] || "查询条件待明确").join("；");
+    note.textContent = `候选 ${screening.candidate_count} 篇，词项筛选命中 ${screening.matched_count} 篇，展示 ${screening.included_count} 篇，未纳入 ${screening.excluded_count} 篇。`
+      + (detail ? detail + "。" : "")
+      + (screening.unmapped_terms && screening.unmapped_terms.length ? "未映射：" + screening.unmapped_terms.join("、") + "。" : "")
+      + (screening.note || "");
+  }
+  $("excludedSources").classList.toggle("hidden", excluded.length === 0);
+  $("excludedCount").textContent = `未纳入的候选 · ${excluded.length} 篇`;
+  const list = $("excludedList");
+  list.innerHTML = "";
+  const reasons = {
+    missing_population: "人群词项未覆盖", missing_intervention: "干预词项未覆盖",
+    missing_comparison: "对照词项未覆盖", missing_outcome: "摘要中未覆盖所问结局",
+    insufficient_lexical_coverage: "其他查询词覆盖不足", missing_abstract: "缺少摘要",
+    unsupported_query: "查询条件尚未完整解析",
+  };
+  excluded.forEach((d) => {
+    const item = document.createElement("div");
+    item.className = "doc-item";
+    const why = ((d.screening && d.screening.reasons) || []).map((key) => reasons[key] || key).join("；");
+    const pmid = String(d.pmid || "");
+    const title = /^[1-9][0-9]{0,9}$/.test(pmid)
+      ? `<a href="https://pubmed.ncbi.nlm.nih.gov/${pmid}/" target="_blank" rel="noopener">${esc(d.title || "无标题")}</a>`
+      : esc(d.title || "无标题");
+    item.innerHTML = `<p class="doc-title">${title}</p><div>${integrityBadges(d)}</div><p class="doc-meta">未纳入原因：${esc(why)}</p><div>${integrityLinks(d)}</div>`;
+    list.appendChild(item);
+  });
+}
+
 /* 未完成语义对齐与独立验证前，不渲染旧版置信度。 */
 function renderConfidence() {
   const tag = $("confTag");
@@ -461,6 +505,7 @@ function renderDocs(results) {
       ${d.abstract ? `<div class="doc-abstract">${esc(d.abstract)}</div>` : ""}
       ${d.pmid ? `<a class="doc-pmid" href="${pmidUrl}" target="_blank" rel="noopener">PMID ${esc(d.pmid)}</a>` : ""}
       <div>${integrityLinks(d)}</div>
+      <div class="doc-meta">查询词项覆盖 ${Number(d.relevance || 0).toFixed(1)}% · 不代表临床适用性</div>
       <div class="rel-bar"><div class="rel-fill" style="width:${Math.max(2, d.relevance || 0)}%"></div></div>
     `;
     list.appendChild(div);
@@ -494,6 +539,7 @@ async function ask(query) {
     setStatus(data.online);
     renderStats(data, elapsed, data.evidence);
     renderPico(data.pico);
+    renderScreening(data);
     renderAnswer(data);
     renderDist(data.evidence_distribution || {});
     renderDocs(data.results || []);

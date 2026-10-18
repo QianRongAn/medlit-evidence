@@ -7,6 +7,8 @@ import httpx
 
 from .config import LLM_API_KEY, LLM_BASE_URL, LLM_MODEL
 from .integrity import is_usable_evidence
+from .screening import build_query_plan, sentence_relevant
+from .tokenizer import tokenize
 from .study_type import GRADE_ORDER
 
 SENT_SPLIT = re.compile(r"(?<=[.!?])\s+")
@@ -53,7 +55,7 @@ def _split_sentences(text):
     return out
 
 
-def extractive_answer(docs, query_tokens, max_sentences=4):
+def extractive_answer(docs, query_tokens, max_sentences=4, *, query_plan=None):
     """按证据等级 + 关键词命中密度抽取关键句，附 PMID 引用。"""
     docs_sorted = sorted(docs, key=lambda d: GRADE_ORDER.get(d.get("grade", "N/A"), 4))
 
@@ -64,9 +66,10 @@ def extractive_answer(docs, query_tokens, max_sentences=4):
         text = d.get("abstract") or d.get("title") or ""
         for si, s in enumerate(_split_sentences(text)):
             label, body = _strip_label(s)
-            sl = body.lower()
-            hits = sum(1 for t in query_tokens if t in sl)
-            if hits == 0:
+            hits = len(set(query_tokens) & set(tokenize(body)))
+            if query_plan is not None and not sentence_relevant(body, query_plan):
+                continue
+            if hits == 0 and query_plan is None:
                 continue
             pos_bonus = 1.0 if si == 0 else 0.0
             grade_bonus = max(0.0, (4 - GRADE_ORDER.get(d.get("grade", "N/A"), 4)) * 0.4)
@@ -127,7 +130,7 @@ def _build_context(docs, max_docs=6, max_chars=4000):
     return json.dumps({"documents": selected}, ensure_ascii=False), sources
 
 
-def _validate_answer(content, sources):
+def _validate_answer(content, sources, query_plan=None):
     """逐项验证来源与引文原句；不声称验证摘要与原文的语义蕴含。"""
     if not isinstance(content, str) or not content.strip() or len(content) > 20000:
         raise CitationValidationError("empty_or_oversized_output")
@@ -154,6 +157,8 @@ def _validate_answer(content, sources):
         if (not isinstance(quote, str) or len(quote.strip()) < 20
                 or quote not in sources[pmid]["abstract"]):
             raise CitationValidationError("quote_not_in_context")
+        if query_plan is not None and not sentence_relevant(quote, query_plan):
+            raise CitationValidationError("quote_not_relevant_to_query")
         result.append({
             "pmid": pmid, "sentence": text.strip(), "quote": quote,
             "title": sources[pmid]["title"], "polarity": "unassessed",
@@ -163,6 +168,7 @@ def _validate_answer(content, sources):
 
 async def llm_answer(query, docs):
     """整理摘要，全部引用验证通过后返回结构化条目；否则抛错供调用方回退。"""
+    plan = build_query_plan(query)
     context, sources = _build_context(docs)
     if not sources:
         raise CitationValidationError("no_citable_context")
@@ -194,4 +200,4 @@ async def llm_answer(query, docs):
         )
         r.raise_for_status()
         data = r.json()
-        return _validate_answer(data["choices"][0]["message"]["content"], sources)
+        return _validate_answer(data["choices"][0]["message"]["content"], sources, plan)

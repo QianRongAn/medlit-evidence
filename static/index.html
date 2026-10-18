@@ -137,7 +137,7 @@
       <div class="pico-card">
         <div class="pico-head">
           <h2>问题理解 · PICO</h2>
-          <span class="pico-note">自动结构化拆解</span>
+          <span class="pico-note">词典提取 · 已识别条件用于筛选</span>
         </div>
         <div class="pico-grid">
           <div class="pico-item">
@@ -157,6 +157,7 @@
             <span class="pico-meta"><span class="pico-cap">结局</span><span class="pico-val" id="picoO">未明确</span></span>
           </div>
         </div>
+        <p class="assessment-note" id="screeningNote"></p>
         <div class="integrity-warning hidden" id="integrityWarning"></div>
       </div>
 
@@ -218,6 +219,10 @@
         <div class="card-head"><h2>证据来源</h2><span class="count" id="docCount"></span></div>
         <p class="assessment-note">研究模型分数仅供人工排序，未校准，不代表未来撤稿概率；演示改写摘要不评分。</p>
         <div id="docList" class="doc-grid"></div>
+        <details class="excluded-sources hidden" id="excludedSources">
+          <summary id="excludedCount">未纳入的候选</summary>
+          <div id="excludedList"></div>
+        </details>
       </div>
     </section>
 

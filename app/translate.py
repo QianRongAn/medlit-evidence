@@ -90,7 +90,7 @@ def translate_query(text):
         # 英文/数字直接保留（跳过空格分隔的英文单词块）
         if ch.isascii() and (ch.isalnum() or ch == "-"):
             j = i
-            while j < n and (text[j].isalnum() or text[j] == "-"):
+            while j < n and text[j].isascii() and (text[j].isalnum() or text[j] == "-"):
                 j += 1
             out.append(text[i:j])
             i = j

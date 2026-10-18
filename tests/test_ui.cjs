@@ -158,3 +158,21 @@ test("integrity links preserve direction and reject malformed linked IDs", () =>
   assert.match(links, /&lt;script&gt;/);
   assert.doesNotMatch(links, /onmouseover|<script>/);
 });
+
+test("screening results expose counts and exclusions without calling them clinical inapplicability", () => {
+  const { context, get } = loadApp();
+  context.renderScreening({ screening: { candidate_count: 3, matched_count: 1, included_count: 1,
+    excluded_count: 2, issues: [], note: "词项匹配不代表临床适用性。" }, excluded_results: [
+    { title: "Wrong drug", screening: { reasons: ["missing_intervention"] } },
+    { title: "<script>bad</script>", screening: { reasons: ["missing_outcome", "missing_abstract"] } },
+  ] });
+  assert.match(get("screeningNote").textContent, /候选 3 篇.*展示 1 篇.*未纳入 2 篇/);
+  assert.match(get("screeningNote").textContent, /不代表临床适用性/);
+  assert.equal(get("excludedSources").classList.contains("hidden"), false);
+  assert.match(get("excludedList").children[0].innerHTML, /干预词项未覆盖/);
+  assert.match(get("excludedList").children[1].innerHTML, /&lt;script&gt;/);
+  context.renderScreening({ screening: { candidate_count: 0, matched_count: 0, included_count: 0,
+    excluded_count: 0, issues: ["unsupported_numeric_constraint"], note: "" }, excluded_results: [] });
+  assert.match(get("screeningNote").textContent, /尚不能解析数字条件/);
+  assert.equal(get("excludedSources").classList.contains("hidden"), true);
+});

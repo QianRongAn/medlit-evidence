@@ -14,16 +14,16 @@ from pydantic import BaseModel, Field
 from .config import CORPUS_FILE, LLM_API_KEY, RETMAX, STATIC_DIR
 from .evidence import analyze_evidence
 from .integrity import document_integrity, is_usable_evidence
-from .pico import extract_pico
 from .pubmed import efetch, esearch, load_corpus
 from .retrieval import rank
+from .screening import build_query_plan, screen_document, screening_summary
 from .risk import model_available, predict_risk
 from .study_type import classify
 from .synthesizer import CitationValidationError, extractive_answer, llm_answer
 from .tokenizer import tokenize
 from .translate import translate_query
 
-app = FastAPI(title="MedLit Evidence", version="0.4.0")
+app = FastAPI(title="MedLit Evidence", version="0.5.0")
 
 
 class Query(BaseModel):
@@ -32,23 +32,27 @@ class Query(BaseModel):
 
 
 def _search_text(query):
-    """中文提问先翻译成英文检索词，英文提问原样返回。"""
+    """生成召回词；中文使用已识别概念及有效词，不丢失已识别的 PICO 条件。"""
     translated = translate_query(query)
+    if any("\u4e00" <= c <= "\u9fff" for c in query):
+        # 使用完整概念短语，避免翻译丢失“2 型/新发”等条件或重复拼接药名。
+        plan = build_query_plan(query)
+        terms = [c for values in plan["pico"].values() for c in values] + plan["lexical_terms"]
+        translated = " ".join(dict.fromkeys(terms)) or translated
     return translated or query
 
 
 def _query_tokens(query):
-    """检索用的 token：原文 + 翻译后的英文，保证中英文都能命中。"""
-    return tokenize(query) + tokenize(_search_text(query))
+    """词项去重，加入已识别概念的词典变体供排序；不作为纳入门槛。"""
+    return build_query_plan(query)["ranking_tokens"]
 
 
 def _annotate_docs(docs, query_tokens):
-    """分类 + BM25 打分 + 归一化，按相关性降序返回。"""
+    """分类及原始 BM25 排序，不再按候选最大值生成 100 分。"""
     docs = deepcopy(docs)  # PubMed 缓存由多次请求共享，标注不得污染缓存。
     doc_tokens = [tokenize((d.get("title") or "") + " " + (d.get("abstract") or "")) for d in docs]
     ranked = rank(doc_tokens, query_tokens)
 
-    max_score = max((s for _, s in ranked), default=0.0) or 1.0
     for d in docs:
         d.update(document_integrity(d))
         if d.get("is_notice") or d.get("integrity") == "notice":
@@ -57,11 +61,13 @@ def _annotate_docs(docs, query_tokens):
             d["study_type"], d["grade"] = classify(
                 d.get("abstract") or "", d.get("pubtypes"), title=d.get("title") or "")
         d["relevance"] = 0.0
+        d["bm25_score"] = 0.0
 
     for i, s in ranked:
-        docs[i]["relevance"] = round(s / max_score * 100, 1)
+        docs[i]["bm25_score"] = round(s, 4)
+        docs[i]["relevance"] = round(len(set(query_tokens) & set(doc_tokens[i])) / max(len(set(query_tokens)), 1) * 100, 1)
 
-    docs.sort(key=lambda d: -d["relevance"])
+    docs.sort(key=lambda d: -d["bm25_score"])
     return docs
 
 
@@ -78,8 +84,31 @@ async def _retrieve(query, retmax):
     corpus = load_corpus(CORPUS_FILE)
     tokens = _query_tokens(query)
     ranked = rank([tokenize((d.get("title") or "") + " " + (d.get("abstract") or "")) for d in corpus], tokens)
-    picked = [corpus[i] for i, _ in ranked[:retmax]]
+    picked = [corpus[i] for i, _ in ranked]  # 先筛选，再按返回上限截断，避免弱匹配挤掉合格演示记录。
     return picked, False, len(picked)
+
+
+def _source(d, score_model=True):
+    fields = ("pmid", "title", "abstract", "journal", "year", "authors", "study_type", "grade",
+              "relevance", "bm25_score", "source", "integrity", "integrity_flags", "is_notice",
+              "notice_types", "integrity_relations", "screening", "answer_eligible")
+    return {**{key: d.get(key) for key in fields}, "risk": predict_risk(d) if score_model else None}
+
+
+async def _screened_retrieval(query, retmax):
+    plan = build_query_plan(query)
+    candidates, online, total = await _retrieve(query, retmax)
+    candidates = _annotate_docs(candidates, plan["ranking_tokens"])
+    included, excluded = [], []
+    for d in candidates:
+        d["screening"] = screen_document(d, plan)
+        d["relevance"] = d["screening"]["coverage"]
+        d["answer_eligible"] = d["screening"]["eligible"] and is_usable_evidence(d)
+        (included if d["screening"]["eligible"] else excluded).append(d)
+    included.sort(key=lambda d: (-d["relevance"], -d["bm25_score"]))
+    summary = screening_summary(plan, len(candidates), included[:retmax], excluded)
+    summary["matched_count"] = len(included)
+    return included[:retmax], excluded, online, total, plan, summary
 
 
 @app.get("/health")
@@ -103,37 +132,17 @@ async def search(q: Query):
     query = q.query.strip()
     if not query:
         raise HTTPException(status_code=400, detail="query 不能为空")
-    query_tokens = _query_tokens(query)
-
-    docs, online, count = await _retrieve(query, q.retmax)
-    docs = _annotate_docs(docs, query_tokens)
+    docs, excluded, online, count, plan, screening = await _screened_retrieval(query, q.retmax)
 
     return {
         "query": query,
         "online": online,
         "total": count,
         "count": len(docs),
-        "results": [
-            {
-                "pmid": d.get("pmid"),
-                "title": d.get("title"),
-                "abstract": d.get("abstract"),
-                "journal": d.get("journal"),
-                "year": d.get("year"),
-                "authors": d.get("authors"),
-                "study_type": d.get("study_type"),
-                "grade": d.get("grade"),
-                "relevance": d.get("relevance"),
-                "source": d.get("source"),
-                "integrity": d.get("integrity", "ok"),
-                "integrity_flags": d.get("integrity_flags", []),
-                "is_notice": d.get("is_notice", False),
-                "notice_types": d.get("notice_types", []),
-                "integrity_relations": d.get("integrity_relations", []),
-                "risk": predict_risk(d),
-            }
-            for d in docs
-        ],
+        "pico": plan["pico"],
+        "screening": screening,
+        "results": [_source(d) for d in docs],
+        "excluded_results": [_source(d, False) for d in excluded],
     }
 
 
@@ -142,14 +151,9 @@ async def answer(q: Query):
     query = q.query.strip()
     if not query:
         raise HTTPException(status_code=400, detail="query 不能为空")
-    query_tokens = _query_tokens(query)
-
-    docs, online, count = await _retrieve(query, q.retmax)
-    docs = _annotate_docs(docs, query_tokens)
-
-    top = [d for d in docs if d.get("relevance", 0) > 0][:8]
-
-    usable = [d for d in top if is_usable_evidence(d)]
+    docs, excluded, online, count, plan, screening = await _screened_retrieval(query, q.retmax)
+    query_tokens = plan["ranking_tokens"]
+    usable = [d for d in docs if d["answer_eligible"]][:8]
     mode = "extractive"
     sentences = None
     fallback_reason = None
@@ -163,12 +167,14 @@ async def answer(q: Query):
             fallback_reason = "llm_unavailable"
 
     if sentences is None:
-        sentences = extractive_answer(usable, query_tokens)
+        sentences = extractive_answer(usable, query_tokens, query_plan=plan)
         mode = "extractive"
     answer_text = "\n\n".join(f"{s['sentence']} [PMID {s['pmid']}]" for s in sentences)
-    answer_text = answer_text or "未找到可用于回答的相关证据；已撤稿文献及学术通知不用于生成回答。"
+    if not answer_text:
+        answer_text = ("问题中有尚不能可靠解析的条件，请使用明确的医学术语并说明比较对象。"
+                       if plan["issues"] else "未找到同时满足查询条件且可摘录的相关证据；未放宽条件生成回答。")
 
-    evidence = analyze_evidence(top)
+    evidence = analyze_evidence(docs)
 
     # 证据等级分布
     from collections import Counter
@@ -187,30 +193,12 @@ async def answer(q: Query):
             "content_entailment": "unassessed",
         },
         "llm_fallback_reason": fallback_reason,
-        "pico": extract_pico(query),
+        "pico": plan["pico"],
+        "screening": screening,
         "evidence": evidence,
         "evidence_distribution": {k: dist.get(k, 0) for k in ["High", "Moderate", "Low", "Very low", "N/A"]},
-        "results": [
-            {
-                "pmid": d.get("pmid"),
-                "title": d.get("title"),
-                "abstract": d.get("abstract"),
-                "journal": d.get("journal"),
-                "year": d.get("year"),
-                "authors": d.get("authors"),
-                "study_type": d.get("study_type"),
-                "grade": d.get("grade"),
-                "relevance": d.get("relevance"),
-                "source": d.get("source"),
-                "integrity": d.get("integrity", "ok"),
-                "integrity_flags": d.get("integrity_flags", []),
-                "is_notice": d.get("is_notice", False),
-                "notice_types": d.get("notice_types", []),
-                "integrity_relations": d.get("integrity_relations", []),
-                "risk": predict_risk(d),
-            }
-            for d in docs
-        ],
+        "results": [_source(d) for d in docs],
+        "excluded_results": [_source(d, False) for d in excluded],
     }
 
 
