@@ -1,10 +1,10 @@
 const GRADE_ZH = {
   High: "高", Moderate: "中", Low: "低", "Very low": "极低", "N/A": "未分级",
 };
-// Miro 风格证据等级配色：青绿 / 蓝 / 黄 / 橙红 / 灰
+// 沉静的分级配色；类别含义同时用文字表达
 const GRADE_COLOR = {
-  High: "#12A594", Moderate: "#4262FF", Low: "#FFD02E",
-  "Very low": "#FFA3A0", "N/A": "#C3C2BC",
+  High: "#377F78", Moderate: "#4665B8", Low: "#80652C",
+  "Very low": "#A26761", "N/A": "#65758C",
 };
 
 // 根据背景亮度自动选深/浅文字，避免亮黄底配白字看不清
@@ -120,8 +120,8 @@ function renderStats(data, elapsedMs, ev) {
   // 未经验证的方向与置信度不显示为数字或无冲突。
   $("confidenceNum").textContent = "–";
 
-  // 卡 2：证据判定（马卡龙色调表达结论方向：支持=粉，反对=橙红，对立=米黄，中立=薄荷）
-  // 值去掉「证据」前缀：标签已叫「证据判定」，避免重复（与参考稿一致显示「倾向支持」）
+  // 未验证的证据方向保持待核对状态。
+  // 保留原有判定文字，不通过主题色暗示支持或反对。
   $("verdictText").textContent = ev ? ev.verdict.replace(/^证据/, "") : "待核对";
   const verdictCard = $("statVerdict");
   verdictCard.classList.remove("tone-cream", "tone-pink", "tone-salmon", "tone-mint");
@@ -167,7 +167,7 @@ function renderHomeStatus(h) {
   const online = !!(h && h.pubmed_online);
   const svc = $("homeSvc");
   svc.textContent = online ? "在线" : "离线";
-  svc.style.color = online ? "#0e8f80" : "#c04b3e";
+  svc.style.color = online ? "#287567" : "#95631b";
   $("homeSvcSub").textContent = online
     ? "PubMed E-utilities 实时检索已连通"
     : "联网失败 · 自动回退内置示例语料";
@@ -175,7 +175,7 @@ function renderHomeStatus(h) {
   const loaded = !!(h && h.model_loaded);
   const model = $("homeModel");
   model.textContent = loaded ? "已加载" : "未加载";
-  model.style.color = loaded ? "#1B1B1D" : "#c04b3e";
+  model.style.color = loaded ? "#273449" : "#95631b";
   $("homeModelSub").textContent = loaded
     ? "研究模型分数 · 未校准"
     : "模型不可用 · 分数未显示";
@@ -184,10 +184,10 @@ function renderHomeStatus(h) {
 
   const lib = $("homeLib");
   if (online) {
-    lib.textContent = "3800万+";
-    $("homeLibSub").textContent = "PubMed 收录 · 实时检索";
+    lib.textContent = "已连接";
+    $("homeLibSub").textContent = "PubMed · 按问题实时检索";
   } else {
-    lib.textContent = (h && h.corpus_size) || "11";
+    lib.textContent = h && Number.isInteger(h.corpus_size) ? h.corpus_size : "–";
     $("homeLibSub").textContent = "离线语料篇数 · 断网可用";
   }
 }
@@ -336,6 +336,8 @@ function syncHome() {
   const busy = !$("loading").classList.contains("hidden");
   const hasResult = !$("result").classList.contains("hidden");
   $("homeDash").classList.toggle("hidden", busy || hasResult);
+  $("workspaceIntro").classList.toggle("hidden", busy || hasResult);
+  document.body?.classList.toggle("research-active", busy || hasResult);
 }
 
 function showDashboard() {
@@ -406,9 +408,9 @@ function renderConfidence() {
   const score = $("confScore");
   const desc = $("confDesc");
   tag.textContent = "未评估";
-  tag.style.color = "#9C9C96";
+  tag.style.color = "#5F6E83";
   score.textContent = "–";
-  score.style.color = "#FFD02E";
+  score.style.color = "#4665b8";
   desc.textContent = "研究类型不等于结论可信度";
 }
 
@@ -690,18 +692,33 @@ function renderHistory() {
 }
 
 /* ---------- 抽屉开合 ---------- */
+let activeDrawer = null;
+let drawerOpener = null;
 function openDrawer(name) {
+  if (activeDrawer && activeDrawer !== name) closeDrawer(activeDrawer);
+  drawerOpener = document.activeElement;
+  activeDrawer = name;
   const isSettings = name === "settings";
   const drawer = $(isSettings ? "settingsDrawer" : "notifDrawer");
   const mask = document.querySelector(`.drawer-mask[data-close="${name}"]`);
   drawer.classList.remove("hidden");
   mask.classList.remove("hidden");
   if (!isSettings) renderHistory();
+  document.querySelectorAll(".topbar, .nav-rail, main").forEach((el) => { el.inert = true; });
+  document.body.classList.add("drawer-open");
+  drawer.focus();
 }
 function closeDrawer(name) {
   const isSettings = name === "settings";
   $(isSettings ? "settingsDrawer" : "notifDrawer").classList.add("hidden");
   document.querySelector(`.drawer-mask[data-close="${name}"]`).classList.add("hidden");
+  if (activeDrawer === name) {
+    activeDrawer = null;
+    document.querySelectorAll(".topbar, .nav-rail, main").forEach((el) => { el.inert = false; });
+    document.body.classList.remove("drawer-open");
+    if (drawerOpener) drawerOpener.focus();
+    drawerOpener = null;
+  }
 }
 
 document.querySelectorAll(".drawer-close, .drawer-mask").forEach((el) =>
@@ -710,6 +727,17 @@ document.querySelectorAll(".drawer-close, .drawer-mask").forEach((el) =>
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     ["settings", "notif"].forEach(closeDrawer);
+  }
+  if (e.key === "Tab" && activeDrawer) {
+    const drawer = $(activeDrawer === "settings" ? "settingsDrawer" : "notifDrawer");
+    const controls = [...drawer.querySelectorAll('button, input, a[href], [tabindex="0"]')].filter((el) => !el.disabled);
+    if (!controls.length) { e.preventDefault(); drawer.focus(); return; }
+    const first = controls[0], last = controls[controls.length - 1];
+    if (!controls.includes(document.activeElement) || (!e.shiftKey && document.activeElement === last)) {
+      e.preventDefault(); (e.shiftKey ? last : first).focus();
+    } else if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault(); last.focus();
+    }
   }
 });
 
@@ -750,3 +778,8 @@ renderHome();
 applySettingsUI();
 updateNotifBadge();
 checkHealth();
+
+// Compact navigation shares the existing workspace actions.
+$("railHome").addEventListener("click", () => { showDashboard(); $("query").focus(); });
+$("railHistory").addEventListener("click", () => openDrawer("notif"));
+$("railSettings").addEventListener("click", () => openDrawer("settings"));

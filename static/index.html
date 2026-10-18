@@ -3,35 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>循证问答 · 医学文献循证问答</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23FFD02E'/%3E%3Cpath d='M4 12h3l2-5 4 10 3-8 2 3h2' stroke='%231B1B1D' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <title>MedLit · 医学证据工作台</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23E8EDF2'/%3E%3Cpath d='M4 12h3l2-5 4 10 3-8 2 3h2' stroke='%234663D8' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
+  <a class="skip-link" href="#query">跳转到临床问题</a>
+  <nav class="nav-rail" aria-label="工作台导航">
+    <a class="rail-mark" href="#workspace" aria-label="MedLit 工作台"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h4l2-6 4 12 2-6h4"/></svg></a>
+    <div class="rail-actions">
+      <button class="rail-button active" id="railHome" aria-current="page" aria-label="研究工作台" title="研究工作台"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></svg><span>工作台</span></button>
+      <button class="rail-button" id="railHistory" aria-label="查看历史记录" title="历史记录"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6M12 7v5l3 2"/></svg><span>历史</span></button>
+    </div>
+    <button class="rail-button rail-bottom" id="railSettings" aria-label="打开工作台设置" title="工作台设置"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></svg><span>设置</span></button>
+    <span class="rail-edition" aria-hidden="true">ML / 06</span>
+  </nav>
 
-  <!-- ========== 顶栏（Miro 风格：黄 logo + 居中搜索 + 状态 + 黑色按钮） ========== -->
-  <header class="topbar">
+  <!-- 工作台顶栏 -->
+  <header class="topbar" id="workspace">
     <button class="brand" id="navHome" title="回到首页">
       <span class="brand-logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#1B1B1D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
           <path d="M2 12h4l2-5 4 10 3-8 2 3h5" />
         </svg>
       </span>
-      <span class="brand-name">循证问答</span>
+      <span class="brand-name">MedLit<span class="brand-caption">医学证据工作台</span></span>
     </button>
 
     <div class="topbar-search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="topQuery" type="text" placeholder="搜索文献、问题、PMID..." />
+      <input id="topQuery" type="text" placeholder="快速检索临床问题…" aria-label="快速检索临床问题" />
     </div>
 
     <div class="topbar-right">
-      <div class="status" id="status"><span class="dot"></span><span id="statusText">连接中…</span></div>
-      <button class="icon-btn" id="navNotifications" title="历史记录">
+      <div class="status" id="status" role="status" aria-live="polite"><span class="dot"></span><span id="statusText">连接中…</span></div>
+      <button class="icon-btn" id="navNotifications" title="历史记录" aria-label="历史记录">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
         <span class="side-badge hidden" id="notifBadge"></span>
       </button>
-      <button class="icon-btn" id="navSettings" title="设置">
+      <button class="icon-btn" id="navSettings" title="设置" aria-label="设置">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
       <button class="btn-dark" id="navNew">
@@ -44,20 +54,33 @@
   <!-- ========== 主内容（横版，无侧栏） ========== -->
   <main class="content">
 
-    <!-- 提问大卡 -->
-    <section class="ask-card">
-      <textarea id="query" rows="2" placeholder="输入一个临床问题，例如：Is nivolumab associated with myocarditis in patients with melanoma"></textarea>
+    <section class="workspace-intro" id="workspaceIntro" aria-labelledby="workspaceTitle">
+      <div class="intro-copy">
+        <p class="eyebrow"><span></span> CLINICAL EVIDENCE, IN FOCUS</p>
+        <h1 id="workspaceTitle">从一个问题，<br>走近<span>医学证据。</span></h1>
+        <p class="intro-description">检索文献，回到原文。<br class="mobile-break">让每一次判断，都有迹可循。</p>
+      </div>
+      <div class="evidence-lens" aria-hidden="true">
+        <div class="lens-ring"><div class="lens-core"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 17h22l8 8v24H17z"/><path d="M39 17v10h8M24 33h15M24 39h10"/><path d="M9 12V8h4M51 8h4v4M55 52v4h-4M13 56H9v-4"/></svg></div></div>
+        <span class="lens-label">QUESTION → SOURCE → INSIGHT</span>
+      </div>
+    </section>
+    <div class="section-overline"><span>01 / 提出问题</span><span>RESEARCH WORKSPACE</span></div>
+    <!-- 临床问题输入 -->
+    <section class="ask-card" aria-label="临床问题输入">
+      <label class="query-label" for="query">你想了解什么？<span>从人群、干预、对照或结局开始</span></label>
+      <textarea id="query" rows="2" maxlength="2000" placeholder="例如：二甲双胍对2型糖尿病患者的死亡率有何影响？" aria-describedby="queryHint"></textarea>
       <div class="ask-row">
-        <span class="hint">Ctrl + Enter 发送 · 支持中英文</span>
+        <span class="hint" id="queryHint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> 检索 <span class="hint-separator">/</span> 支持中英文</span>
         <button id="askBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M22 2 11 13" /><path d="M22 2 15 22l-4-9-9-4z" />
+            <circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/>
           </svg>
-          提问
+          检索证据 <span class="button-arrow" aria-hidden="true">↗</span>
         </button>
       </div>
       <div class="examples">
-        <span class="examples-label">试试：</span>
+        <span class="examples-label">探索一个问题</span>
         <button class="chip" data-q="statins risk of incident diabetes">他汀与新发糖尿病</button>
         <button class="chip" data-q="metformin cardiovascular risk type 2 diabetes">二甲双胍与心血管</button>
         <button class="chip" data-q="SGLT2 inhibitor heart failure">SGLT2 与心衰</button>
@@ -68,33 +91,34 @@
 
     <!-- ========== 首页仪表盘（无结果时展示） ========== -->
     <section id="homeDash">
+      <div class="section-overline dashboard-overline"><span>02 / 工作台概览</span><span>YOUR RESEARCH, AT A GLANCE</span></div>
       <div class="stat-grid">
         <div class="stat-card tone-cream">
-          <div class="stat-label">服务状态</div>
+          <div class="stat-label">服务状态<span class="stat-index">01</span></div>
           <div class="stat-num" id="homeSvc">–</div>
           <div class="stat-sub" id="homeSvcSub">正在检查 PubMed 连接…</div>
         </div>
         <div class="stat-card tone-pink">
-          <div class="stat-label">撤稿研究模型</div>
+          <div class="stat-label">撤稿研究模型<span class="stat-index">02</span></div>
           <div class="stat-num" id="homeModel">–</div>
-          <div class="stat-sub" id="homeModelSub">LightGBM · AUC 0.856</div>
+          <div class="stat-sub" id="homeModelSub">研究模型分数 · 未校准</div>
         </div>
         <div class="stat-card tone-salmon">
-          <div class="stat-label">历史问答</div>
+          <div class="stat-label">历史问答<span class="stat-index">03</span></div>
           <div class="stat-num" id="homeHist">0</div>
           <div class="stat-sub">条提问 · 保存在本浏览器</div>
         </div>
         <div class="stat-card tone-mint">
-          <div class="stat-label">文献库</div>
-          <div class="stat-num" id="homeLib">3800万+</div>
-          <div class="stat-sub" id="homeLibSub">PubMed 收录 · 实时检索</div>
+          <div class="stat-label">文献库<span class="stat-index">04</span></div>
+          <div class="stat-num" id="homeLib">–</div>
+          <div class="stat-sub" id="homeLibSub">等待连接状态</div>
         </div>
       </div>
 
       <div class="duo-grid">
         <div class="card">
           <div class="card-head">
-            <h2>最近提问</h2>
+            <h2>最近探索</h2>
             <div class="pill-seg" id="recentSeg">
               <button data-v="today">今日</button>
               <button data-v="all" class="active">全部</button>
@@ -104,27 +128,27 @@
         </div>
 
         <div class="card">
-          <div class="card-head"><h2>使用统计</h2></div>
+          <div class="card-head"><h2>研究足迹</h2><span class="tiny-label">LOCAL ACTIVITY</span></div>
           <div class="usage-big">
             <div class="usage-num" id="usageTotal">0</div>
             <div class="usage-cap">累计提问</div>
           </div>
           <div class="usage-rows">
             <div class="usage-row"><span>平均响应</span><b id="usageAvg">–</b></div>
-            <div class="usage-row"><span>平均置信度</span><b id="usageConf">–</b></div>
-            <div class="usage-row"><span>结论对立</span><b id="usageConflict">–</b></div>
+            <div class="usage-row"><span>结论置信度</span><b id="usageConf">–</b></div>
+            <div class="usage-row"><span>结论方向</span><b id="usageConflict">–</b></div>
           </div>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-head"><h2>问答活动</h2></div>
+        <div class="card-head"><h2>探索节奏</h2></div>
         <div class="heatmap-wrap">
           <div class="heatmap" id="heatmap"></div>
         </div>
         <div class="heat-foot">
-          <span class="heat-hint">每次提问会记录在下面的日历格中</span>
-          <span class="heat-legend">Less <i class="hv hv0"></i><i class="hv hv1"></i><i class="hv hv2"></i><i class="hv hv3"></i><i class="hv hv4"></i> More</span>
+          <span class="heat-hint">每一次探索，都留下一个坐标</span>
+          <span class="heat-legend">少 <i class="hv hv0"></i><i class="hv hv1"></i><i class="hv hv2"></i><i class="hv hv3"></i><i class="hv hv4"></i> 多</span>
         </div>
       </div>
     </section>
@@ -135,6 +159,7 @@
 
       <!-- 问题理解 · PICO（米黄大卡） -->
       <div class="pico-card">
+        <span class="tiny-label result-step">02 / UNDERSTAND THE QUESTION</span>
         <div class="pico-head">
           <h2>问题理解 · PICO</h2>
           <span class="pico-note">词典提取 · 已识别条件用于筛选</span>
@@ -226,24 +251,25 @@
       </div>
     </section>
 
-    <section id="loading" class="hidden">
+    <section id="loading" class="hidden" role="status" aria-live="polite">
       <div class="spinner"></div>
-      <p>正在检索 PubMed 并生成回答…</p>
+      <p>正在连接问题与文献…</p>
     </section>
 
-    <section id="error" class="hidden error-box"></section>
+    <section id="error" class="hidden error-box" role="alert"></section>
 
     <footer>
-      <p>数据来自 PubMed E-utilities（离线时回退内置示例语料）。回答仅供参考，不构成医疗建议。</p>
+      <span class="footer-brand">MEDLIT <span>/</span> EVIDENCE WORKSPACE</span>
+      <p>来源可追溯，判断需审慎。文献整理仅供研究参考，不构成医疗建议。</p>
     </footer>
   </main>
 
   <!-- ========== 设置抽屉 ========== -->
   <div class="drawer-mask hidden" data-close="settings"></div>
-  <aside class="drawer hidden" id="settingsDrawer">
+  <aside class="drawer hidden" id="settingsDrawer" role="dialog" aria-modal="true" aria-label="工作台设置" tabindex="-1">
     <header class="drawer-head">
       <h2>设置</h2>
-      <button class="drawer-close" data-close="settings">
+      <button class="drawer-close" data-close="settings" aria-label="关闭设置">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
     </header>
@@ -262,10 +288,10 @@
       <div class="setting-row">
         <div>
           <p class="setting-title">显示文献摘要</p>
-          <p class="setting-desc">在证据来源卡片中展开每篇文献的摘要</p>
+          <p class="setting-desc">在证据来源卡片中显示每篇文献的摘要片段</p>
         </div>
         <label class="switch">
-          <input type="checkbox" id="showAbstract" checked />
+          <input type="checkbox" id="showAbstract" aria-label="显示文献摘要" checked />
           <span class="switch-slider"></span>
         </label>
       </div>
@@ -279,7 +305,7 @@
       <div class="setting-row">
         <div>
           <p class="setting-title">版本</p>
-          <p class="setting-desc">v0.1.0 · MIT</p>
+          <p class="setting-desc">v0.6.0 · MIT</p>
         </div>
       </div>
     </div>
@@ -287,10 +313,10 @@
 
   <!-- ========== 历史记录抽屉 ========== -->
   <div class="drawer-mask hidden" data-close="notif"></div>
-  <aside class="drawer hidden" id="notifDrawer">
+  <aside class="drawer hidden" id="notifDrawer" role="dialog" aria-modal="true" aria-label="历史记录" tabindex="-1">
     <header class="drawer-head">
       <h2>历史记录</h2>
-      <button class="drawer-close" data-close="notif">
+      <button class="drawer-close" data-close="notif" aria-label="关闭历史记录">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
     </header>
