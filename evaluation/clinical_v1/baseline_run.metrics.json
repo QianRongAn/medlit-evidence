@@ -1,0 +1,351 @@
+{
+  "benchmark_sha256": "2fccf8e1c11fad26677c3f5b62c3260ed87d9c277e53f91c43e338085b4792a4",
+  "run_sha256": "86a41b07eb16ae115935ca5e8f15d1f42d33618574f5d4325a36541015681c68",
+  "annotation_kind": "model_authored_source_review",
+  "expert_review_status": "pending",
+  "summary_reviewer_kind": "model_authored_source_review",
+  "scope": "closed_corpus_snapshot_not_live_pubmed; paired_languages_not_independent",
+  "mode_requested": "extractive",
+  "llm_success_queries": 0,
+  "all": {
+    "query_n": 30,
+    "topic_precision_at_5": {
+      "numerator": 17,
+      "denominator": 17,
+      "rate": 1.0
+    },
+    "pico_document_match_at_5": {
+      "numerator": 15,
+      "denominator": 17,
+      "rate": 0.8823529411764706
+    },
+    "closed_pool_recall_at_5": {
+      "numerator": 15,
+      "denominator": 26,
+      "rate": 0.5769230769230769
+    },
+    "answerable_query_hit_at_5": {
+      "numerator": 13,
+      "denominator": 24,
+      "rate": 0.5416666666666666
+    },
+    "pico_query_exact": {
+      "numerator": 6,
+      "denominator": 30,
+      "rate": 0.2
+    },
+    "answer_coverage": {
+      "numerator": 9,
+      "denominator": 24,
+      "rate": 0.375
+    },
+    "no_evidence_abstention": {
+      "numerator": 6,
+      "denominator": 6,
+      "rate": 1.0
+    },
+    "claim_review_coverage": {
+      "numerator": 26,
+      "denominator": 26,
+      "rate": 1.0
+    },
+    "summary_faithfulness": {
+      "numerator": 23,
+      "denominator": 26,
+      "rate": 0.8846153846153846
+    },
+    "summary_responsiveness": {
+      "numerator": 16,
+      "denominator": 26,
+      "rate": 0.6153846153846154
+    },
+    "supported_answer_coverage": {
+      "numerator": 8,
+      "denominator": 24,
+      "rate": 0.3333333333333333
+    },
+    "pico_fields": {
+      "population": {
+        "tp": 22,
+        "fp": 0,
+        "fn": 10,
+        "exact": 20
+      },
+      "intervention": {
+        "tp": 10,
+        "fp": 0,
+        "fn": 20,
+        "exact": 10
+      },
+      "comparison": {
+        "tp": 10,
+        "fp": 0,
+        "fn": 2,
+        "exact": 28
+      },
+      "outcome": {
+        "tp": 20,
+        "fp": 0,
+        "fn": 10,
+        "exact": 20
+      }
+    }
+  },
+  "by_language": {
+    "en": {
+      "query_n": 15,
+      "topic_precision_at_5": {
+        "numerator": 15,
+        "denominator": 15,
+        "rate": 1.0
+      },
+      "pico_document_match_at_5": {
+        "numerator": 13,
+        "denominator": 15,
+        "rate": 0.8666666666666667
+      },
+      "closed_pool_recall_at_5": {
+        "numerator": 13,
+        "denominator": 13,
+        "rate": 1.0
+      },
+      "answerable_query_hit_at_5": {
+        "numerator": 12,
+        "denominator": 12,
+        "rate": 1.0
+      },
+      "pico_query_exact": {
+        "numerator": 3,
+        "denominator": 15,
+        "rate": 0.2
+      },
+      "answer_coverage": {
+        "numerator": 8,
+        "denominator": 12,
+        "rate": 0.6666666666666666
+      },
+      "no_evidence_abstention": {
+        "numerator": 3,
+        "denominator": 3,
+        "rate": 1.0
+      },
+      "claim_review_coverage": {
+        "numerator": 22,
+        "denominator": 22,
+        "rate": 1.0
+      },
+      "summary_faithfulness": {
+        "numerator": 19,
+        "denominator": 22,
+        "rate": 0.8636363636363636
+      },
+      "summary_responsiveness": {
+        "numerator": 13,
+        "denominator": 22,
+        "rate": 0.5909090909090909
+      },
+      "supported_answer_coverage": {
+        "numerator": 7,
+        "denominator": 12,
+        "rate": 0.5833333333333334
+      },
+      "pico_fields": {
+        "population": {
+          "tp": 11,
+          "fp": 0,
+          "fn": 5,
+          "exact": 10
+        },
+        "intervention": {
+          "tp": 5,
+          "fp": 0,
+          "fn": 10,
+          "exact": 5
+        },
+        "comparison": {
+          "tp": 5,
+          "fp": 0,
+          "fn": 1,
+          "exact": 14
+        },
+        "outcome": {
+          "tp": 10,
+          "fp": 0,
+          "fn": 5,
+          "exact": 10
+        }
+      }
+    },
+    "zh": {
+      "query_n": 15,
+      "topic_precision_at_5": {
+        "numerator": 2,
+        "denominator": 2,
+        "rate": 1.0
+      },
+      "pico_document_match_at_5": {
+        "numerator": 2,
+        "denominator": 2,
+        "rate": 1.0
+      },
+      "closed_pool_recall_at_5": {
+        "numerator": 2,
+        "denominator": 13,
+        "rate": 0.15384615384615385
+      },
+      "answerable_query_hit_at_5": {
+        "numerator": 1,
+        "denominator": 12,
+        "rate": 0.08333333333333333
+      },
+      "pico_query_exact": {
+        "numerator": 3,
+        "denominator": 15,
+        "rate": 0.2
+      },
+      "answer_coverage": {
+        "numerator": 1,
+        "denominator": 12,
+        "rate": 0.08333333333333333
+      },
+      "no_evidence_abstention": {
+        "numerator": 3,
+        "denominator": 3,
+        "rate": 1.0
+      },
+      "claim_review_coverage": {
+        "numerator": 4,
+        "denominator": 4,
+        "rate": 1.0
+      },
+      "summary_faithfulness": {
+        "numerator": 4,
+        "denominator": 4,
+        "rate": 1.0
+      },
+      "summary_responsiveness": {
+        "numerator": 3,
+        "denominator": 4,
+        "rate": 0.75
+      },
+      "supported_answer_coverage": {
+        "numerator": 1,
+        "denominator": 12,
+        "rate": 0.08333333333333333
+      },
+      "pico_fields": {
+        "population": {
+          "tp": 11,
+          "fp": 0,
+          "fn": 5,
+          "exact": 10
+        },
+        "intervention": {
+          "tp": 5,
+          "fp": 0,
+          "fn": 10,
+          "exact": 5
+        },
+        "comparison": {
+          "tp": 5,
+          "fp": 0,
+          "fn": 1,
+          "exact": 14
+        },
+        "outcome": {
+          "tp": 10,
+          "fp": 0,
+          "fn": 5,
+          "exact": 10
+        }
+      }
+    }
+  },
+  "by_answer_mode": {
+    "extractive": {
+      "query_n": 30,
+      "topic_precision_at_5": {
+        "numerator": 17,
+        "denominator": 17,
+        "rate": 1.0
+      },
+      "pico_document_match_at_5": {
+        "numerator": 15,
+        "denominator": 17,
+        "rate": 0.8823529411764706
+      },
+      "closed_pool_recall_at_5": {
+        "numerator": 15,
+        "denominator": 26,
+        "rate": 0.5769230769230769
+      },
+      "answerable_query_hit_at_5": {
+        "numerator": 13,
+        "denominator": 24,
+        "rate": 0.5416666666666666
+      },
+      "pico_query_exact": {
+        "numerator": 6,
+        "denominator": 30,
+        "rate": 0.2
+      },
+      "answer_coverage": {
+        "numerator": 9,
+        "denominator": 24,
+        "rate": 0.375
+      },
+      "no_evidence_abstention": {
+        "numerator": 6,
+        "denominator": 6,
+        "rate": 1.0
+      },
+      "claim_review_coverage": {
+        "numerator": 26,
+        "denominator": 26,
+        "rate": 1.0
+      },
+      "summary_faithfulness": {
+        "numerator": 23,
+        "denominator": 26,
+        "rate": 0.8846153846153846
+      },
+      "summary_responsiveness": {
+        "numerator": 16,
+        "denominator": 26,
+        "rate": 0.6153846153846154
+      },
+      "supported_answer_coverage": {
+        "numerator": 8,
+        "denominator": 24,
+        "rate": 0.3333333333333333
+      },
+      "pico_fields": {
+        "population": {
+          "tp": 22,
+          "fp": 0,
+          "fn": 10,
+          "exact": 20
+        },
+        "intervention": {
+          "tp": 10,
+          "fp": 0,
+          "fn": 20,
+          "exact": 10
+        },
+        "comparison": {
+          "tp": 10,
+          "fp": 0,
+          "fn": 2,
+          "exact": 28
+        },
+        "outcome": {
+          "tp": 20,
+          "fp": 0,
+          "fn": 10,
+          "exact": 20
+        }
+      }
+    }
+  },
+  "llm_faithfulness": null
+}
