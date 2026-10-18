@@ -100,7 +100,7 @@ LLM 必须返回含 `pmid`、`text`、`quote` 的 JSON 条目。服务端只允�
 - [引文信号历史报告](data/citation_signal_report.md)
 - [多信号研究方案](docs/credibility_cross_validation.md)
 
-以上是探索性结果。当前数据采样、发表年份删失、预测时点、PR 曲线面积和概率校准仍有待验证，不能据此认定某篇文献会在未来撤稿。`data/integrity_signals.jsonl` 为被忽略的本地产物，当前仓库不足以独立复现引文信号报告。
+以上是探索性结果。已统一 AP 与同折常量基线，显式年份切点和严格固定观察窗校验；方法与真实重跑结果见 [评估协议 v2](docs/evaluation_protocol.md)。当前数据采样、发表年份删失、预测时点来源和概率校准仍有待验证，不能据此认定某篇文献会在未来撤稿。`data/integrity_signals.jsonl` 为被忽略的本地产物，当前仓库不足以独立复现引文信号报告。
 
 ## 测试与后续工作
 
@@ -109,7 +109,7 @@ python -m unittest discover -s tests -v
 node --test tests/test_ui.cjs
 ```
 
-Python 测试替换外部网络服务，不需要密钥或模型依赖。GitHub Actions 在 Python 3.10 / 3.12 下验证后端，并运行前端状态回归测试。
+Python 测试替换外部网络服务，不需要密钥或预训练模型；评估回归需要安装 requirements.txt 中的科学计算依赖。GitHub Actions 在 Python 3.10 / 3.12 下验证后端，并运行前端状态回归测试。
 
 [项目状态](docs/project_status.md) · [项目审查与优先级](docs/project_review.md)
 
