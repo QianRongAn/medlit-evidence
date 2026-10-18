@@ -64,7 +64,8 @@ class TestScreening(unittest.TestCase):
 
     def test_unknown_terms_are_not_lost_when_a_known_drug_is_present(self):
         plan = build_query_plan("metformin asthma exacerbations")
-        self.assertEqual(set(plan["lexical_terms"]), {"asthma", "exacerbations"})
+        self.assertEqual(set(plan["lexical_terms"]), {"asthma"})
+        self.assertEqual(plan["pico"]["outcome"], ["exacerbations"])
         self.assertFalse(screen_document(document("Metformin reduced mortality in diabetes."), plan)["eligible"])
         self.assertTrue(screen_document(document("Metformin asthma exacerbations were assessed."), plan)["eligible"])
 

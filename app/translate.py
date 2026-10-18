@@ -4,6 +4,8 @@ PubMed 以英文为主，中文提问需要先翻译成英文检索词才能召�
 这里用最长匹配做术语替换，其余中文语气词/虚词丢弃，英文单词原样保留。
 """
 
+from .pico import TERM_LISTS
+
 ZH2EN = [
     ("免疫检查点抑制剂", "immune checkpoint inhibitor"),
     ("无进展生存期", "progression-free survival"),
@@ -75,6 +77,15 @@ ZH2EN = [
     ("有", ""),
     ("是", ""),
 ]
+
+# 与 PICO 共用医学词表；所有中文别名按最长匹配，避免维护两套不一致的概念。
+_translations = dict(ZH2EN)
+for _terms in TERM_LISTS.values():
+    for _canonical, _aliases in _terms:
+        for _alias in _aliases:
+            if any("\u4e00" <= ch <= "\u9fff" for ch in _alias):
+                _translations[_alias] = _canonical
+ZH2EN = sorted(_translations.items(), key=lambda item: -len(item[0]))
 
 
 def translate_query(text):

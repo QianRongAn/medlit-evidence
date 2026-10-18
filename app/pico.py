@@ -10,6 +10,11 @@ import unicodedata
 
 # 每类：英文规范词 -> 中英文变体；英文使用词边界，中文优先较长概念。
 POPULATION = [
+    ("obesity", ["obesity", "obese", "肥胖"]),
+    ("obstructive sleep apnea", ["obstructive sleep apnea", "obstructive sleep apnoea", "阻塞性睡眠呼吸暂停"]),
+    ("copd", ["copd", "chronic obstructive pulmonary disease", "慢性阻塞性肺疾病", "慢阻肺"]),
+    ("early alzheimer's disease", ["early alzheimer's disease", "early alzheimer disease", "早期阿尔茨海默病"]),
+    ("alzheimer's disease", ["alzheimer's disease", "alzheimer disease", "阿尔茨海默病"]),
     ("type 2 diabetes", ["type 2 diabetes", "type ii diabetes", "t2dm", "2型糖尿病", "2 型糖尿病"]),
     ("type 1 diabetes", ["type 1 diabetes", "type i diabetes", "t1dm", "1型糖尿病", "1 型糖尿病"]),
     ("diabetes", ["diabetes", "diabetic", "糖尿病"]),
@@ -31,6 +36,13 @@ POPULATION = [
 ]
 
 INTERVENTION = [
+    ("semaglutide", ["semaglutide", "司美格鲁肽"]),
+    ("tirzepatide", ["tirzepatide", "替尔泊肽", "替西帕肽"]),
+    ("finerenone", ["finerenone", "非奈利酮"]),
+    ("dupilumab", ["dupilumab", "度普利尤单抗", "度普利单抗", "杜匹鲁单抗"]),
+    ("lecanemab", ["lecanemab", "仑卡奈单抗", "伦卡奈单抗"]),
+    ("dapagliflozin", ["dapagliflozin", "达格列净"]),
+    ("ipilimumab", ["ipilimumab", "伊匹木单抗"]),
     ("metformin", ["metformin", "二甲双胍"]),
     ("aspirin", ["aspirin", "阿司匹林"]),
     ("statin", ["statin", "statins", "他汀"]),
@@ -54,10 +66,15 @@ COMPARISON = [
 ]
 
 OUTCOME = [
+    ("weight loss", ["weight loss", "weight reduction", "reduction in weight", "减重", "体重减轻", "体重下降"]),
+    ("apnea-hypopnea index", ["apnea-hypopnea index", "apnoea-hypopnoea index", "ahi", "呼吸暂停低通气指数"]),
+    ("exacerbations", ["exacerbations", "exacerbation", "急性加重"]),
+    ("cognitive decline", ["cognitive decline", "decline on measures of cognition", "measures of cognition", "cdr-sb", "认知下降"]),
+    ("major hemorrhage", ["major hemorrhage", "major haemorrhage", "major bleeding", "严重出血", "大出血"]),
     ("mortality", ["mortality", "death", "deaths", "死亡率", "死亡"]),
     ("overall survival", ["overall survival", "总生存期", "总生存"]),
     ("progression-free survival", ["progression-free survival", "progression free survival", "无进展生存期"]),
-    ("cardiovascular risk", ["cardiovascular risk", "cardiovascular events", "major adverse cardiovascular", "心血管风险", "心血管事件"]),
+    ("cardiovascular risk", ["cardiovascular risk", "cardiovascular events", "major adverse cardiovascular", "cardiovascular end point", "cardiovascular end-point", "cardiovascular endpoint", "心血管风险", "心血管事件"]),
     ("myocardial infarction", ["myocardial infarction", "心肌梗死", "心梗"]),
     ("myocarditis", ["myocarditis", "心肌炎"]),
     ("stroke", ["stroke", "脑卒中", "卒中"]),

@@ -19,12 +19,13 @@ SECTION_LABELS = {
     "result", "conclusions", "conclusion", "findings", "introduction",
     "design", "interventions", "measurements", "participants", "outcomes",
     "limitations", "aim", "purpose", "settings", "setting", "context",
-    "discussion", "registration", "main outcome", "main outcome measures",
+    "discussion", "interpretation", "registration", "main outcome", "main outcome measures",
 }
-CONCLUSION_LABELS = {"results", "result", "conclusions", "conclusion", "findings"}
+CONCLUSION_LABELS = {"results", "result", "conclusions", "conclusion", "findings", "interpretation"}
 WEAK_LABELS = {
     "background", "objective", "objectives", "methods", "method",
     "introduction", "design", "measurements", "participants", "aim", "purpose",
+    "outcomes", "interventions", "main outcome", "main outcome measures", "registration", "setting", "settings", "context",
 }
 
 
@@ -47,12 +48,68 @@ def _strip_label(s):
 def _split_sentences(text):
     if not text:
         return []
+    # Preserve original text and offsets: abbreviations are not sentence ends.
+    parts, start = [], 0
+    abbreviations = {"vs", "al", "eg", "ie", "e.g", "i.e", "dr", "prof", "fig", "no", "st", "approx"}
+    for boundary in SENT_SPLIT.finditer(text):
+        prefix = text[:boundary.start()]
+        token = re.search(r"([A-Za-z.]+)\.$", prefix)
+        if token and (token.group(1).lower() in abbreviations
+                      or re.fullmatch(r"(?:[A-Z]\.)*[A-Z]", token.group(1))):
+            continue
+        parts.append(text[start:boundary.start()])
+        start = boundary.end()
+    parts.append(text[start:])
     out = []
-    for s in SENT_SPLIT.split(text):
+    for s in parts:
         s = s.strip()
         if len(s) > 15:
             out.append(s)
     return out
+
+
+def _sections(text):
+    """Retain section identity for every sentence, not only its first one."""
+    headers = []
+    for match in re.finditer(r"(?:^|(?<=[.!?])\s+|\n+)([A-Za-z][A-Za-z ,/-]{1,40}):\s*", text):
+        raw = match.group(1).lower().strip()
+        label = raw if raw in SECTION_LABELS else next((w for w in re.findall(r"[a-z]+", raw) if w in SECTION_LABELS), None)
+        if label:
+            headers.append((match.start(), match.end(), label))
+    if not headers:
+        return [(None, text)]
+    chunks = [(None, text[:headers[0][0]])] if text[:headers[0][0]].strip() else []
+    for i, (_, end, label) in enumerate(headers):
+        stop = headers[i + 1][0] if i + 1 < len(headers) else len(text)
+        chunks.append((label, text[end:stop]))
+    return chunks
+
+
+def _answer_sentences(text):
+    for label, chunk in _sections(text):
+        if label in WEAK_LABELS:
+            continue
+        for body in _split_sentences(chunk):
+            # Unstructured research questions are not outcome findings. Keep
+            # uncertainty in explicit results/conclusions instead of erasing it.
+            if label is None and re.search(r"\bwhether\b.{0,250}\b(?:unknown|unclear|not known)\b", body, re.I):
+                continue
+            yield label, body
+
+
+def _context_excerpt(text, max_chars=600):
+    candidates = list(_answer_sentences(text))
+    candidates.sort(key=lambda item: (0 if item[0] in {"conclusions", "conclusion", "interpretation"}
+                                      else 1 if item[0] in CONCLUSION_LABELS else 2))
+    selected, used = [], 0
+    for label, body in candidates:
+        excerpt = (label.upper() + ": " if label else "") + body
+        size = len(excerpt) + bool(selected)
+        if used + size > max_chars:
+            continue
+        selected.append(excerpt)
+        used += size
+    return "\n".join(selected)
 
 
 def extractive_answer(docs, query_tokens, max_sentences=4, *, query_plan=None):
@@ -64,8 +121,7 @@ def extractive_answer(docs, query_tokens, max_sentences=4, *, query_plan=None):
         if not is_usable_evidence(d):
             continue
         text = d.get("abstract") or d.get("title") or ""
-        for si, s in enumerate(_split_sentences(text)):
-            label, body = _strip_label(s)
+        for si, (label, body) in enumerate(_answer_sentences(text)):
             hits = len(set(query_tokens) & set(tokenize(body)))
             if query_plan is not None and not sentence_relevant(body, query_plan):
                 continue
@@ -79,13 +135,13 @@ def extractive_answer(docs, query_tokens, max_sentences=4, *, query_plan=None):
             elif label in WEAK_LABELS:
                 section_bonus = -0.8
             score = hits * 2.0 + pos_bonus + grade_bonus + section_bonus
-            scored.append((score, body, d))
+            scored.append((score, body, d, label))
 
     scored.sort(key=lambda x: -x[0])
 
     seen = set()
     picked = []
-    for _, s, d in scored:
+    for _, s, d, label in scored:
         key = s[:60].lower()
         if key in seen:
             continue
@@ -95,6 +151,7 @@ def extractive_answer(docs, query_tokens, max_sentences=4, *, query_plan=None):
             "pmid": d.get("pmid"),
             "title": d.get("title"),
             "polarity": "unassessed",
+            "source_section": label or "unstructured",
         })
         if len(picked) >= max_sentences:
             break
@@ -117,7 +174,7 @@ def _build_context(docs, max_docs=6, max_chars=4000):
         if len(selected) >= max_docs:
             break
         pmid = str(d.get("pmid") or "")
-        abstract = (d.get("abstract") or "").strip()[:600]
+        abstract = _context_excerpt((d.get("abstract") or "").strip())
         if (not is_usable_evidence(d) or not _PMID.fullmatch(pmid)
                 or pmid in sources or len(abstract) < 20):
             continue
@@ -157,6 +214,8 @@ def _validate_answer(content, sources, query_plan=None):
         if (not isinstance(quote, str) or len(quote.strip()) < 20
                 or quote not in sources[pmid]["abstract"]):
             raise CitationValidationError("quote_not_in_context")
+        if not any(quote.strip() == body for _, body in _answer_sentences(sources[pmid]["abstract"])):
+            raise CitationValidationError("quote_not_complete_result_sentence")
         if query_plan is not None and not sentence_relevant(quote, query_plan):
             raise CitationValidationError("quote_not_relevant_to_query")
         result.append({
@@ -175,7 +234,8 @@ async def llm_answer(query, docs):
     system = (
         "你是一名循证医学助手。基于提供的文献生成中文回答，"
         '仅返回 JSON：{"items":[{"pmid":"来源编号","text":"一段摘要整理","quote":"来源摘要中的连续原句"}]}。'
-        "每项只引用一篇文献，共 1–6 项。quote 必须逐字复制所提供 abstract 中至少 20 个字符，"
+        "每项只引用一篇文献，共 1–6 项。quote 必须逐字复制所提供 abstract 中至少20字符的完整一句，不能截断或拼接，"
+        "保留否定、比较对象、数字、单位和不确定性。不要用研究背景的未知状态或方法说明代替结果。"
         "text 不得含换行、链接、引用编号或 PMID 标记，引用由服务端生成。不得输出 JSON 之外的文字。"
         "不得编造未在文献中出现的数据，"
         "证据不足时明确说明。当前未完成问题与各文献的人群、干预、对照、结局对齐，"

@@ -23,7 +23,7 @@ from .synthesizer import CitationValidationError, extractive_answer, llm_answer
 from .tokenizer import tokenize
 from .translate import translate_query
 
-app = FastAPI(title="MedLit Evidence", version="0.5.0")
+app = FastAPI(title="MedLit Evidence", version="0.6.0")
 
 
 class Query(BaseModel):

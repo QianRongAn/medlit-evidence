@@ -7,6 +7,7 @@ from .translate import ZH2EN, translate_query
 
 _FILLER = (
     "能不能", "会不会", "有没有", "能否", "有无", "对于", "是否", "如何", "什么", "哪些",
+    "有何", "何种", "怎样", "怎么样", "怎么", "使用", "服用", "接受", "相较", "针对",
     "以及", "或者", "相比", "比较", "对比", "有效", "效果", "影响", "作用", "能够", "不能", "吗", "呢",
 )
 _GENERIC = {"whether", "inhibitor", "inhibitors", "receptor", "agonist", "benefit", "benefits",
@@ -71,7 +72,7 @@ def build_query_plan(query):
         issues.append("unparsed_exclusion")
     if not any(pico.values()) and not tokens:
         issues.append("no_content_terms")
-    return {"version": "1", "pico": pico, "lexical_terms": tokens,
+    return {"version": "2", "pico": pico, "lexical_terms": tokens,
             "ranking_tokens": ranking, "unmapped_terms": unknown, "issues": issues,
             "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。"}
 
