@@ -1,7 +1,12 @@
 {
   "benchmark_sha256": "2fccf8e1c11fad26677c3f5b62c3260ed87d9c277e53f91c43e338085b4792a4",
-  "application_sha256": "3a3ae6b150d88015138acc2baae9a7a714fe4ecbd06458b5ecc27bd31bcad4fd",
-  "git_commit": "111dc664f628d44e8bfa629dde0af662272dee7d",
+  "application_sha256": "03f8ef987e399e5b6d26b6f6d23dcd9d7f928eccdc4ddb7fd75356aedff1c161",
+  "evaluator_sha256": "e47eb8dec7fbf1a95b9f8c1803a4f6bac50b8046342f58bf6c12e47526d16a8e",
+  "hash_normalization": {
+    "frozen_v1_files": "UTF-8 CRLF",
+    "source_code": "UTF-8 LF"
+  },
+  "git_commit": "6038911cdf8e4c9df8d32ee7acc112f850a1db52",
   "mode_requested": "extractive",
   "scope": "closed_corpus_snapshot_not_live_pubmed; paired_languages_not_independent",
   "retmax": 5,
@@ -1462,6 +1467,5 @@
       "fallback_reason": null
     }
   ],
-  "run_sha256": "86a41b07eb16ae115935ca5e8f15d1f42d33618574f5d4325a36541015681c68",
-  "evaluator_sha256": "ad38c06bd414cc161f7041fc1ccbf6ca0bb36cf7648ec6ff19bd764e65275eae"
+  "run_sha256": "00176e2937933bc810328b6cb121cfa02916d35654a2580e1162c2fd896fdccf"
 }

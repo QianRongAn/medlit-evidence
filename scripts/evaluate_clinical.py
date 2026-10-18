@@ -22,6 +22,16 @@ def digest(value):
     return hashlib.sha256(value).hexdigest()
 
 
+def text_digest(content, newline=b"\n"):
+    """Hash logical UTF-8 text independent of Git autocrlf.
+
+    v1 source hashes were frozen from a Windows CRLF checkout. Recreate that
+    canonical representation when verifying them, preserving original hashes.
+    Application/evaluator fingerprints use canonical LF instead.
+    """
+    return digest(content.replace(b"\r\n", b"\n").replace(b"\n", newline))
+
+
 def read_json(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
@@ -35,7 +45,7 @@ def load_benchmark(folder):
     folder = Path(folder)
     manifest = read_json(folder / "manifest.json")
     for name in ("corpus.json", "queries.json", "judgments.csv"):
-        if digest((folder / name).read_bytes()) != manifest["files"].get(name):
+        if text_digest((folder / name).read_bytes(), b"\r\n") != manifest["files"].get(name):
             raise ValueError("frozen benchmark changed: " + name)
     corpus, queries = read_json(folder / "corpus.json"), read_json(folder / "queries.json")
     ids = [str(d["pmid"]) for d in corpus]
@@ -92,9 +102,10 @@ async def run_benchmark(folder, output, mode="extractive"):
         raise FileExistsError("choose a new --output; preserve previous runs and reviews")
     if mode == "llm" and not main.LLM_API_KEY:
         raise ValueError("LLM mode requires configured credentials; never substitute extractive results")
-    code = {p.name: digest(p.read_bytes()) for p in sorted((ROOT / "app").glob("*.py"))}
+    code = {p.name: text_digest(p.read_bytes()) for p in sorted((ROOT / "app").glob("*.py"))}
     run = {"benchmark_sha256": digest(manifest), "application_sha256": digest(code),
-           "evaluator_sha256": digest(Path(__file__).read_bytes()),
+           "evaluator_sha256": text_digest(Path(__file__).read_bytes()),
+           "hash_normalization": {"frozen_v1_files": "UTF-8 CRLF", "source_code": "UTF-8 LF"},
            "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
            "mode_requested": mode, "scope": manifest["scope"], "retmax": manifest["retrieval_k"],
            "annotation_kind": manifest["annotation_kind"], "expert_review_status": manifest["expert_review_status"],

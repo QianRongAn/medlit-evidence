@@ -87,6 +87,15 @@ class ClinicalMetricsTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "frozen benchmark changed"):
                 load_benchmark(target)
 
+    def test_linux_lf_checkout_preserves_original_frozen_hashes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)/"benchmark"
+            shutil.copytree(BENCHMARK, target)
+            for name in ("queries.json", "corpus.json", "judgments.csv"):
+                path = target/name
+                path.write_bytes(path.read_bytes().replace(b"\r\n", b"\n"))
+            self.assertEqual(load_benchmark(target), load_benchmark(BENCHMARK))
+
     def test_published_run_and_reviews_are_consistent(self):
         result = score_benchmark(BENCHMARK, BENCHMARK/"baseline_run.json", BENCHMARK/"baseline_run.review.json")
         self.assertEqual(result["summary_reviewer_kind"], "model_authored_source_review")
