@@ -84,6 +84,7 @@ function signalAction(kind, element) {
 function focusSource(pmid) {
   const target = $(pmid ? "source-" + pmid : "sourcePanel");
   if (!target) return;
+  if (target.classList.contains("hidden")) { $("sourceFilter").value = ""; filterSources(); }
   target.scrollIntoView({ behavior: motionBehavior(), block: "center" });
   target.focus({ preventScroll: true });
   signalAction("source", target);
@@ -479,7 +480,7 @@ function modelScoreBadge(score) {
       || !Array.isArray(score.scale) || score.scale[0] !== 0 || score.scale[1] !== 100
       || typeof score.score !== "number" || !Number.isFinite(score.score)
       || score.score < 0 || score.score > 100) return "";
-  return `<span class="risk-badge" style="background:#e8edf7;color:#32415e" title="仅供人工排序；未校准，不代表未来撤稿概率">研究分数 ${score.score.toFixed(1)} / 100</span>`;
+  return `<span class="risk-badge" style="background:#eff2e9;color:#506346" title="仅供人工排序；未校准，不代表未来撤稿概率">研究分数 ${score.score.toFixed(1)} / 100</span>`;
 }
 
 function integrityBadges(doc) {
@@ -509,13 +510,30 @@ function integrityLinks(doc) {
   }).join(" · ");
 }
 
+function filterSources() {
+  const query = ($("sourceFilter").value || "").trim().toLocaleLowerCase();
+  const cards = Array.from($("docList").children);
+  let visible = 0;
+  cards.forEach(card => {
+    const match = !query || (card.dataset.search || "").includes(query);
+    card.classList.toggle("hidden", !match);
+    if (match) visible++;
+  });
+  $("sourceVisible").textContent = query ? `当前显示 ${visible} / ${cards.length} 篇文献` : "";
+  $("sourceEmpty").classList.toggle("hidden", visible > 0 || !query);
+}
+
 function renderDocs(results) {
   const list = $("docList");
   list.innerHTML = "";
   $("docCount").textContent = `${results.length} 篇文献`;
+  $("sourceFilter").value = "";
+  $("sourceVisible").textContent = "";
+  $("sourceEmpty").classList.add("hidden");
   results.forEach((d, index) => {
     const div = document.createElement("div");
     div.className = "doc-item";
+    div.dataset.search = [d.title, d.abstract, d.journal, d.year, d.pmid, ...(d.authors || [])].filter(Boolean).join(" ").toLocaleLowerCase();
     if (/^[1-9][0-9]*$/.test(String(d.pmid || ""))) div.id = "source-" + d.pmid;
     div.tabIndex = -1;
     div.style.setProperty?.("--entry-delay", Math.min(index, 5) * 45 + "ms");
@@ -536,7 +554,7 @@ function renderDocs(results) {
 
     const pmidUrl = d.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${d.pmid}/` : "";
     div.innerHTML = `
-      <div class="doc-topline"><span>文献 ${String(index + 1).padStart(2, "0")}</span><span>文献来源</span></div>
+      <div class="doc-topline"><span>${String(index + 1).padStart(2, "0")}</span><span>${esc(STYPE_ZH[d.study_type] || "其他研究")} · ${esc(String(d.year || "年份未注明"))}</span></div>
       <p class="doc-title"><a href="${pmidUrl || "#"}" target="_blank" rel="noopener">${esc(d.title)}</a></p>
       <div class="doc-meta">
         <span class="badge" style="background:${color};color:${contrastText(color)}">${grade}</span>
@@ -865,3 +883,5 @@ $("railSettings").addEventListener("click", () => openDrawer("settings"));
 $("readingMode").addEventListener("click", toggleReadingMode);
 $("jumpSources").addEventListener("click", () => focusSource(null));
 $("cancelSearch").addEventListener("click", () => { cancelSearch(); $("query").focus(); });
+
+$("sourceFilter").addEventListener("input", filterSources);

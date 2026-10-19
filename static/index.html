@@ -5,19 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MedLit · 医学证据工作台</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23E8EDF2'/%3E%3Cpath d='M4 12h3l2-5 4 10 3-8 2 3h2' stroke='%234663D8' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
-  <link rel="stylesheet" href="/static/style.css" />
-  <link rel="stylesheet" href="/static/refinement.css" />
+  <link rel="stylesheet" href="/static/style.css?v=20261020-redesign" />
 </head>
 <body>
   <a class="skip-link" href="#query">跳转到临床问题</a>
   <nav class="nav-rail" aria-label="工作台导航">
-    <a class="rail-mark" href="#workspace" aria-label="MedLit 工作台"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h4l2-6 4 12 2-6h4"/></svg></a>
+    <a class="rail-mark" href="#workspace" aria-label="MedLit 工作台"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h4l2-6 4 12 2-6h4"/></svg><span class="rail-wordmark">medlit<span>.</span></span></a>
+    <p class="rail-section">研究空间</p>
     <div class="rail-actions">
       <button class="rail-button active" id="railHome" aria-current="page" aria-label="研究工作台" title="研究工作台"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></svg><span>工作台</span></button>
       <button class="rail-button" id="railHistory" aria-label="查看历史记录" title="历史记录"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6M12 7v5l3 2"/></svg><span>历史</span></button>
     </div>
     <button class="rail-button rail-bottom" id="railSettings" aria-label="打开工作台设置" title="工作台设置"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></svg><span>设置</span></button>
-    <span class="rail-edition" aria-hidden="true">ML / 06</span>
+    <div class="rail-note"><span class="rail-note-dot"></span>为严谨的研究而设计<small>MedLit Evidence · 0.6</small></div>
   </nav>
 
   <!-- 工作台顶栏 -->
@@ -28,7 +28,7 @@
           <path d="M2 12h4l2-5 4 10 3-8 2 3h5" />
         </svg>
       </span>
-      <span class="brand-name">MedLit<span class="brand-caption">医学证据工作台</span></span>
+      <span class="brand-name"><span class="brand-workspace">研究工作台</span><span class="mobile-wordmark">medlit.</span><span class="brand-caption">医学文献检索</span></span>
     </button>
 
     <div class="topbar-search">
@@ -52,24 +52,33 @@
     </div>
   </header>
 
-  <!-- ========== 主内容（横版，无侧栏） ========== -->
+  <!-- 主工作区 -->
   <main class="content">
 
     <section class="workspace-intro" id="workspaceIntro" aria-labelledby="workspaceTitle">
       <div class="intro-copy">
-        <p class="eyebrow"><span></span> 让证据更清晰</p>
-        <h1 id="workspaceTitle">从一个问题，<br>走近<span>医学证据。</span></h1>
-        <p class="intro-description">检索文献，回到原文。<br class="mobile-break">让每一次判断，都有迹可循。</p>
+        <p class="eyebrow">MedLit / Evidence workspace</p>
+        <h1 id="workspaceTitle">好问题，<br>值得<span>好证据。</span></h1>
+        <p class="intro-description">从临床问题到文献摘要，<br>让每一步探索，都有迹可循。</p>
       </div>
-      <div class="evidence-lens" aria-hidden="true">
-        <div class="lens-ring"><div class="lens-core"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 17h22l8 8v24H17z"/><path d="M39 17v10h8M24 33h15M24 39h10"/><path d="M9 12V8h4M51 8h4v4M55 52v4h-4M13 56H9v-4"/></svg></div></div>
-        <span class="lens-label">问题 → 文献 → 证据</span>
+      <div class="citation-art" aria-hidden="true">
+        <svg viewBox="0 0 400 160" fill="none">
+          <path d="M8 130H392M8 82H392M64 8V150M336 8V150" stroke="#ffffff" stroke-opacity=".06"/>
+          <path d="M202 85H286Q300 85 300 70V48H355M202 85H262Q278 85 278 104V124H355" stroke="#a5c4ad" stroke-width="1.2"/>
+          <rect x="110" y="22" width="108" height="124" rx="7" transform="rotate(-9 110 22)" fill="#466255" stroke="#789083"/>
+          <rect x="130" y="12" width="108" height="124" rx="7" transform="rotate(5 130 12)" fill="#e7eee5"/>
+          <path d="M151 39H210M151 48H195M151 69H210M151 78H210M151 87H199" stroke="#93a294" stroke-width="3" stroke-linecap="round"/>
+          <rect x="150" y="101" width="43" height="17" rx="4" fill="#c4d6bd"/><text x="157" y="113" fill="#355340" font-size="10" font-family="sans-serif">PMID ↗</text>
+          <circle cx="356" cy="48" r="6" fill="#c6e1ad"/><circle cx="356" cy="124" r="6" stroke="#a4bfa7"/>
+          <circle cx="65" cy="82" r="4" fill="#97b6a1"/><path d="M69 82H113" stroke="#97b6a1"/>
+        </svg>
+        <span>Ask. Read. Verify.</span>
       </div>
     </section>
-    <div class="section-overline"><span>01 / 提出问题</span><span>医学文献检索</span></div>
+
     <!-- 临床问题输入 -->
     <section class="ask-card" id="searchComposer" aria-label="临床问题输入" aria-busy="false">
-      <label class="query-label" for="query">你想了解什么？<span>从人群、干预、对照或结局开始</span></label>
+      <label class="query-label" for="query">开始一次循证检索<span>描述你的临床问题，我们帮你找到相关文献。</span></label>
       <textarea id="query" rows="2" maxlength="2000" placeholder="例如：二甲双胍对2型糖尿病患者的死亡率有何影响？" aria-describedby="queryHint"></textarea>
       <div class="ask-row">
         <span class="hint" id="queryHint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> 检索 <span class="hint-separator">/</span> 支持中英文</span>
@@ -81,7 +90,7 @@
         </button>
       </div>
       <div class="examples">
-        <span class="examples-label">探索一个问题</span>
+        <span class="examples-label">或从这些问题开始</span>
         <button class="chip" data-q="statins risk of incident diabetes">他汀与新发糖尿病</button>
         <button class="chip" data-q="metformin cardiovascular risk type 2 diabetes">二甲双胍与心血管</button>
         <button class="chip" data-q="SGLT2 inhibitor heart failure">SGLT2 与心衰</button>
@@ -92,7 +101,7 @@
 
     <!-- ========== 首页仪表盘（无结果时展示） ========== -->
     <section id="homeDash">
-      <div class="section-overline dashboard-overline"><span>02 / 工作台概览</span><span>本地研究概览</span></div>
+      <div class="section-overline dashboard-overline"><h2>你的研究空间</h2><span>连接文献，积累思考</span></div>
       <div class="stat-grid">
         <div class="stat-card tone-cream">
           <div class="stat-label">服务状态<span class="stat-index">01</span></div>
@@ -154,7 +163,7 @@
       </div>
     </section>
 
-    <!-- ========== 结果区（参考图顺序：问题理解 → 统计卡 → 回答+分布 → 来源） ========== -->
+    <!-- 结果：检索统计 → 摘要 → PICO → 来源；DOM 与视觉顺序一致 -->
     <section id="result" class="hidden">
       <div class="result-toolbar">
         <h1 class="result-meta" id="resultMeta"></h1>
@@ -164,36 +173,7 @@
         </div>
       </div>
 
-      <!-- 问题理解 · PICO（米黄大卡） -->
-      <div class="pico-card">
-        <span class="tiny-label result-step">问题中的研究条件</span>
-        <div class="pico-head">
-          <h2>问题理解 · PICO</h2>
-          <span class="pico-note">词典提取 · 已识别条件用于筛选</span>
-        </div>
-        <div class="pico-grid">
-          <div class="pico-item">
-            <span class="pico-tag pico-p">P</span>
-            <span class="pico-meta"><span class="pico-cap">人群</span><span class="pico-val" id="picoP">未明确</span></span>
-          </div>
-          <div class="pico-item">
-            <span class="pico-tag pico-i">I</span>
-            <span class="pico-meta"><span class="pico-cap">干预</span><span class="pico-val" id="picoI">未明确</span></span>
-          </div>
-          <div class="pico-item">
-            <span class="pico-tag pico-c">C</span>
-            <span class="pico-meta"><span class="pico-cap">对照</span><span class="pico-val" id="picoC">未明确</span></span>
-          </div>
-          <div class="pico-item">
-            <span class="pico-tag pico-o">O</span>
-            <span class="pico-meta"><span class="pico-cap">结局</span><span class="pico-val" id="picoO">未明确</span></span>
-          </div>
-        </div>
-        <p class="assessment-note" id="screeningNote"></p>
-        <div class="integrity-warning hidden" id="integrityWarning"></div>
-      </div>
-
-      <!-- 四张马卡龙统计卡 -->
+      <!-- 检索统计 -->
       <div class="stat-grid">
         <div class="stat-card tone-cream" id="statRecall">
           <div class="stat-label">证据置信度</div>
@@ -246,11 +226,43 @@
         </div>
       </div>
 
+      <!-- 问题理解 · PICO（米黄大卡） -->
+      <div class="pico-card">
+        <span class="tiny-label result-step">问题中的研究条件</span>
+        <div class="pico-head">
+          <h2>问题理解 · PICO</h2>
+          <span class="pico-note">词典提取 · 已识别条件用于筛选</span>
+        </div>
+        <div class="pico-grid">
+          <div class="pico-item">
+            <span class="pico-tag pico-p">P</span>
+            <span class="pico-meta"><span class="pico-cap">人群</span><span class="pico-val" id="picoP">未明确</span></span>
+          </div>
+          <div class="pico-item">
+            <span class="pico-tag pico-i">I</span>
+            <span class="pico-meta"><span class="pico-cap">干预</span><span class="pico-val" id="picoI">未明确</span></span>
+          </div>
+          <div class="pico-item">
+            <span class="pico-tag pico-c">C</span>
+            <span class="pico-meta"><span class="pico-cap">对照</span><span class="pico-val" id="picoC">未明确</span></span>
+          </div>
+          <div class="pico-item">
+            <span class="pico-tag pico-o">O</span>
+            <span class="pico-meta"><span class="pico-cap">结局</span><span class="pico-val" id="picoO">未明确</span></span>
+          </div>
+        </div>
+        <p class="assessment-note" id="screeningNote"></p>
+        <div class="integrity-warning hidden" id="integrityWarning"></div>
+      </div>
+
+
       <!-- 证据来源 -->
       <div class="card" id="sourcePanel" tabindex="-1">
-        <div class="card-head"><h2>证据来源</h2><span class="count" id="docCount"></span></div>
+        <div class="card-head"><div><h2>证据来源</h2><span class="count" id="docCount"></span></div><label class="source-search" for="sourceFilter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input id="sourceFilter" type="search" placeholder="在本次文献中查找" aria-label="在本次文献中查找" /></label></div>
+        <p id="sourceVisible" class="filter-status" role="status" aria-live="polite"></p>
         <p class="assessment-note">研究模型分数仅供人工排序，未校准，不代表未来撤稿概率；演示改写摘要不评分。</p>
         <div id="docList" class="doc-grid"></div>
+        <p id="sourceEmpty" class="source-empty hidden">本次结果中没有匹配的文献。试试更短的关键词。</p>
         <details class="excluded-sources hidden" id="excludedSources">
           <summary id="excludedCount">未纳入的候选</summary>
           <div id="excludedList"></div>
@@ -267,7 +279,7 @@
     <section id="error" class="hidden error-box" role="alert"></section>
 
     <footer>
-      <span class="footer-brand">MEDLIT <span>/</span> EVIDENCE WORKSPACE</span>
+      <span class="footer-brand">medlit. <span>Evidence, with context.</span></span>
       <p>来源可追溯，判断需审慎。文献整理仅供研究参考，不构成医疗建议。</p>
     </footer>
   </main>

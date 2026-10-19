@@ -258,3 +258,44 @@ test("request failure restores controls and permits another search", async () =>
   assert.equal(get("resultMeta").textContent,"「recovered query」");
   assert.equal(get("error").classList.contains("hidden"),true);
 });
+
+test("source filtering searches text and PMID without changing the result total", () => {
+  const {context, get} = loadApp();
+  context.renderDocs([
+    {pmid:"123",title:"Statin diabetes trial",abstract:"Adult participants",authors:["Smith"],year:2024},
+    {pmid:"456",title:"Heart failure study",abstract:"Cardiovascular outcomes",authors:["Chen"]},
+  ]);
+  const [first, second] = get("docList").children;
+  get("sourceFilter").value = " SMITH ";
+  context.filterSources();
+  assert.equal(first.classList.contains("hidden"), false);
+  assert.equal(second.classList.contains("hidden"), true);
+  assert.equal(get("sourceVisible").textContent, "当前显示 1 / 2 篇文献");
+  assert.equal(get("docCount").textContent, "2 篇文献");
+  get("sourceFilter").value = "456";
+  context.filterSources();
+  assert.equal(second.classList.contains("hidden"), false);
+  get("sourceFilter").value = "no matching paper";
+  context.filterSources();
+  assert.equal(get("sourceEmpty").classList.contains("hidden"), false);
+  get("sourceFilter").value = "";
+  context.filterSources();
+  assert.equal(first.classList.contains("hidden"), false);
+  assert.equal(second.classList.contains("hidden"), false);
+  assert.equal(get("sourceEmpty").classList.contains("hidden"), true);
+  assert.equal(get("sourceVisible").textContent, "");
+});
+
+test("citation location clears a filter that would hide the cited source", () => {
+  const {context, get} = loadApp();
+  context.setTimeout = () => 1;
+  const card = get("source-123");
+  card.dataset.search = "statin trial";
+  card.classList.add("hidden");
+  get("docList").children.push(card);
+  get("sourceFilter").value = "unrelated";
+  context.focusSource("123");
+  assert.equal(get("sourceFilter").value, "");
+  assert.equal(card.classList.contains("hidden"), false);
+  assert.equal(card.focused, true);
+});
