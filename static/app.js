@@ -75,11 +75,18 @@ function motionBehavior() {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ? "auto" : "smooth";
 }
 
+function signalAction(kind, element) {
+  if (typeof CustomEvent === "function") {
+    document.dispatchEvent(new CustomEvent("medlit:action", { detail: { kind, element } }));
+  }
+}
+
 function focusSource(pmid) {
   const target = $(pmid ? "source-" + pmid : "sourcePanel");
   if (!target) return;
   target.scrollIntoView({ behavior: motionBehavior(), block: "center" });
   target.focus({ preventScroll: true });
+  signalAction("source", target);
   target.classList.add("source-highlight");
   setTimeout(() => target.classList.remove("source-highlight"), 2400);
 }
@@ -529,7 +536,7 @@ function renderDocs(results) {
 
     const pmidUrl = d.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${d.pmid}/` : "";
     div.innerHTML = `
-      <div class="doc-topline"><span>文献 ${String(index + 1).padStart(2, "0")}</span><span>PUBLICATION</span></div>
+      <div class="doc-topline"><span>文献 ${String(index + 1).padStart(2, "0")}</span><span>文献来源</span></div>
       <p class="doc-title"><a href="${pmidUrl || "#"}" target="_blank" rel="noopener">${esc(d.title)}</a></p>
       <div class="doc-meta">
         <span class="badge" style="background:${color};color:${contrastText(color)}">${grade}</span>
@@ -776,6 +783,7 @@ function openDrawer(name) {
   document.querySelectorAll(".topbar, .nav-rail, main").forEach((el) => { el.inert = true; });
   document.body.classList.add("drawer-open");
   drawer.focus();
+  signalAction("drawer", drawer);
 }
 function closeDrawer(name) {
   const isSettings = name === "settings";
@@ -800,7 +808,8 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Tab" && activeDrawer) {
     const drawer = $(activeDrawer === "settings" ? "settingsDrawer" : "notifDrawer");
     const controls = [...drawer.querySelectorAll('button, input, a[href], [tabindex="0"]')].filter((el) => !el.disabled);
-    if (!controls.length) { e.preventDefault(); drawer.focus(); return; }
+    if (!controls.length) { e.preventDefault(); drawer.focus();
+  signalAction("drawer", drawer); return; }
     const first = controls[0], last = controls[controls.length - 1];
     if (!controls.includes(document.activeElement) || (!e.shiftKey && document.activeElement === last)) {
       e.preventDefault(); (e.shiftKey ? last : first).focus();

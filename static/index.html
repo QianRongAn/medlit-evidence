@@ -6,6 +6,7 @@
   <title>MedLit · 医学证据工作台</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23E8EDF2'/%3E%3Cpath d='M4 12h3l2-5 4 10 3-8 2 3h2' stroke='%234663D8' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="/static/style.css" />
+  <link rel="stylesheet" href="/static/refinement.css" />
 </head>
 <body>
   <a class="skip-link" href="#query">跳转到临床问题</a>
@@ -56,16 +57,16 @@
 
     <section class="workspace-intro" id="workspaceIntro" aria-labelledby="workspaceTitle">
       <div class="intro-copy">
-        <p class="eyebrow"><span></span> CLINICAL EVIDENCE, IN FOCUS</p>
+        <p class="eyebrow"><span></span> 让证据更清晰</p>
         <h1 id="workspaceTitle">从一个问题，<br>走近<span>医学证据。</span></h1>
         <p class="intro-description">检索文献，回到原文。<br class="mobile-break">让每一次判断，都有迹可循。</p>
       </div>
       <div class="evidence-lens" aria-hidden="true">
         <div class="lens-ring"><div class="lens-core"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 17h22l8 8v24H17z"/><path d="M39 17v10h8M24 33h15M24 39h10"/><path d="M9 12V8h4M51 8h4v4M55 52v4h-4M13 56H9v-4"/></svg></div></div>
-        <span class="lens-label">QUESTION → SOURCE → INSIGHT</span>
+        <span class="lens-label">问题 → 文献 → 证据</span>
       </div>
     </section>
-    <div class="section-overline"><span>01 / 提出问题</span><span>RESEARCH WORKSPACE</span></div>
+    <div class="section-overline"><span>01 / 提出问题</span><span>医学文献检索</span></div>
     <!-- 临床问题输入 -->
     <section class="ask-card" id="searchComposer" aria-label="临床问题输入" aria-busy="false">
       <label class="query-label" for="query">你想了解什么？<span>从人群、干预、对照或结局开始</span></label>
@@ -91,7 +92,7 @@
 
     <!-- ========== 首页仪表盘（无结果时展示） ========== -->
     <section id="homeDash">
-      <div class="section-overline dashboard-overline"><span>02 / 工作台概览</span><span>YOUR RESEARCH, AT A GLANCE</span></div>
+      <div class="section-overline dashboard-overline"><span>02 / 工作台概览</span><span>本地研究概览</span></div>
       <div class="stat-grid">
         <div class="stat-card tone-cream">
           <div class="stat-label">服务状态<span class="stat-index">01</span></div>
@@ -128,7 +129,7 @@
         </div>
 
         <div class="card">
-          <div class="card-head"><h2>研究足迹</h2><span class="tiny-label">LOCAL ACTIVITY</span></div>
+          <div class="card-head"><h2>研究足迹</h2><span class="tiny-label">本地记录</span></div>
           <div class="usage-big">
             <div class="usage-num" id="usageTotal">0</div>
             <div class="usage-cap">累计提问</div>
@@ -156,7 +157,7 @@
     <!-- ========== 结果区（参考图顺序：问题理解 → 统计卡 → 回答+分布 → 来源） ========== -->
     <section id="result" class="hidden">
       <div class="result-toolbar">
-        <p class="result-meta" id="resultMeta"></p>
+        <h1 class="result-meta" id="resultMeta"></h1>
         <div class="reading-actions">
           <button id="readingMode" class="reading-button" aria-pressed="false">舒适阅读</button>
           <button id="jumpSources" class="reading-button">证据来源 <span aria-hidden="true">↓</span></button>
@@ -165,7 +166,7 @@
 
       <!-- 问题理解 · PICO（米黄大卡） -->
       <div class="pico-card">
-        <span class="tiny-label result-step">02 / UNDERSTAND THE QUESTION</span>
+        <span class="tiny-label result-step">问题中的研究条件</span>
         <div class="pico-head">
           <h2>问题理解 · PICO</h2>
           <span class="pico-note">词典提取 · 已识别条件用于筛选</span>
@@ -333,5 +334,7 @@
   </aside>
 
   <script src="/static/app.js"></script>
+  <script defer src="/static/vendor/gsap.min.js"></script>
+  <script defer src="/static/ui-effects.js"></script>
 </body>
 </html>

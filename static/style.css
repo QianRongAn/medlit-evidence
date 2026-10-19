@@ -429,7 +429,7 @@ h1 span {
   width: 108px;
   height: 108px;
   border-radius: 50%;
-  background: linear-gradient(140deg,#f1f4f8,#e4e9ef);
+  background: var(--bg);
   box-shadow: 7px 7px 17px #c6cfdb,-7px -7px 17px #fff;
   display: grid;
   place-items: center;
@@ -1314,7 +1314,7 @@ kbd {
   inset: 0;
   z-index: 40;
   background: #26354a45;
-  backdrop-filter: blur(3px)
+  backdrop-filter: none
 }
 
 .drawer {
@@ -2140,7 +2140,7 @@ footer, .footer-brand { font-size: 11px; }
 .loading-header p { font-size: 14px; margin: 0; color: var(--muted); }
 .loading-header .reading-button { margin-left: auto; }
 .skeleton-card { padding: 28px; border-radius: 20px; box-shadow: var(--small); margin: 0 0 25px; }
-.skeleton-card span { display: block; height: 13px; margin: 0 0 18px; border-radius: 7px; background: linear-gradient(100deg, #d7e0ec 20%, #edf2f8 48%, #d7e0ec 76%); background-size: 220% 100%; animation: shimmer 1.8s ease-in-out infinite; }
+.skeleton-card span { display: block; height: 13px; margin: 0 0 18px; border-radius: 7px; background: #d4deea; background-size: 220% 100%; animation: shimmer 1.8s ease-in-out infinite; }
 .skeleton-card span:first-child { width: 35%; height: 17px; }
 .skeleton-card span:last-child { width: 76%; margin-bottom: 0; }
 .skeleton-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
@@ -2150,10 +2150,7 @@ footer, .footer-brand { font-size: 11px; }
 .ask-card:focus-within { border-color: #b0bfdf; }
 .button-arrow { transition: transform .2s; }
 #askBtn:hover:not(:disabled) .button-arrow { transform: translate(2px,-2px); }
-#result:not(.hidden) > .pico-card, #result:not(.hidden) > .stat-grid, #result:not(.hidden) > .duo-grid, #result:not(.hidden) > #sourcePanel { animation: reveal .4s ease both; }
-#result .doc-item { animation: reveal .35s ease both; animation-delay: var(--entry-delay, 0ms); }
 .source-highlight { outline: 2px solid #748ed2; outline-offset: 4px; }
-.evidence-lens { animation: lens-arrive .8s ease both; }
 @keyframes reveal { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes shimmer { to { background-position: -220% 0; } }
 @keyframes lens-arrive { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }

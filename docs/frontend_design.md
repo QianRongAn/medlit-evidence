@@ -35,3 +35,22 @@
 - 结果与卡片采用轻量渐入，按钮有按压反馈；减少动态效果时取消CSS动画并使用即时来源定位。
 
 本轮15项Node测试通过，新增覆盖阅读模式、原文转义、来源定位、取消/重复提交/迟到响应和失败恢复。Chrome实际验证六种宽度无溢出、完整摘要展开收起、17/20px阅读切换、16px手机正文、键盘焦点定位、加载计时与取消、减少动态效果以及零脚本错误。实际PubMed检索联调不计作临床正确率验证。
+
+
+## 2026-10-19：四套设计 skill 的整合
+
+使用已安装的 design-taste-frontend、ui-ux-pro-max、gsap-core 和 react-bits 技能。
+
+- Taste 抽取方向：Editorial greeting，seed `1321345126`，workspace / home + report，保留既有配色和字体。无重抽。用真实数据、安静表面和统一边缘组织阅读；用户明确指定的新拟态和大字号优先于技能默认的无阴影、小标题建议。
+- UI/UX Pro Max：初次全局检索返回营销首页结构，不适合本项目，未采用；按 `neumorphism medical workspace --domain style` 缩小后命中 Neumorphism。采用文字对比度、明确焦点、触控区域和减少动态效果要求。
+- React Bits：通过 rb-add 实时获取 `SpotlightCard-JS-CSS`，不是凭记忆重写。原组件使用 React；遵守 Taste 的保留技术栈要求，将实际源码中的光照衰减、指针和焦点反馈适配为原生 DOM。搜索输入区域是唯一高光区域；取消全局指针监听、环境循环、噪点和持续重绘。没有引入 React，也没有声称运行 React 组件。
+- GSAP：本地固定 `3.14.2`，保留发行版权头；为抽屉、引用定位和摘要展开添加 transform / opacity 反馈。matchMedia 管理减少动态效果，清理监听和内联状态。无 GSAP 时操作仍正常。
+- 第三方许可：`static/vendor/ReactBits-LICENSE.md` 为原文 MIT + Commons Clause；GSAP 遵循 https://gsap.com/standard-license 。源码只随本应用使用。
+
+屏幕问题：主页“我要检索什么临床问题”；结果页“哪些文献可以追溯到这份摘要”。产品特征是蓝灰医研工作台与可直接定位原文的引用。没有新增示例论文、虚构数字或假进度，结果仍来自实际 API。
+
+设计变化：辅助文字不低于 11px；正文保留桌面 17px、手机 16px，舒适阅读 20px。去掉冗余英文微标签，收拢结果页搜索框，统计合为一条；摘要采用浅纸面，文献卡减少阴影。手机保留 44px 触控区域。
+
+验证：Node UI 回归 15 项通过；Chrome 在 1440、1024、768、390、375、320px 以及 844×390 横屏检查。真实中文 PubMed 检索、舒适阅读、摘要展开、引用定位、取消请求和失败恢复通过；动态切换减少动态效果能清理并恢复高光，GSAP 加载失败时抽屉可用，无浏览器脚本错误。
+
+Taste 检查：修改前 4 FAIL / 4 WARN；修改后 0 FAIL（显式允许 button-fx / heavy-shadow，原因是用户要求的新拟态材质）。修正微标签、字号和对比度。保留大标题提示以符合用户的大字号偏好；保留概览在检索之后的顺序，首屏优先呈现主要任务。最近探索和研究足迹按各自内容保持自然高度，避免为空列表强加空白；这是对 ragged-row / panel-void 提示的有意取舍。完整 before/after 截图与测量在本地 outputs/taste-before、outputs/taste-after 中。
