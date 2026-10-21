@@ -359,12 +359,41 @@ function renderHeatmap() {
   wrap.appendChild(main);
 }
 
+// Calendar-day buckets use the same local dates as the activity heatmap.
+function dailyActivity(history, now = new Date()) {
+  const end = new Date(now); end.setHours(0, 0, 0, 0);
+  const days = Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(end); date.setDate(end.getDate() - 6 + index);
+    return { date, count: 0 };
+  });
+  history.forEach(item => {
+    const date = new Date(item.time);
+    if (!Number.isFinite(date.getTime()) || date > now) return;
+    const day = days.find(bucket => bucket.date.toDateString() === date.toDateString());
+    if (day) day.count++;
+  });
+  return days;
+}
+
+function renderActivity() {
+  const days = dailyActivity(getHistory());
+  const total = days.reduce((sum, day) => sum + day.count, 0);
+  $("activityTotal").textContent = `${total} 次`;
+  const max = Math.max(1, ...days.map(day => day.count));
+  const points = days.map((day, index) => [40 + index * 94, 132 - day.count / max * 106]);
+  const polyline = points.map(point => point.join(",")).join(" ");
+  const labels = days.map(day => `<span>${day.date.getMonth() + 1}/${day.date.getDate()}</span>`).join("");
+  const description = days.map(day => `${day.date.getMonth() + 1}月${day.date.getDate()}日${day.count}次`).join("，");
+  $("activityChart").innerHTML = `<div class="activity-plot"><svg viewBox="0 0 650 145" preserveAspectRatio="none" role="img" aria-label="最近7天本地检索共${total}次：${description}" xmlns="http://www.w3.org/2000/svg"><g stroke="#efebf5" stroke-width="1" vector-effect="non-scaling-stroke"><path d="M25 26H610M25 79H610M25 132H610"/></g>${total ? `<polygon points="40,132 ${polyline} 604,132" fill="#e5e0f6" fill-opacity=".6"/><polyline points="${polyline}" stroke="#aa9edb" stroke-width="2.5" vector-effect="non-scaling-stroke" fill="none"/>` : ""}</svg><div class="activity-axis" aria-hidden="true"><span>${max}</span><span>0</span></div></div><div class="activity-dates" aria-hidden="true">${labels}</div>${total ? "" : '<p class="activity-empty">还没有检索记录，试着提出第一个问题。</p>'}`;
+}
+
 function renderHome() {
   const histEl = $("homeHist");
   if (histEl) histEl.textContent = getAskCount();
   renderRecent();
   renderUsage();
   renderHeatmap();
+  renderActivity();
 }
 
 /* 首页仪表盘与结果区互斥显示 */
@@ -374,6 +403,10 @@ function syncHome() {
   $("homeDash").classList.toggle("hidden", busy || hasResult);
   $("workspaceIntro").classList.toggle("hidden", busy || hasResult);
   document.body?.classList.toggle("research-active", busy || hasResult);
+  $("overviewNav").classList.toggle("selected", !busy && !hasResult);
+  $("searchNav").classList.toggle("selected", busy || hasResult);
+  $("overviewNav").ariaCurrent = !busy && !hasResult ? "page" : "false";
+  $("searchNav").ariaCurrent = busy || hasResult ? "page" : "false";
 }
 
 function showDashboard() {
@@ -885,3 +918,15 @@ $("jumpSources").addEventListener("click", () => focusSource(null));
 $("cancelSearch").addEventListener("click", () => { cancelSearch(); $("query").focus(); });
 
 $("sourceFilter").addEventListener("input", filterSources);
+
+$("overviewNav").addEventListener("click", showDashboard);
+$("searchNav").addEventListener("click", () => {
+  $("query").scrollIntoView({ behavior: motionBehavior(), block: "center" });
+  $("query").focus({ preventScroll: true });
+});
+$("activityNav").addEventListener("click", () => {
+  showDashboard();
+  $("activityPanel").scrollIntoView({ behavior: motionBehavior(), block: "center" });
+  $("activityPanel").focus({ preventScroll: true });
+});
+$("historyNav").addEventListener("click", () => openDrawer("notif"));

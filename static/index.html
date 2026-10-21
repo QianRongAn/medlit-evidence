@@ -6,9 +6,11 @@
   <title>MedLit · 医学证据工作台</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23E8EDF2'/%3E%3Cpath d='M4 12h3l2-5 4 10 3-8 2 3h2' stroke='%234663D8' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="/static/style.css?v=20261020-redesign" />
+  <link rel="stylesheet" href="/static/studio.css?v=20261021-reference" />
 </head>
 <body>
   <a class="skip-link" href="#query">跳转到临床问题</a>
+  <div class="app-shell">
   <nav class="nav-rail" aria-label="工作台导航">
     <a class="rail-mark" href="#workspace" aria-label="MedLit 工作台"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h4l2-6 4 12 2-6h4"/></svg><span class="rail-wordmark">medlit<span>.</span></span></a>
     <p class="rail-section">研究空间</p>
@@ -31,6 +33,12 @@
       <span class="brand-name"><span class="brand-workspace">研究工作台</span><span class="mobile-wordmark">medlit.</span><span class="brand-caption">医学文献检索</span></span>
     </button>
 
+    <nav class="workspace-nav" aria-label="主要操作">
+      <button id="overviewNav" class="selected" aria-current="page">工作台</button>
+      <button id="searchNav">文献检索</button>
+      <button id="activityNav">研究足迹</button>
+      <button id="historyNav">历史记录</button>
+    </nav>
     <div class="topbar-search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       <input id="topQuery" type="text" placeholder="快速检索临床问题…" aria-label="快速检索临床问题" />
@@ -56,30 +64,14 @@
   <main class="content">
 
     <section class="workspace-intro" id="workspaceIntro" aria-labelledby="workspaceTitle">
-      <div class="intro-copy">
-        <p class="eyebrow">MedLit / Evidence workspace</p>
-        <h1 id="workspaceTitle">好问题，<br>值得<span>好证据。</span></h1>
-        <p class="intro-description">从临床问题到文献摘要，<br>让每一步探索，都有迹可循。</p>
-      </div>
-      <div class="citation-art" aria-hidden="true">
-        <svg viewBox="0 0 400 160" fill="none">
-          <path d="M8 130H392M8 82H392M64 8V150M336 8V150" stroke="#ffffff" stroke-opacity=".06"/>
-          <path d="M202 85H286Q300 85 300 70V48H355M202 85H262Q278 85 278 104V124H355" stroke="#a5c4ad" stroke-width="1.2"/>
-          <rect x="110" y="22" width="108" height="124" rx="7" transform="rotate(-9 110 22)" fill="#466255" stroke="#789083"/>
-          <rect x="130" y="12" width="108" height="124" rx="7" transform="rotate(5 130 12)" fill="#e7eee5"/>
-          <path d="M151 39H210M151 48H195M151 69H210M151 78H210M151 87H199" stroke="#93a294" stroke-width="3" stroke-linecap="round"/>
-          <rect x="150" y="101" width="43" height="17" rx="4" fill="#c4d6bd"/><text x="157" y="113" fill="#355340" font-size="10" font-family="sans-serif">PMID ↗</text>
-          <circle cx="356" cy="48" r="6" fill="#c6e1ad"/><circle cx="356" cy="124" r="6" stroke="#a4bfa7"/>
-          <circle cx="65" cy="82" r="4" fill="#97b6a1"/><path d="M69 82H113" stroke="#97b6a1"/>
-        </svg>
-        <span>Ask. Read. Verify.</span>
-      </div>
+      <h1 id="workspaceTitle">研究工作台<span>Dashboard</span></h1>
+      <p class="intro-description">从一个问题开始，找到值得细读的证据。</p>
     </section>
 
     <!-- 临床问题输入 -->
     <section class="ask-card" id="searchComposer" aria-label="临床问题输入" aria-busy="false">
-      <label class="query-label" for="query">开始一次循证检索<span>描述你的临床问题，我们帮你找到相关文献。</span></label>
-      <textarea id="query" rows="2" maxlength="2000" placeholder="例如：二甲双胍对2型糖尿病患者的死亡率有何影响？" aria-describedby="queryHint"></textarea>
+      <label class="query-label" for="query">提出一个问题<span>描述你的临床问题，探索相关文献。</span></label>
+      <textarea id="query" rows="2" maxlength="2000" placeholder="输入人群、干预、对照或结局…" aria-describedby="queryHint"></textarea>
       <div class="ask-row">
         <span class="hint" id="queryHint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> 检索 <span class="hint-separator">/</span> 支持中英文</span>
         <button id="askBtn">
@@ -90,77 +82,36 @@
         </button>
       </div>
       <div class="examples">
-        <span class="examples-label">或从这些问题开始</span>
-        <button class="chip" data-q="statins risk of incident diabetes">他汀与新发糖尿病</button>
-        <button class="chip" data-q="metformin cardiovascular risk type 2 diabetes">二甲双胍与心血管</button>
-        <button class="chip" data-q="SGLT2 inhibitor heart failure">SGLT2 与心衰</button>
-        <button class="chip" data-q="PD-1 inhibitor advanced melanoma overall survival">PD-1 与黑色素瘤</button>
-        <button class="chip" data-q="intensive blood pressure control SPRINT">强化降压对比</button>
+        <span class="examples-label">选择一个研究方向</span>
+        <button class="chip topic-lilac" data-q="statins risk of incident diabetes"><span class="topic-label">他汀与糖尿病</span><span class="topic-desc">探索降脂治疗与新发糖尿病的相关证据。</span><span class="topic-meta"><span class="topic-icon" aria-hidden="true">↗</span>心血管 · 代谢</span></button>
+        <button class="chip topic-blue" data-q="SGLT2 inhibitor heart failure"><span class="topic-label">SGLT2 与心衰</span><span class="topic-desc">关注心力衰竭治疗中的临床研究。</span><span class="topic-meta"><span class="topic-icon" aria-hidden="true">↗</span>心血管 · 治疗</span></button>
+        <button class="chip topic-lime" data-q="intensive blood pressure control SPRINT"><span class="topic-label">强化降压</span><span class="topic-desc">了解强化与标准血压控制的研究。</span><span class="topic-meta"><span class="topic-icon" aria-hidden="true">↗</span>血压 · 临床试验</span></button>
       </div>
     </section>
 
-    <!-- ========== 首页仪表盘（无结果时展示） ========== -->
     <section id="homeDash">
-      <div class="section-overline dashboard-overline"><h2>你的研究空间</h2><span>连接文献，积累思考</span></div>
-      <div class="stat-grid">
-        <div class="stat-card tone-cream">
-          <div class="stat-label">服务状态<span class="stat-index">01</span></div>
-          <div class="stat-num" id="homeSvc">–</div>
-          <div class="stat-sub" id="homeSvcSub">正在检查 PubMed 连接…</div>
-        </div>
-        <div class="stat-card tone-pink">
-          <div class="stat-label">撤稿研究模型<span class="stat-index">02</span></div>
-          <div class="stat-num" id="homeModel">–</div>
-          <div class="stat-sub" id="homeModelSub">研究模型分数 · 未校准</div>
-        </div>
-        <div class="stat-card tone-salmon">
-          <div class="stat-label">历史问答<span class="stat-index">03</span></div>
-          <div class="stat-num" id="homeHist">0</div>
-          <div class="stat-sub">条提问 · 保存在本浏览器</div>
-        </div>
-        <div class="stat-card tone-mint">
-          <div class="stat-label">文献库<span class="stat-index">04</span></div>
-          <div class="stat-num" id="homeLib">–</div>
-          <div class="stat-sub" id="homeLibSub">等待连接状态</div>
-        </div>
+      <div class="card activity-card" id="activityPanel" tabindex="-1">
+        <div class="card-head"><div><h2>检索活动</h2><p class="panel-description">每一次提问，都是研究的起点。</p></div><span class="period-label">最近 7 天</span></div>
+        <div class="activity-caption"><span><i></i> 检索次数</span><span id="activityTotal">0 次</span></div>
+        <div id="activityChart" class="activity-chart"></div>
+        <p class="activity-footnote">基于本浏览器保存的最近 20 条记录</p>
       </div>
-
       <div class="duo-grid">
-        <div class="card">
-          <div class="card-head">
-            <h2>最近探索</h2>
-            <div class="pill-seg" id="recentSeg">
-              <button data-v="today">今日</button>
-              <button data-v="all" class="active">全部</button>
-            </div>
-          </div>
+        <div class="card recent-card">
+          <div class="card-head"><div><h2>最近探索</h2><p class="panel-description">回到上一次的问题与思考。</p></div><div class="pill-seg" id="recentSeg"><button data-v="today">今日</button><button data-v="all" class="active">全部</button></div></div>
           <div id="recentList" class="recent-list"></div>
         </div>
-
-        <div class="card">
-          <div class="card-head"><h2>研究足迹</h2><span class="tiny-label">本地记录</span></div>
-          <div class="usage-big">
-            <div class="usage-num" id="usageTotal">0</div>
-            <div class="usage-cap">累计提问</div>
-          </div>
-          <div class="usage-rows">
-            <div class="usage-row"><span>平均响应</span><b id="usageAvg">–</b></div>
-            <div class="usage-row"><span>结论置信度</span><b id="usageConf">–</b></div>
-            <div class="usage-row"><span>结论方向</span><b id="usageConflict">–</b></div>
-          </div>
+        <div class="card service-card">
+          <div class="card-head"><div><h2>研究概况</h2><p class="panel-description">连接状态与本地研究记录</p></div></div>
+          <div class="service-metrics"><div><span>累计提问</span><strong id="usageTotal">0</strong></div><div><span>平均响应</span><strong id="usageAvg">–</strong></div></div>
+          <div class="service-row"><span>文献服务</span><b id="homeSvc">–</b><small id="homeSvcSub">正在检查连接…</small></div>
+          <div class="service-row"><span>研究模型</span><b id="homeModel">–</b><small id="homeModelSub">研究分数 · 未校准</small></div>
+          <div class="service-row"><span>文献来源</span><b id="homeLib">–</b><small id="homeLibSub">等待连接</small></div>
+          <!-- Retained state bindings; unassessed clinical metrics do not belong in an activity panel. -->
+          <div hidden><span id="homeHist">0</span><span id="usageConf">–</span><span id="usageConflict">–</span></div>
         </div>
       </div>
-
-      <div class="card">
-        <div class="card-head"><h2>探索节奏</h2></div>
-        <div class="heatmap-wrap">
-          <div class="heatmap" id="heatmap"></div>
-        </div>
-        <div class="heat-foot">
-          <span class="heat-hint">每一次探索，都留下一个坐标</span>
-          <span class="heat-legend">少 <i class="hv hv0"></i><i class="hv hv1"></i><i class="hv hv2"></i><i class="hv hv3"></i><i class="hv hv4"></i> 多</span>
-        </div>
-      </div>
+      <details class="card longterm-card"><summary>长期研究足迹 <span>近 52 周</span></summary><div class="heatmap-wrap"><div class="heatmap" id="heatmap"></div></div><div class="heat-foot"><span class="heat-hint">本浏览器的历史提问记录</span><span class="heat-legend">少 <i class="hv hv0"></i><i class="hv hv1"></i><i class="hv hv2"></i><i class="hv hv3"></i><i class="hv hv4"></i> 多</span></div></details>
     </section>
 
     <!-- 结果：检索统计 → 摘要 → PICO → 来源；DOM 与视觉顺序一致 -->
@@ -283,6 +234,7 @@
       <p>来源可追溯，判断需审慎。文献整理仅供研究参考，不构成医疗建议。</p>
     </footer>
   </main>
+  </div>
 
   <!-- ========== 设置抽屉 ========== -->
   <div class="drawer-mask hidden" data-close="settings"></div>

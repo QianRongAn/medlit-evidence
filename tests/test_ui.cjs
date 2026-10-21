@@ -299,3 +299,24 @@ test("citation location clears a filter that would hide the cited source", () =>
   assert.equal(card.classList.contains("hidden"), false);
   assert.equal(card.focused, true);
 });
+
+test("activity chart uses seven local calendar days and excludes future or older records", () => {
+  const {context, get} = loadApp();
+  const now = new Date(2026, 9, 21, 12);
+  const days = context.dailyActivity([
+    {time:new Date(2026,9,15,9).getTime()},
+    {time:new Date(2026,9,21,8).getTime()},
+    {time:new Date(2026,9,21,10).getTime()},
+    {time:new Date(2026,9,14,23).getTime()},
+    {time:new Date(2026,9,21,13).getTime()},
+    {time:"invalid"},
+  ], now);
+  assert.equal(days.length,7);
+  assert.deepEqual(Array.from(days,day=>day.count),[1,0,0,0,0,0,2]);
+  assert.equal(days[0].date.getDate(),15);
+  assert.equal(days[6].date.getDate(),21);
+  context.renderActivity();
+  assert.equal(get("activityTotal").textContent,"0 次");
+  assert.match(get("activityChart").innerHTML,/还没有检索记录/);
+  assert.doesNotMatch(get("activityChart").innerHTML,/<polygon/);
+});
