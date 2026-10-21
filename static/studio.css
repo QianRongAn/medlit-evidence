@@ -1271,3 +1271,4 @@ footer p {
 @media(max-width:1000px){.rail-bottom{left:32px}}
 @media(max-width:720px){.activity-chart{height:auto;min-height:180px}.rail-bottom{left:20px;bottom:22px}}
 @media(max-width:380px){.rail-bottom{left:14px;bottom:18px}}
+.research-active #result > .duo-grid {align-items:start}
