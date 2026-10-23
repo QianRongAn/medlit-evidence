@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MedLit · 医学证据工作台</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23E8EDF2'/%3E%3Cpath d='M4 12h3l2-5 4 10 3-8 2 3h2' stroke='%234663D8' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
-  <link rel="stylesheet" href="/static/style.css?v=20261020-redesign" />
-  <link rel="stylesheet" href="/static/studio.css?v=20261021-reference" />
+  <link rel="stylesheet" href="/static/studio.css?v=20261024-evidence" />
 </head>
 <body>
   <a class="skip-link" href="#query">跳转到临床问题</a>
@@ -17,8 +16,8 @@
     <div class="rail-actions">
       <button class="rail-button active" id="railHome" aria-current="page" aria-label="研究工作台" title="研究工作台"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></svg><span>工作台</span></button>
       <button class="rail-button" id="railHistory" aria-label="查看历史记录" title="历史记录"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6M12 7v5l3 2"/></svg><span>历史</span></button>
+    <button class="rail-button" id="railSettings" aria-label="打开工作台设置" title="工作台设置"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></svg><span>设置</span></button>
     </div>
-    <button class="rail-button rail-bottom" id="railSettings" aria-label="打开工作台设置" title="工作台设置"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></svg><span>设置</span></button>
     <div class="rail-note"><span class="rail-note-dot"></span>为严谨的研究而设计<small>MedLit Evidence · 0.6</small></div>
   </nav>
 
@@ -30,13 +29,13 @@
           <path d="M2 12h4l2-5 4 10 3-8 2 3h5" />
         </svg>
       </span>
-      <span class="brand-name"><span class="brand-workspace">研究工作台</span><span class="mobile-wordmark">medlit.</span><span class="brand-caption">医学文献检索</span></span>
+      <span class="brand-name">MedLit <span>Evidence</span></span>
     </button>
 
     <nav class="workspace-nav" aria-label="主要操作">
-      <button id="overviewNav" class="selected" aria-current="page">工作台</button>
+      <button id="overviewNav" class="selected" aria-current="page">新建问题</button>
       <button id="searchNav">文献检索</button>
-      <button id="activityNav">研究足迹</button>
+
       <button id="historyNav">历史记录</button>
     </nav>
     <div class="topbar-search">
@@ -64,13 +63,13 @@
   <main class="content">
 
     <section class="workspace-intro" id="workspaceIntro" aria-labelledby="workspaceTitle">
-      <h1 id="workspaceTitle">研究工作台<span>Dashboard</span></h1>
+      <h1 id="workspaceTitle">从问题出发，回到证据。</h1>
       <p class="intro-description">从一个问题开始，找到值得细读的证据。</p>
     </section>
 
     <!-- 临床问题输入 -->
     <section class="ask-card" id="searchComposer" aria-label="临床问题输入" aria-busy="false">
-      <label class="query-label" for="query">提出一个问题<span>描述你的临床问题，探索相关文献。</span></label>
+      <label class="query-label" for="query">临床问题<span>描述人群、干预、对照或结局，支持中英文。</span></label>
       <textarea id="query" rows="2" maxlength="2000" placeholder="输入人群、干预、对照或结局…" aria-describedby="queryHint"></textarea>
       <div class="ask-row">
         <span class="hint" id="queryHint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> 检索 <span class="hint-separator">/</span> 支持中英文</span>
@@ -82,42 +81,54 @@
         </button>
       </div>
       <div class="examples">
-        <span class="examples-label">选择一个研究方向</span>
+        <span class="examples-label">试着问</span>
         <button class="chip topic-lilac" data-q="statins risk of incident diabetes"><span class="topic-label">他汀与糖尿病</span><span class="topic-desc">探索降脂治疗与新发糖尿病的相关证据。</span><span class="topic-meta"><span class="topic-icon" aria-hidden="true">↗</span>心血管 · 代谢</span></button>
         <button class="chip topic-blue" data-q="SGLT2 inhibitor heart failure"><span class="topic-label">SGLT2 与心衰</span><span class="topic-desc">关注心力衰竭治疗中的临床研究。</span><span class="topic-meta"><span class="topic-icon" aria-hidden="true">↗</span>心血管 · 治疗</span></button>
         <button class="chip topic-lime" data-q="intensive blood pressure control SPRINT"><span class="topic-label">强化降压</span><span class="topic-desc">了解强化与标准血压控制的研究。</span><span class="topic-meta"><span class="topic-icon" aria-hidden="true">↗</span>血压 · 临床试验</span></button>
       </div>
     </section>
 
-    <section id="homeDash">
-      <div class="card activity-card" id="activityPanel" tabindex="-1">
-        <div class="card-head"><div><h2>检索活动</h2><p class="panel-description">每一次提问，都是研究的起点。</p></div><span class="period-label">最近 7 天</span></div>
-        <div class="activity-caption"><span><i></i> 检索次数</span><span id="activityTotal">0 次</span></div>
-        <div id="activityChart" class="activity-chart"></div>
-        <p class="activity-footnote">基于本浏览器保存的最近 20 条记录</p>
-      </div>
-      <div class="duo-grid">
-        <div class="card recent-card">
-          <div class="card-head"><div><h2>最近探索</h2><p class="panel-description">回到上一次的问题与思考。</p></div><div class="pill-seg" id="recentSeg"><button data-v="today">今日</button><button data-v="all" class="active">全部</button></div></div>
-          <div id="recentList" class="recent-list"></div>
-        </div>
-        <div class="card service-card">
-          <div class="card-head"><div><h2>研究概况</h2><p class="panel-description">连接状态与本地研究记录</p></div></div>
-          <div class="service-metrics"><div><span>累计提问</span><strong id="usageTotal">0</strong></div><div><span>平均响应</span><strong id="usageAvg">–</strong></div></div>
-          <div class="service-row"><span>文献服务</span><b id="homeSvc">–</b><small id="homeSvcSub">正在检查连接…</small></div>
-          <div class="service-row"><span>研究模型</span><b id="homeModel">–</b><small id="homeModelSub">研究分数 · 未校准</small></div>
-          <div class="service-row"><span>文献来源</span><b id="homeLib">–</b><small id="homeLibSub">等待连接</small></div>
-          <!-- Retained state bindings; unassessed clinical metrics do not belong in an activity panel. -->
-          <div hidden><span id="homeHist">0</span><span id="usageConf">–</span><span id="usageConflict">–</span></div>
-        </div>
-      </div>
-      <details class="card longterm-card"><summary>长期研究足迹 <span>近 52 周</span></summary><div class="heatmap-wrap"><div class="heatmap" id="heatmap"></div></div><div class="heat-foot"><span class="heat-hint">本浏览器的历史提问记录</span><span class="heat-legend">少 <i class="hv hv0"></i><i class="hv hv1"></i><i class="hv hv2"></i><i class="hv hv3"></i><i class="hv hv4"></i> 多</span></div></details>
+    <section id="homeDash" aria-label="检索说明">
+      <div class="home-guide"><div><span>01</span><h2>明确研究条件</h2><p>识别人群、干预、对照与结局，未明确的条件会保留为空。</p></div><div><span>02</span><h2>阅读摘要依据</h2><p>逐条查看摘要摘录，用 PMID 定位文献，核对原文语境。</p></div><div><span>03</span><h2>核查文献来源</h2><p>检查研究类型与撤稿、存疑、更正关系，再判断证据适用性。</p></div></div>
+      <details class="connection-details"><summary>数据与模型状态</summary><div class="connection-grid"><div><span>文献服务</span><b id="homeSvc">检查中</b><small id="homeSvcSub"></small></div><div><span>研究模型</span><b id="homeModel">检查中</b><small id="homeModelSub"></small></div><div><span>文献来源</span><b id="homeLib">检查中</b><small id="homeLibSub"></small></div></div></details>
+      <div hidden><span id="homeHist"></span><span id="usageTotal"></span><span id="usageAvg"></span><span id="usageConf"></span><span id="usageConflict"></span></div>
     </section>
 
-    <!-- 结果：检索统计 → 摘要 → PICO → 来源；DOM 与视觉顺序一致 -->
+    <!-- 结果：PICO → 检索状态 → 摘要与概况 → 文献来源 -->
     <section id="result" class="hidden">
+      <!-- PICO 与筛选说明 -->
+      <div class="pico-card">
+        <span class="tiny-label result-step">问题中的研究条件</span>
+        <div class="pico-head">
+          <h2>研究条件 · PICO</h2>
+          <span class="pico-note">词典提取 · 已识别条件用于筛选</span>
+        </div>
+        <div class="pico-grid">
+          <div class="pico-item">
+            <span class="pico-tag pico-p">P</span>
+            <span class="pico-meta"><span class="pico-cap">人群</span><span class="pico-val" id="picoP">未明确</span></span>
+          </div>
+          <div class="pico-item">
+            <span class="pico-tag pico-i">I</span>
+            <span class="pico-meta"><span class="pico-cap">干预</span><span class="pico-val" id="picoI">未明确</span></span>
+          </div>
+          <div class="pico-item">
+            <span class="pico-tag pico-c">C</span>
+            <span class="pico-meta"><span class="pico-cap">对照</span><span class="pico-val" id="picoC">未明确</span></span>
+          </div>
+          <div class="pico-item">
+            <span class="pico-tag pico-o">O</span>
+            <span class="pico-meta"><span class="pico-cap">结局</span><span class="pico-val" id="picoO">未明确</span></span>
+          </div>
+        </div>
+        <p class="assessment-note" id="screeningNote"></p>
+
+      </div>
+
+
       <div class="result-toolbar">
         <h1 class="result-meta" id="resultMeta"></h1>
+      <div class="retrieval-strip"><span id="retrievalSummary"></span><span id="requestSummary"></span></div>
         <div class="reading-actions">
           <button id="readingMode" class="reading-button" aria-pressed="false">舒适阅读</button>
           <button id="jumpSources" class="reading-button">证据来源 <span aria-hidden="true">↓</span></button>
@@ -125,7 +136,7 @@
       </div>
 
       <!-- 检索统计 -->
-      <div class="stat-grid">
+      <div class="stat-grid" hidden>
         <div class="stat-card tone-cream" id="statRecall">
           <div class="stat-label">证据置信度</div>
           <div class="stat-num" id="confidenceNum">–</div>
@@ -152,7 +163,7 @@
       <div class="duo-grid">
         <div class="card answer-card">
           <div class="card-head">
-            <h2>文献摘要整理</h2>
+            <h2>循证回答<span class="heading-caption">文献摘要整理</span></h2>
             <span class="mode-badge" id="modeBadge"></span>
           </div>
           <p class="assessment-note" id="assessmentNote"></p>
@@ -160,13 +171,15 @@
           <div class="answer-body" id="answerBody"></div>
         </div>
 
-        <div class="card">
-          <div class="card-head"><h2>研究类型参考分级</h2></div>
+        <div class="card evidence-overview">
+          <div class="card-head"><h2>证据概况</h2></div>
+          <h3 class="overview-label">文献类型分布 <span id="distTotal"></span></h3>
           <div class="dist-bar" id="distBar"></div>
           <div class="dist-legend" id="distLegend"></div>
+          <div class="pico-overview"><h3 class="overview-label">PICO 条件识别</h3><p id="picoSummary"></p></div>
           <div class="conf-badge" id="confBadge">
             <div class="conf-left">
-              <div class="conf-cap">结论可信度</div>
+              <div class="conf-cap">证据方向与结论可信度</div>
               <div class="conf-tag" id="confTag">未评估</div>
             </div>
             <div class="conf-right">
@@ -177,39 +190,12 @@
         </div>
       </div>
 
-      <!-- 问题理解 · PICO（米黄大卡） -->
-      <div class="pico-card">
-        <span class="tiny-label result-step">问题中的研究条件</span>
-        <div class="pico-head">
-          <h2>问题理解 · PICO</h2>
-          <span class="pico-note">词典提取 · 已识别条件用于筛选</span>
-        </div>
-        <div class="pico-grid">
-          <div class="pico-item">
-            <span class="pico-tag pico-p">P</span>
-            <span class="pico-meta"><span class="pico-cap">人群</span><span class="pico-val" id="picoP">未明确</span></span>
-          </div>
-          <div class="pico-item">
-            <span class="pico-tag pico-i">I</span>
-            <span class="pico-meta"><span class="pico-cap">干预</span><span class="pico-val" id="picoI">未明确</span></span>
-          </div>
-          <div class="pico-item">
-            <span class="pico-tag pico-c">C</span>
-            <span class="pico-meta"><span class="pico-cap">对照</span><span class="pico-val" id="picoC">未明确</span></span>
-          </div>
-          <div class="pico-item">
-            <span class="pico-tag pico-o">O</span>
-            <span class="pico-meta"><span class="pico-cap">结局</span><span class="pico-val" id="picoO">未明确</span></span>
-          </div>
-        </div>
-        <p class="assessment-note" id="screeningNote"></p>
-        <div class="integrity-warning hidden" id="integrityWarning"></div>
-      </div>
-
+      <div class="integrity-warning hidden" id="integrityWarning" role="status"></div>
 
       <!-- 证据来源 -->
       <div class="card" id="sourcePanel" tabindex="-1">
-        <div class="card-head"><div><h2>证据来源</h2><span class="count" id="docCount"></span></div><label class="source-search" for="sourceFilter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input id="sourceFilter" type="search" placeholder="在本次文献中查找" aria-label="在本次文献中查找" /></label></div>
+        <div class="card-head"><div><h2>文献来源</h2><span class="count" id="docCount"></span></div><label class="source-search" for="sourceFilter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input id="sourceFilter" type="search" placeholder="在本次文献中查找" aria-label="在本次文献中查找" /></label></div>
+        <div class="source-types" role="group" aria-label="按研究类型筛选"><button class="selected" data-source-type="all" aria-pressed="true">全部</button><button data-source-type="trial" aria-pressed="false">随机试验</button><button data-source-type="synthesis" aria-pressed="false">系统综述 / Meta 分析</button><button data-source-type="other" aria-pressed="false">其他</button></div>
         <p id="sourceVisible" class="filter-status" role="status" aria-live="polite"></p>
         <p class="assessment-note">研究模型分数仅供人工排序，未校准，不代表未来撤稿概率；演示改写摘要不评分。</p>
         <div id="docList" class="doc-grid"></div>
@@ -297,7 +283,7 @@
     </div>
   </aside>
 
-  <script src="/static/app.js"></script>
+  <script src="/static/app.js?v=20261024-evidence"></script>
   <script defer src="/static/vendor/gsap.min.js"></script>
   <script defer src="/static/ui-effects.js"></script>
 </body>

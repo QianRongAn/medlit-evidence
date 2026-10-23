@@ -300,23 +300,65 @@ test("citation location clears a filter that would hide the cited source", () =>
   assert.equal(card.focused, true);
 });
 
-test("activity chart uses seven local calendar days and excludes future or older records", () => {
-  const {context, get} = loadApp();
-  const now = new Date(2026, 9, 21, 12);
-  const days = context.dailyActivity([
-    {time:new Date(2026,9,15,9).getTime()},
-    {time:new Date(2026,9,21,8).getTime()},
-    {time:new Date(2026,9,21,10).getTime()},
-    {time:new Date(2026,9,14,23).getTime()},
-    {time:new Date(2026,9,21,13).getTime()},
-    {time:"invalid"},
-  ], now);
-  assert.equal(days.length,7);
-  assert.deepEqual(Array.from(days,day=>day.count),[1,0,0,0,0,0,2]);
-  assert.equal(days[0].date.getDate(),15);
-  assert.equal(days[6].date.getDate(),21);
-  context.renderActivity();
-  assert.equal(get("activityTotal").textContent,"0 次");
-  assert.match(get("activityChart").innerHTML,/还没有检索记录/);
-  assert.doesNotMatch(get("activityChart").innerHTML,/<polygon/);
+test("study-type distribution counts actual sources, including empty results", () => {
+  const {context,get} = loadApp();
+  const docs = [
+    {study_type:"randomized_controlled_trial"},
+    {study_type:"meta_analysis"}, {study_type:"systematic_review"},
+    {study_type:"clinical_trial"}, {study_type:"notice"}, {},
+  ];
+  context.renderDist(docs);
+  assert.equal(get("distTotal").textContent,"（纳入 6 篇）");
+  assert.equal(get("distBar").children.length,3);
+  assert.deepEqual(Array.from(get("distBar").children, segment => segment.style.background),
+    ["#D9D6F7","#CFECFA","#E0F5CD"]);
+  assert.deepEqual(Array.from(get("distLegend").children, item => item.innerHTML.match(/ (\d+)$/)[1]),["1","2","3"]);
+  assert.equal(context.sourceType({study_type:"clinical_trial"}),"other");
+  context.renderDist([]);
+  assert.equal(get("distTotal").textContent,"（纳入 0 篇）");
+  assert.equal(get("distLegend").textContent,"暂无纳入文献");
+});
+
+test("PICO overview names identified and unspecified conditions without invented matching percentages", () => {
+  const {context,get} = loadApp();
+  context.renderPico({population:["heart failure"], intervention:["SGLT2 inhibitor"]});
+  assert.equal(get("picoP").textContent,"heart failure");
+  assert.equal(get("picoC").textContent,"未明确");
+  assert.match(get("picoSummary").textContent,/已识别：人群、干预/);
+  assert.match(get("picoSummary").textContent,/未明确：对照、结局/);
+  assert.doesNotMatch(get("picoSummary").textContent,/%|大部分匹配/);
+  context.renderPico(null);
+  assert.equal(get("picoP").textContent,"未明确");
+  assert.match(get("picoSummary").textContent,/尚未识别研究条件/);
+});
+
+test("source type filter combines with text and is reset by citation location", () => {
+  const {context,get} = loadApp();
+  context.renderDocs([{pmid:"123",title:"Heart failure trial",study_type:"randomized_controlled_trial"},
+    {pmid:"456",title:"Heart failure review",study_type:"systematic_review"}]);
+  vm.runInContext('sourceCategory = "synthesis"',context);
+  get("sourceFilter").value="heart";
+  context.filterSources();
+  const [trial,review]=get("docList").children;
+  assert.equal(trial.classList.contains("hidden"),true);
+  assert.equal(review.classList.contains("hidden"),false);
+  assert.equal(get("sourceVisible").textContent,"当前显示 1 / 2 篇文献");
+  context.setTimeout=()=>1;
+  const target=get("source-123");
+  target.classList.add("hidden");
+  context.focusSource("123");
+  assert.equal(vm.runInContext('sourceCategory',context),"all");
+  assert.equal(trial.classList.contains("hidden"),false);
+  assert.equal(get("sourceFilter").value,"");
+});
+
+test("empty source results have an explicit message and no fabricated distribution", () => {
+  const {context,get} = loadApp();
+  context.renderDocs([]);
+  context.renderDist([]);
+  assert.equal(get("sourceEmpty").classList.contains("hidden"),false);
+  assert.match(get("sourceEmpty").textContent,/没有通过筛选/);
+  assert.equal(get("docCount").textContent,"0 篇文献");
+  context.filterSources();
+  assert.equal(get("sourceEmpty").classList.contains("hidden"),false);
 });

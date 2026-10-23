@@ -84,7 +84,15 @@ function signalAction(kind, element) {
 function focusSource(pmid) {
   const target = $(pmid ? "source-" + pmid : "sourcePanel");
   if (!target) return;
-  if (target.classList.contains("hidden")) { $("sourceFilter").value = ""; filterSources(); }
+  if (target.classList.contains("hidden")) {
+    $("sourceFilter").value = "";
+    sourceCategory = "all";
+    document.querySelectorAll("[data-source-type]").forEach(button => {
+      button.classList.toggle("selected", button.dataset.sourceType === "all");
+      button.ariaPressed = String(button.dataset.sourceType === "all");
+    });
+    filterSources();
+  }
   target.scrollIntoView({ behavior: motionBehavior(), block: "center" });
   target.focus({ preventScroll: true });
   signalAction("source", target);
@@ -177,6 +185,8 @@ function renderStats(data, elapsedMs, ev) {
   $("timeNum").textContent = sec >= 1 ? sec.toFixed(1) + "s" : Math.round(elapsedMs) + "ms";
   $("timeSub").textContent = data.mode === "llm" ? "生成式回答" : "抽取式回答";
 
+  $("retrievalSummary").textContent = `纳入 ${data.results.length} 篇 · 检索命中 ${data.total.toLocaleString()} 篇 · ${data.online ? "PubMed 在线" : "离线演示语料"}`;
+  $("requestSummary").textContent = `用时 ${$("timeNum").textContent} · ${data.mode === "llm" ? "LLM 摘要整理" : "摘要摘录"}`;
   $("resultMeta").textContent = `「${data.query}」`;
 
   // 完整性告警（撤稿 / 存疑 / 更正）
@@ -228,43 +238,6 @@ function renderHomeStatus(h) {
   }
 }
 
-/* 最近提问列表（支持 今日 / 全部 切换） */
-let recentMode = "all";
-
-function renderRecent() {
-  const list = $("recentList");
-  list.innerHTML = "";
-  let h = getHistory();
-  if (recentMode === "today") {
-    const t = new Date(); t.setHours(0, 0, 0, 0);
-    h = h.filter((it) => it.time >= t.getTime());
-  }
-  if (!h.length) {
-    list.innerHTML = '<p class="recent-empty">暂无提问，从上方搜索框开始</p>';
-    return;
-  }
-  h.slice(0, 6).forEach((it) => {
-    const div = document.createElement("div");
-    div.className = "recent-item";
-    let color = "#a6a6a0";
-    if (it.conflict) color = "#f5a800";
-    else if (it.verdict === "证据倾向支持") color = "#12b76a";
-    else if (it.verdict === "证据倾向不支持") color = "#f24726";
-    const t = new Date(it.time);
-    const hh = String(t.getHours()).padStart(2, "0");
-    const mm = String(t.getMinutes()).padStart(2, "0");
-    div.innerHTML = `
-      <span class="recent-dot" style="background:${color}"></span>
-      <span class="recent-q">${esc(it.query)}</span>
-      <span class="recent-meta">
-        <span class="recent-verdict" style="color:${color}">${esc(it.verdict)}</span>
-        <span>${hh}:${mm}</span>
-      </span>
-    `;
-    list.appendChild(div);
-  });
-}
-
 /* 使用统计（累计次数独立计数，不受历史 20 条上限影响） */
 function renderUsage() {
   const h = getHistory();
@@ -283,117 +256,8 @@ function renderUsage() {
   }
 }
 
-/* 问答活动热力图：近 52 周，GitHub 风格绿色格子 */
-function renderHeatmap() {
-  const wrap = $("heatmap");
-  wrap.innerHTML = "";
-  const counts = {};
-  getHistory().forEach((it) => {
-    const d = new Date(it.time);
-    const key = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
-    counts[key] = (counts[key] || 0) + 1;
-  });
-
-  const today = new Date(); today.setHours(0, 0, 0, 0);
-  const dow = (today.getDay() + 6) % 7; // 周一=0
-  const monday = new Date(today); monday.setDate(today.getDate() - dow);
-  const WEEKS = 52;
-  const start = new Date(monday); start.setDate(monday.getDate() - (WEEKS - 1) * 7);
-
-  const level = (n) => (n >= 5 ? 4 : n >= 3 ? 3 : n >= 2 ? 2 : n >= 1 ? 1 : 0);
-
-  // 月份标签行
-  const top = document.createElement("div");
-  top.className = "heat-top";
-  const CELL = 17; // 14px 格子 + 3px 间隙
-  let lastMonth = -1;
-  for (let w = 0; w < WEEKS; w++) {
-    const colDate = new Date(start); colDate.setDate(start.getDate() + w * 7);
-    if (colDate.getMonth() !== lastMonth) {
-      lastMonth = colDate.getMonth();
-      const m = document.createElement("span");
-      m.className = "heat-month";
-      m.style.left = 40 + w * CELL + "px";
-      m.textContent = colDate.getMonth() + 1 + "月";
-      top.appendChild(m);
-    }
-  }
-  wrap.appendChild(top);
-
-  // 主区：左侧星期标签 + 周列
-  const main = document.createElement("div");
-  main.className = "heat-main";
-  const labels = document.createElement("div");
-  labels.className = "heat-labels";
-  ["周一", "", "周三", "", "周五", "", ""].forEach((txt) => {
-    const s = document.createElement("span");
-    s.className = "heat-label";
-    s.textContent = txt;
-    labels.appendChild(s);
-  });
-  main.appendChild(labels);
-
-  const cols = document.createElement("div");
-  cols.className = "heat-cols";
-  for (let w = 0; w < WEEKS; w++) {
-    const col = document.createElement("div");
-    col.className = "heat-col";
-    for (let r = 0; r < 7; r++) {
-      const day = new Date(start);
-      day.setDate(start.getDate() + w * 7 + r);
-      const cell = document.createElement("div");
-      cell.className = "heat-cell";
-      if (day <= today) {
-        const key = day.getFullYear() + "-" + day.getMonth() + "-" + day.getDate();
-        const n = counts[key] || 0;
-        if (n > 0) cell.classList.add("l" + level(n));
-        cell.title = `${day.getMonth() + 1}月${day.getDate()}日 · ${n} 次提问`;
-      } else {
-        cell.style.visibility = "hidden";
-      }
-      col.appendChild(cell);
-    }
-    cols.appendChild(col);
-  }
-  main.appendChild(cols);
-  wrap.appendChild(main);
-}
-
-// Calendar-day buckets use the same local dates as the activity heatmap.
-function dailyActivity(history, now = new Date()) {
-  const end = new Date(now); end.setHours(0, 0, 0, 0);
-  const days = Array.from({ length: 7 }, (_, index) => {
-    const date = new Date(end); date.setDate(end.getDate() - 6 + index);
-    return { date, count: 0 };
-  });
-  history.forEach(item => {
-    const date = new Date(item.time);
-    if (!Number.isFinite(date.getTime()) || date > now) return;
-    const day = days.find(bucket => bucket.date.toDateString() === date.toDateString());
-    if (day) day.count++;
-  });
-  return days;
-}
-
-function renderActivity() {
-  const days = dailyActivity(getHistory());
-  const total = days.reduce((sum, day) => sum + day.count, 0);
-  $("activityTotal").textContent = `${total} 次`;
-  const max = Math.max(1, ...days.map(day => day.count));
-  const points = days.map((day, index) => [40 + index * 94, 132 - day.count / max * 106]);
-  const polyline = points.map(point => point.join(",")).join(" ");
-  const labels = days.map(day => `<span>${day.date.getMonth() + 1}/${day.date.getDate()}</span>`).join("");
-  const description = days.map(day => `${day.date.getMonth() + 1}月${day.date.getDate()}日${day.count}次`).join("，");
-  $("activityChart").innerHTML = `<div class="activity-plot"><svg viewBox="0 0 650 145" preserveAspectRatio="none" role="img" aria-label="最近7天本地检索共${total}次：${description}" xmlns="http://www.w3.org/2000/svg"><g stroke="#efebf5" stroke-width="1" vector-effect="non-scaling-stroke"><path d="M25 26H610M25 79H610M25 132H610"/></g>${total ? `<polygon points="40,132 ${polyline} 604,132" fill="#e5e0f6" fill-opacity=".6"/><polyline points="${polyline}" stroke="#aa9edb" stroke-width="2.5" vector-effect="non-scaling-stroke" fill="none"/>` : ""}</svg><div class="activity-axis" aria-hidden="true"><span>${max}</span><span>0</span></div></div><div class="activity-dates" aria-hidden="true">${labels}</div>${total ? "" : '<p class="activity-empty">还没有检索记录，试着提出第一个问题。</p>'}`;
-}
-
 function renderHome() {
-  const histEl = $("homeHist");
-  if (histEl) histEl.textContent = getAskCount();
-  renderRecent();
   renderUsage();
-  renderHeatmap();
-  renderActivity();
 }
 
 /* 首页仪表盘与结果区互斥显示 */
@@ -418,7 +282,7 @@ function showDashboard() {
   window.scrollTo({ top: 0, behavior: motionBehavior() });
 }
 function renderPico(pico) {
-  if (!pico) return;
+  pico = pico || {};
   const set = (id, arr) => {
     $(id).textContent = arr && arr.length ? arr.join(" · ") : "未明确";
   };
@@ -426,6 +290,11 @@ function renderPico(pico) {
   set("picoI", pico.intervention);
   set("picoC", pico.comparison);
   set("picoO", pico.outcome);
+  const fields = { population: "人群", intervention: "干预", comparison: "对照", outcome: "结局" };
+  const identified = Object.keys(fields).filter(key => pico[key]?.length).map(key => fields[key]);
+  const missing = Object.keys(fields).filter(key => !pico[key]?.length).map(key => fields[key]);
+  $("picoSummary").textContent = (identified.length ? "已识别：" + identified.join("、") + "。" : "尚未识别研究条件。")
+    + (missing.length ? "未明确：" + missing.join("、") + "。" : "") + "词项覆盖不等于临床适用性。";
 }
 
 function renderScreening(data) {
@@ -484,27 +353,37 @@ function renderConfidence() {
   desc.textContent = "研究类型不等于结论可信度";
 }
 
-function renderDist(dist) {
-  const bar = $("distBar");
-  const legend = $("distLegend");
+function sourceType(doc) {
+  if (doc.study_type === "randomized_controlled_trial") return "trial";
+  if (["systematic_review", "meta_analysis"].includes(doc.study_type)) return "synthesis";
+  return "other";
+}
+
+function renderDist(results) {
+  const groups = [
+    { key: "trial", label: "随机试验", color: "#D9D6F7" },
+    { key: "synthesis", label: "系统综述 / Meta 分析", color: "#CFECFA" },
+    { key: "other", label: "其他", color: "#E0F5CD" },
+  ];
+  const bar = $("distBar"), legend = $("distLegend");
   bar.innerHTML = "";
   legend.innerHTML = "";
-  const total = GRADE_ORDER.reduce((a, k) => a + (dist[k] || 0), 0) || 1;
-  GRADE_ORDER.forEach((k) => {
-    const v = dist[k] || 0;
-    if (v === 0) return;
-    const pct = (v / total) * 100;
-    const seg = document.createElement("div");
-    seg.className = "dist-seg";
-    seg.style.width = pct + "%";
-    seg.style.background = GRADE_COLOR[k];
-    seg.title = `${GRADE_ZH[k]}：${v} 篇`;
-    bar.appendChild(seg);
-
+  $("distTotal").textContent = `（纳入 ${results.length} 篇）`;
+  groups.forEach(group => {
+    const count = results.filter(doc => sourceType(doc) === group.key).length;
+    if (count) {
+      const segment = document.createElement("div");
+      segment.className = "dist-seg";
+      segment.style.width = count / results.length * 100 + "%";
+      segment.style.background = group.color;
+      segment.title = `${group.label}：${count} 篇`;
+      bar.appendChild(segment);
+    }
     const item = document.createElement("span");
-    item.innerHTML = `<i class="swatch" style="background:${GRADE_COLOR[k]}"></i>${GRADE_ZH[k]} · ${v} 篇`;
+    item.innerHTML = `<i class="swatch" style="background:${group.color}"></i>${group.label} ${count}`;
     legend.appendChild(item);
   });
+  if (!results.length) legend.textContent = "暂无纳入文献";
 }
 
 function modelScoreBadge(score) {
@@ -543,29 +422,40 @@ function integrityLinks(doc) {
   }).join(" · ");
 }
 
+let sourceCategory = "all";
+
 function filterSources() {
   const query = ($("sourceFilter").value || "").trim().toLocaleLowerCase();
   const cards = Array.from($("docList").children);
   let visible = 0;
   cards.forEach(card => {
-    const match = !query || (card.dataset.search || "").includes(query);
+    const match = (!query || (card.dataset.search || "").includes(query))
+      && (sourceCategory === "all" || card.dataset.category === sourceCategory);
     card.classList.toggle("hidden", !match);
     if (match) visible++;
   });
-  $("sourceVisible").textContent = query ? `当前显示 ${visible} / ${cards.length} 篇文献` : "";
-  $("sourceEmpty").classList.toggle("hidden", visible > 0 || !query);
+  $("sourceVisible").textContent = query || sourceCategory !== "all" ? `当前显示 ${visible} / ${cards.length} 篇文献` : "";
+  $("sourceEmpty").textContent = cards.length ? "本次结果中没有匹配的文献。试试其他类型或更短的关键词。" : "本次没有通过筛选的文献。请检查 PICO 条件或调整问题。";
+  $("sourceEmpty").classList.toggle("hidden", visible > 0);
 }
 
 function renderDocs(results) {
   const list = $("docList");
+  sourceCategory = "all";
+  document.querySelectorAll("[data-source-type]").forEach(button => {
+    button.classList.toggle("selected", button.dataset.sourceType === "all");
+    button.ariaPressed = String(button.dataset.sourceType === "all");
+  });
   list.innerHTML = "";
   $("docCount").textContent = `${results.length} 篇文献`;
   $("sourceFilter").value = "";
   $("sourceVisible").textContent = "";
-  $("sourceEmpty").classList.add("hidden");
+  $("sourceEmpty").textContent = "本次没有通过筛选的文献。请检查 PICO 条件或调整问题。";
+  $("sourceEmpty").classList.toggle("hidden", results.length > 0);
   results.forEach((d, index) => {
     const div = document.createElement("div");
     div.className = "doc-item";
+    div.dataset.category = sourceType(d);
     div.dataset.search = [d.title, d.abstract, d.journal, d.year, d.pmid, ...(d.authors || [])].filter(Boolean).join(" ").toLocaleLowerCase();
     if (/^[1-9][0-9]*$/.test(String(d.pmid || ""))) div.id = "source-" + d.pmid;
     div.tabIndex = -1;
@@ -664,7 +554,7 @@ async function ask(query) {
     renderPico(data.pico);
     renderScreening(data);
     renderAnswer(data);
-    renderDist(data.evidence_distribution || {});
+    renderDist(data.results || []);
     renderDocs(data.results || []);
     recordHistory(query, data.evidence, elapsed);
     $("loading").classList.add("hidden");
@@ -892,17 +782,6 @@ $("topQuery").addEventListener("keydown", (e) => {
   }
 });
 
-/* 最近提问：今日 / 全部 切换 */
-document.querySelectorAll("#recentSeg button").forEach((b) =>
-  b.addEventListener("click", () => {
-    recentMode = b.dataset.v;
-    document.querySelectorAll("#recentSeg button").forEach((x) =>
-      x.classList.toggle("active", x === b)
-    );
-    renderRecent();
-  })
-);
-
 renderHome();
 applySettingsUI();
 updateNotifBadge();
@@ -924,9 +803,14 @@ $("searchNav").addEventListener("click", () => {
   $("query").scrollIntoView({ behavior: motionBehavior(), block: "center" });
   $("query").focus({ preventScroll: true });
 });
-$("activityNav").addEventListener("click", () => {
-  showDashboard();
-  $("activityPanel").scrollIntoView({ behavior: motionBehavior(), block: "center" });
-  $("activityPanel").focus({ preventScroll: true });
-});
 $("historyNav").addEventListener("click", () => openDrawer("notif"));
+
+// Text and study-type filters share the same visible-source count.
+document.querySelectorAll("[data-source-type]").forEach(button => button.addEventListener("click", () => {
+  sourceCategory = button.dataset.sourceType;
+  document.querySelectorAll("[data-source-type]").forEach(item => {
+    item.classList.toggle("selected", item === button);
+    item.ariaPressed = String(item === button);
+  });
+  filterSources();
+}));
