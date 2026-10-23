@@ -10,12 +10,6 @@
 
 ![MedLit Evidence 新版首页实际运行截图](docs/images/workspace-home.png)
 
-### 结果页 · 设计效果图
-
-![MedLit Evidence 结果页设计效果图](docs/images/results-design.png)
-
-第二张为设计效果图，文献、数量、完整性提示和匹配条均为示意，不是实际检索或临床评测结果。实际页面根据检索数据展示，未验证的结论保持“未评估”。
-
 ## 当前能力
 
 - 中英文查询；中文医学词典映射为英文检索词。

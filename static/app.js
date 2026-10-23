@@ -655,19 +655,7 @@ function recordHistory(query, ev, elapsedMs) {
   });
   localStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0, 20)));
   localStorage.setItem(ASKCOUNT_KEY, String(getAskCount() + 1));
-  updateNotifBadge();
   renderHome();
-}
-
-function updateNotifBadge() {
-  const n = getHistory().length;
-  const badge = $("notifBadge");
-  if (n > 0) {
-    badge.textContent = n > 99 ? "99+" : String(n);
-    badge.classList.remove("hidden");
-  } else {
-    badge.classList.add("hidden");
-  }
 }
 
 function renderHistory() {
@@ -701,8 +689,7 @@ function renderHistory() {
   clear.textContent = "清空记录";
   clear.addEventListener("click", () => {
     localStorage.removeItem(HISTORY_KEY);
-    updateNotifBadge();
-    renderHistory();
+      renderHistory();
     renderHome();
   });
   list.appendChild(clear);
@@ -784,7 +771,6 @@ $("topQuery").addEventListener("keydown", (e) => {
 
 renderHome();
 applySettingsUI();
-updateNotifBadge();
 checkHealth();
 
 // Compact navigation shares the existing workspace actions.
