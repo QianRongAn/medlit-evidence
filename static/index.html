@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MedLit · 医学证据工作台</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23E8EDF2'/%3E%3Cpath d='M4 12h3l2-5 4 10 3-8 2 3h2' stroke='%234663D8' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
-  <link rel="stylesheet" href="/static/studio.css?v=20261024-evidence" />
+  <link rel="stylesheet" href="/static/studio.css?v=20261024-continuation" />
 </head>
 <body>
   <a class="skip-link" href="#query">跳转到临床问题</a>
@@ -79,6 +79,17 @@
           <span id="askLabel">检索证据</span> <span class="button-arrow" aria-hidden="true">↗</span>
         </button>
       </div>
+      <details class="pico-editor" id="picoEditor">
+        <summary>补充或修正 PICO 条件</summary>
+        <p>自动识别不完整时可直接填写。留空沿用原问题，多个条件用顿号分隔；未识别的医学术语可填写英文。</p>
+        <div class="pico-input-grid">
+          <label>P · 人群<input id="editPicoP" maxlength="200" placeholder="如：成人、心衰患者" /></label>
+          <label>I · 干预<input id="editPicoI" maxlength="200" placeholder="如：二甲双胍" /></label>
+          <label>C · 对照<input id="editPicoC" maxlength="200" placeholder="如：安慰剂、阿司匹林" /></label>
+          <label>O · 结局<input id="editPicoO" maxlength="200" placeholder="如：死亡率、住院" /></label>
+        </div>
+        <button id="applyPico" class="reading-button" type="button">按这些条件重新检索</button>
+      </details>
       <div class="examples">
         <span class="examples-label">试着问</span>
         <button class="chip topic-lilac" data-q="statins risk of incident diabetes"><span class="topic-label">他汀与糖尿病</span><span class="topic-desc">探索降脂治疗与新发糖尿病的相关证据。</span><span class="topic-meta"><span class="topic-icon" aria-hidden="true">↗</span>心血管 · 代谢</span></button>
@@ -100,7 +111,7 @@
         <span class="tiny-label result-step">问题中的研究条件</span>
         <div class="pico-head">
           <h2>研究条件 · PICO</h2>
-          <span class="pico-note">词典提取 · 已识别条件用于筛选</span>
+          <button id="editPico" class="reading-button" type="button">补充 / 修正条件</button>
         </div>
         <div class="pico-grid">
           <div class="pico-item">
@@ -172,10 +183,7 @@
 
         <div class="card evidence-overview">
           <div class="card-head"><h2>证据概况</h2></div>
-          <h3 class="overview-label">文献类型分布 <span id="distTotal"></span></h3>
-          <div class="dist-bar" id="distBar"></div>
-          <div class="dist-legend" id="distLegend"></div>
-          <div class="pico-overview"><h3 class="overview-label">PICO 条件识别</h3><p id="picoSummary"></p></div>
+          <div class="reported-assessment"><h3 class="overview-label">结局方向 · 原文报告</h3><div id="reportedDirection"></div><div id="reportedCertainty"></div></div>
           <div class="conf-badge" id="confBadge">
             <div class="conf-left">
               <div class="conf-cap">证据方向与结论可信度</div>
@@ -186,6 +194,22 @@
               <div class="conf-desc" id="confDesc">研究类型不等于结论可信度</div>
             </div>
           </div>
+
+          <h3 class="overview-label">文献类型分布 <span id="distTotal"></span></h3>
+          <div class="dist-bar" id="distBar"></div>
+          <div class="dist-legend" id="distLegend"></div>
+          <div class="pico-overview"><h3 class="overview-label">PICO 条件识别</h3><p id="picoSummary"></p></div>
+          <details class="grade-review" id="gradeReview"><summary>填写 GRADE 可信度评估</summary>
+            <p>这是人工核查工作表。逐项填写判断、理由与 PMID 后生成分级草案；系统不会用研究数量或类型代替五项核查。</p>
+            <label>证据起点<select id="gradeInitial"><option value="unknown">请选择</option><option value="randomized">随机试验证据</option><option value="observational">观察性证据（未含升级因素）</option></select></label>
+            <label>偏倚风险<select id="grade-risk_of_bias"><option value="unknown">资料待补齐</option><option value="not_serious">未发现严重问题</option><option value="serious">严重问题（降 1 级）</option><option value="very_serious">非常严重（降 2 级）</option></select><textarea id="reason-risk_of_bias" maxlength="2000" rows="2" placeholder="核查理由与依据"></textarea></label>
+            <label>研究结果不一致性<select id="grade-inconsistency"><option value="unknown">资料待补齐</option><option value="not_serious">未发现严重问题</option><option value="serious">严重问题（降 1 级）</option><option value="very_serious">非常严重（降 2 级）</option></select><textarea id="reason-inconsistency" maxlength="2000" rows="2" placeholder="核查理由与依据"></textarea></label>
+            <label>对当前 PICO 的间接性<select id="grade-indirectness"><option value="unknown">资料待补齐</option><option value="not_serious">未发现严重问题</option><option value="serious">严重问题（降 1 级）</option><option value="very_serious">非常严重（降 2 级）</option></select><textarea id="reason-indirectness" maxlength="2000" rows="2" placeholder="核查理由与依据"></textarea></label>
+            <label>效应估计不精确性<select id="grade-imprecision"><option value="unknown">资料待补齐</option><option value="not_serious">未发现严重问题</option><option value="serious">严重问题（降 1 级）</option><option value="very_serious">非常严重（降 2 级）</option></select><textarea id="reason-imprecision" maxlength="2000" rows="2" placeholder="核查理由与依据"></textarea></label>
+            <label>发表偏倚<select id="grade-publication_bias"><option value="unknown">资料待补齐</option><option value="not_serious">未发现严重问题</option><option value="serious">严重问题（降 1 级）</option><option value="very_serious">非常严重（降 2 级）</option></select><textarea id="reason-publication_bias" maxlength="2000" rows="2" placeholder="核查理由与依据"></textarea></label>
+            <label>核查依据 PMID<input id="gradeReferences" maxlength="1200" placeholder="多个 PMID 用逗号分隔" /></label>
+            <button id="submitGrade" class="reading-button" type="button">生成可信度分级草案</button><p id="gradeReviewResult" role="status"></p>
+          </details>
         </div>
       </div>
 
@@ -193,12 +217,13 @@
 
       <!-- 证据来源 -->
       <div class="card" id="sourcePanel" tabindex="-1">
-        <div class="card-head"><div><h2>文献来源</h2><span class="count" id="docCount"></span></div><label class="source-search" for="sourceFilter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input id="sourceFilter" type="search" placeholder="在本次文献中查找" aria-label="在本次文献中查找" /></label></div>
+        <div class="card-head"><div><h2>文献来源</h2><span class="count" id="docCount"></span></div><label class="source-search" for="sourceFilter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input id="sourceFilter" type="search" placeholder="在已加载文献中查找" aria-label="在已加载文献中查找" /></label></div>
         <div class="source-types" role="group" aria-label="按研究类型筛选"><button class="selected" data-source-type="all" aria-pressed="true">全部</button><button data-source-type="trial" aria-pressed="false">随机试验</button><button data-source-type="synthesis" aria-pressed="false">系统综述 / Meta 分析</button><button data-source-type="other" aria-pressed="false">其他</button></div>
         <p id="sourceVisible" class="filter-status" role="status" aria-live="polite"></p>
         <p class="assessment-note">研究模型分数仅供人工排序，未校准，不代表未来撤稿概率；演示改写摘要不评分。</p>
         <div id="docList" class="doc-grid"></div>
         <p id="sourceEmpty" class="source-empty hidden">本次结果中没有匹配的文献。试试更短的关键词。</p>
+        <div class="source-pagination"><p id="pageProgress" role="status" aria-live="polite"></p><button id="loadMoreSources" class="reading-button hidden">继续加载文献</button><p id="pageError" role="alert"></p></div>
         <details class="excluded-sources hidden" id="excludedSources">
           <summary id="excludedCount">未纳入的候选</summary>
           <div id="excludedList"></div>
@@ -233,13 +258,13 @@
     <div class="drawer-body">
       <div class="setting-row">
         <div>
-          <p class="setting-title">每次返回文献数</p>
-          <p class="setting-desc">控制单次检索返回并用于分级与合成的文献篇数</p>
+          <p class="setting-title">每批检索规模</p>
+          <p class="setting-desc">控制每次网络请求的候选规模，不限制总展示数量。滚动到底部会继续加载全部匹配结果。</p>
         </div>
         <div class="seg" id="retmaxSeg">
-          <button data-v="10">10</button>
-          <button data-v="20">20</button>
-          <button data-v="40">40</button>
+          <button data-v="20">100 篇</button>
+          <button data-v="40">200 篇</button>
+          <button data-v="100">500 篇</button>
         </div>
       </div>
       <div class="setting-row">
@@ -262,7 +287,7 @@
       <div class="setting-row">
         <div>
           <p class="setting-title">版本</p>
-          <p class="setting-desc">v0.6.0 · MIT</p>
+          <p class="setting-desc">v0.7.0 · MIT</p>
         </div>
       </div>
     </div>
@@ -282,7 +307,8 @@
     </div>
   </aside>
 
-  <script src="/static/app.js?v=20261024-evidence"></script>
+  <script src="/static/app.js?v=20261024-continuation"></script>
+  <script src="/static/assessment-ui.js?v=20261024-assessment"></script>
   <script defer src="/static/vendor/gsap.min.js"></script>
   <script defer src="/static/ui-effects.js"></script>
 </body>

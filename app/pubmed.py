@@ -2,6 +2,9 @@
 
 内置进程内 TTL 缓存，重复提问避免重复请求 PubMed（E-utilities 有频率限制）。
 """
+import base64
+import hashlib
+import asyncio
 import json
 import time
 import xml.etree.ElementTree as ET
@@ -13,6 +16,21 @@ from .integrity import document_integrity, integrity_details
 
 _CACHE = {}  # key -> (expire_at, value)
 _CACHE_TTL = 300  # 秒
+_RATE_LOOP = None
+_RATE_LOCK = None
+_NEXT_REQUEST = 0.0
+
+
+async def _respect_rate_limit():
+    global _RATE_LOOP, _RATE_LOCK, _NEXT_REQUEST
+    loop = asyncio.get_running_loop()
+    if _RATE_LOOP is not loop:
+        _RATE_LOOP, _RATE_LOCK, _NEXT_REQUEST = loop, asyncio.Lock(), 0.0
+    async with _RATE_LOCK:
+        delay = _NEXT_REQUEST - loop.time()
+        if delay > 0:
+            await asyncio.sleep(delay)
+        _NEXT_REQUEST = loop.time() + 0.35
 
 
 def _cache_get(key):
@@ -27,15 +45,16 @@ def _cache_set(key, value):
 
 
 def _client():
-    kwargs = {"timeout": PUBMED_TIMEOUT}
+    # Configure PubMed through PUBMED_PROXY; unrelated inherited proxies can expire.
+    kwargs = {"timeout": PUBMED_TIMEOUT, "trust_env": False}
     if PUBMED_PROXY:
         kwargs["proxy"] = PUBMED_PROXY
     return httpx.AsyncClient(**kwargs)
 
 
-async def esearch(term, retmax=RETMAX):
+async def esearch(term, retmax=RETMAX, retstart=0):
     """返回 (pmids, total_count)。"""
-    key = f"esearch:{term}:{retmax}"
+    key = f"esearch:{term}:{retmax}:{retstart}"
     cached = _cache_get(key)
     if cached is not None:
         return cached
@@ -45,9 +64,11 @@ async def esearch(term, retmax=RETMAX):
         "db": "pubmed",
         "term": term,
         "retmax": str(retmax),
+        "retstart": str(retstart),
         "retmode": "json",
         "sort": "relevance",
     }
+    await _respect_rate_limit()
     async with _client() as c:
         r = await c.get(url, params=params)
         r.raise_for_status()
@@ -56,6 +77,77 @@ async def esearch(term, retmax=RETMAX):
         result = (res.get("idlist", []), int(res.get("count", "0") or 0))
         _cache_set(key, result)
         return result
+
+
+class InvalidCursor(ValueError):
+    pass
+
+
+def _page_token(term, parts, total):
+    if not parts:
+        return None
+    payload = {"q": hashlib.sha256(term.encode()).hexdigest()[:20], "parts": parts, "total": total}
+    return base64.urlsafe_b64encode(json.dumps(payload,separators=(",",":")).encode()).decode().rstrip("=")
+
+
+def _read_page_token(term, token):
+    try:
+        payload=json.loads(base64.urlsafe_b64decode(token + "=" * (-len(token)%4)))
+        parts=payload["parts"]
+        if payload["q"] != hashlib.sha256(term.encode()).hexdigest()[:20]:
+            raise ValueError("cursor does not match this query")
+        if not isinstance(parts,list) or not 1 <= len(parts) <= 64:
+            raise ValueError("invalid cursor partitions")
+        previous=0
+        for part in parts:
+            if not isinstance(part,list) or len(part)!=3 or any(type(n) is not int for n in part):
+                raise ValueError("invalid cursor range")
+            low,high,offset=part
+            if not 0 <= low <= high <= 2147483647 or not 0 <= offset < 10000 or low < previous:
+                raise ValueError("invalid cursor bounds")
+            previous=high
+        if type(payload["total"]) is not int or payload["total"] < 0:
+            raise ValueError("invalid cursor count")
+        return parts,payload["total"]
+    except (KeyError,TypeError,UnicodeError,json.JSONDecodeError,ValueError) as error:
+        raise InvalidCursor("无效或不属于本次问题的分页游标，请重新检索。") from error
+
+
+async def esearch_page(term, retmax, cursor=None, first_result=None):
+    """Continue all results, partitioning UID ranges beyond PubMed's 10,000-ID window."""
+    if cursor:
+        parts,total=_read_page_token(term,cursor)
+    else:
+        ids,total=first_result if first_result is not None else await esearch(term,retmax)
+        if total <= 9999:
+            offset=len(ids)
+            return ids,total,_page_token(term,[[0,0,offset]],total) if ids and offset < total else None
+        parts=[[1,2147483647,0]]
+    while parts:
+        low,high,offset=parts[0]
+        bounded=term if low==high==0 else f"({term}) AND {low}:{high}[UID]"
+        ids,count=await esearch(bounded,retmax,retstart=offset)
+        if count > 9999:
+            if low==high==0:
+                parts=[[1,2147483647,0]]
+                continue
+            if low>=high:
+                raise RuntimeError("PubMed UID partition could not be subdivided")
+            middle=(low+high)//2
+            parts[:1]=[[low,middle,0],[middle+1,high,0]]
+            continue
+        if not ids:
+            if offset < count:
+                raise RuntimeError("PubMed returned an empty page before the result set ended")
+            parts.pop(0)
+            continue
+        next_offset=offset+len(ids)
+        if next_offset>=count:
+            parts.pop(0)
+        else:
+            parts[0]=[low,high,next_offset]
+        return ids,total,_page_token(term,parts,total)
+    return [],total,None
 
 
 async def efetch(pmids):
@@ -69,6 +161,7 @@ async def efetch(pmids):
 
     url = f"{PUBMED_BASE}/efetch.fcgi"
     params = {"db": "pubmed", "id": ",".join(pmids), "retmode": "xml"}
+    await _respect_rate_limit()
     async with _client() as c:
         r = await c.get(url, params=params)
         r.raise_for_status()

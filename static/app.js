@@ -185,8 +185,11 @@ function renderStats(data, elapsedMs, ev) {
   $("timeNum").textContent = sec >= 1 ? sec.toFixed(1) + "s" : Math.round(elapsedMs) + "ms";
   $("timeSub").textContent = data.mode === "llm" ? "生成式回答" : "抽取式回答";
 
-  $("retrievalSummary").textContent = `纳入 ${data.results.length} 篇 · 检索命中 ${data.total.toLocaleString()} 篇 · ${data.online ? "PubMed 在线" : "离线演示语料"}`;
-  $("requestSummary").textContent = `用时 ${$("timeNum").textContent} · ${data.mode === "llm" ? "LLM 摘要整理" : "摘要摘录"}`;
+  const screening = data.screening;
+  $("retrievalSummary").textContent = screening
+    ? `PubMed ${data.online ? "命中" : "离线候选"} ${data.total.toLocaleString()} 篇 · 已检查 ${screening.candidate_count} 篇 · 通过 ${screening.matched_count} 篇 · 展示 ${data.results.length} 篇`
+    : `纳入 ${data.results.length} 篇 · 检索命中 ${data.total.toLocaleString()} 篇`;
+  $("requestSummary").textContent = `${data.screening?.next_cursor ? "首批耗时" : "响应耗时"} ${$("timeNum").textContent} · ${data.mode === "llm" ? "LLM 摘要整理" : "摘要摘录"}`;
   $("resultMeta").textContent = `「${data.query}」`;
 
   // 完整性告警（撤稿 / 存疑 / 更正）
@@ -274,6 +277,8 @@ function syncHome() {
 }
 
 function showDashboard() {
+  cancelSourcePages();
+  if (typeof resetGradeReview === "function") resetGradeReview();
   cancelSearch();
   $("result").classList.add("hidden");
   $("error").classList.add("hidden");
@@ -284,17 +289,20 @@ function showDashboard() {
 function renderPico(pico) {
   pico = pico || {};
   const set = (id, arr) => {
-    $(id).textContent = arr && arr.length ? arr.join(" · ") : "未明确";
+    $(id).textContent = arr && arr.length ? arr.join(" · ") : "原问题未指定";
   };
   set("picoP", pico.population);
   set("picoI", pico.intervention);
   set("picoC", pico.comparison);
   set("picoO", pico.outcome);
+  if (!picoEdited) Object.entries(PICO_INPUTS).forEach(([field,id]) => {
+    $(id).value = (pico[field] || []).join("、");
+  });
   const fields = { population: "人群", intervention: "干预", comparison: "对照", outcome: "结局" };
   const identified = Object.keys(fields).filter(key => pico[key]?.length).map(key => fields[key]);
   const missing = Object.keys(fields).filter(key => !pico[key]?.length).map(key => fields[key]);
-  $("picoSummary").textContent = (identified.length ? "已识别：" + identified.join("、") + "。" : "尚未识别研究条件。")
-    + (missing.length ? "未明确：" + missing.join("、") + "。" : "") + "词项覆盖不等于临床适用性。";
+  $("picoSummary").textContent = (identified.length ? "已识别：" + identified.join("、") + "。" : "尚未识别研究条件，可直接补充 PICO。")
+    + (missing.length ? "原问题未指定：" + missing.join("、") + "，可补充条件后重新检索。" : "") + "词项覆盖不等于临床适用性。";
 }
 
 function renderScreening(data) {
@@ -314,6 +322,8 @@ function renderScreening(data) {
     };
     const detail = (screening.issues || []).map((key) => issues[key] || "查询条件待明确").join("；");
     note.textContent = `候选 ${screening.candidate_count} 篇，词项筛选命中 ${screening.matched_count} 篇，展示 ${screening.included_count} 篇，未纳入 ${screening.excluded_count} 篇。`
+      + (screening.not_displayed_count ? `另有 ${screening.not_displayed_count} 篇通过筛选，受展示上限限制未显示。` : "")
+      + (screening.search_exhausted === false ? "尚未检查全部 PubMed 命中。" : "")
       + (detail ? detail + "。" : "")
       + (screening.unmapped_terms && screening.unmapped_terms.length ? "未映射：" + screening.unmapped_terms.join("、") + "。" : "")
       + (screening.note || "");
@@ -435,7 +445,7 @@ function filterSources() {
     if (match) visible++;
   });
   $("sourceVisible").textContent = query || sourceCategory !== "all" ? `当前显示 ${visible} / ${cards.length} 篇文献` : "";
-  $("sourceEmpty").textContent = cards.length ? "本次结果中没有匹配的文献。试试其他类型或更短的关键词。" : "本次没有通过筛选的文献。请检查 PICO 条件或调整问题。";
+  $("sourceEmpty").textContent = cards.length ? "已加载文献中没有匹配项。可继续加载，或尝试其他类型和关键词。" : "本次没有通过筛选的文献。请检查 PICO 条件或调整问题。";
   $("sourceEmpty").classList.toggle("hidden", visible > 0);
 }
 
@@ -495,6 +505,92 @@ function renderDocs(results) {
   });
 }
 
+const PICO_INPUTS = {population:"editPicoP", intervention:"editPicoI", comparison:"editPicoC", outcome:"editPicoO"};
+let picoEdited = false;
+let picoForQuery = "";
+function clearPicoInputs(query = "") {
+  picoEdited = false;
+  picoForQuery = query;
+  Object.values(PICO_INPUTS).forEach(id => { $(id).value = ""; });
+}
+function picoPayload(query) {
+  if (!picoEdited || picoForQuery !== query) return null;
+  return Object.fromEntries(Object.entries(PICO_INPUTS).map(([field,id]) => [field, ($(id).value || "").trim()]));
+}
+let resultData = null;
+let pageRequest = null;
+let resultPico = null;
+function cancelSourcePages() {
+  pageRequest?.abort();
+  pageRequest = null;
+  resultData = null;
+}
+function renderPageProgress() {
+  const screening = resultData?.screening;
+  const more = !!screening?.next_cursor;
+  $("loadMoreSources").classList.toggle("hidden", !more);
+  $("pageProgress").textContent = !screening ? "" : `已检查 ${screening.candidate_count} 篇，已展示 ${resultData.results.length} 篇匹配文献。`
+    + (more ? "滚动到底部继续加载，总展示数量不设上限。" : "本次可获取的候选已检查完毕。");
+  $("pageError").textContent = "";
+}
+function mergeSourcePage(previous, next) {
+  const unique = values => [...new Map(values.map(doc => [String(doc.pmid), doc])).values()];
+  const results = unique([...(previous.results || []), ...(next.results || [])]);
+  const excluded = unique([...(previous.excluded_results || []), ...(next.excluded_results || [])]);
+  const counts={retracted:0,concern:0,corrected:0,notice:0};
+  results.forEach(doc=>{
+    const flags=new Set(doc.integrity_flags || []);
+    if(doc.integrity && doc.integrity!=="ok")flags.add(doc.integrity);
+    if(doc.is_notice)flags.add("notice");
+    Object.keys(counts).forEach(key=>{if(flags.has(key))counts[key]++;});
+  });
+  const labels={retracted:"已撤稿，不用于回答",concern:"存疑",corrected:"有更正或重发关联",notice:"学术通知，不用于回答"};
+  const warning=Object.entries(counts).filter(([,count])=>count).map(([key,count])=>`${count} 篇${labels[key]}`).join("；");
+  return {...previous, results, excluded_results:excluded, screening:{...next.screening,
+    candidate_count:(previous.screening?.candidate_count || 0)+(next.screening?.candidate_count || 0),
+    matched_count:results.length,included_count:results.length,excluded_count:excluded.length},
+    evidence: {...previous.evidence, integrity_warning:warning || null, ...Object.fromEntries(Object.entries(counts).map(([key,count])=>[key==="notice"?"notice_count":key+"_count",count])), conclusions:[...(previous.evidence?.conclusions || []), ...(next.evidence?.conclusions || [])]}};
+}
+async function loadMoreSources() {
+  const current = resultData;
+  const cursor = current?.screening?.next_cursor;
+  if (!cursor || pageRequest) return;
+  const controller = new AbortController();
+  pageRequest = controller;
+  $("loadMoreSources").disabled = true;
+  $("loadMoreSources").textContent = "正在加载下一批…";
+  let succeeded = false;
+  try {
+    const response = await fetch("/api/answer", {method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({query:current.query,retmax:settings.retmax,cursor,...(resultPico ? {pico:resultPico} : {})}), signal:controller.signal});
+    const next = await response.json();
+    if (!response.ok) throw new Error(next.detail || "加载失败，请重试。");
+    if (resultData !== current || controller.signal.aborted) return;
+    resultData = mergeSourcePage(current,next);
+    const category=sourceCategory, filter=$("sourceFilter").value;
+    renderDocs(resultData.results);
+    sourceCategory=category; $("sourceFilter").value=filter;
+    document.querySelectorAll("[data-source-type]").forEach(button=>{
+      button.classList.toggle("selected",button.dataset.sourceType===category);
+      button.ariaPressed=String(button.dataset.sourceType===category);
+    });
+    filterSources();renderDist(resultData.results);renderScreening(resultData);renderPageProgress();
+    $("retrievalSummary").textContent=`PubMed 命中 ${current.total.toLocaleString()} 篇 · 已检查 ${resultData.screening.candidate_count} 篇 · 展示 ${resultData.results.length} 篇`;
+    $("integrityWarning").textContent=resultData.evidence.integrity_warning || "";
+    $("integrityWarning").classList.toggle("hidden",!resultData.evidence.integrity_warning);
+    if ($("gradeReviewResult").textContent) $("gradeReviewResult").textContent="文献已增加，请复核并重新提交可信度评估草案。";
+    if (typeof renderReportedAssessment === "function") renderReportedAssessment(resultData.results);
+    succeeded = true;
+  } catch(error) {
+    if (!controller.signal.aborted && resultData===current) $("pageError").textContent=error.message;
+  } finally {
+    if (pageRequest===controller) {
+      pageRequest=null; $("loadMoreSources").disabled=false; $("loadMoreSources").textContent="继续加载文献";
+      if (succeeded && resultData?.screening?.next_cursor && $("loadMoreSources").getBoundingClientRect?.().top < window.innerHeight)
+        setTimeout(loadMoreSources,500);
+    }
+  }
+}
 let activeRequest = null;
 let loadingTimer = null;
 
@@ -519,6 +615,10 @@ function cancelSearch() {
 
 async function ask(query) {
   if (!query.trim() || activeRequest) return;
+  cancelSourcePages();
+  if (typeof resetGradeReview === "function") resetGradeReview();
+  const pico = picoPayload(query);
+  if (picoForQuery !== query) clearPicoInputs(query);
   const controller = new AbortController();
   activeRequest = controller;
   $("query").value = query;
@@ -539,7 +639,7 @@ async function ask(query) {
     const r = await fetch("/api/answer", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query, retmax: settings.retmax }),
+      body: JSON.stringify({ query, retmax: settings.retmax, ...(pico ? {pico} : {}) }),
       signal: controller.signal,
     });
     if (!r.ok) {
@@ -556,6 +656,10 @@ async function ask(query) {
     renderAnswer(data);
     renderDist(data.results || []);
     renderDocs(data.results || []);
+    resultData = data;
+    resultPico = pico;
+    renderPageProgress();
+    if (typeof renderReportedAssessment === "function") renderReportedAssessment(data.results || []);
     recordHistory(query, data.evidence, elapsed);
     $("loading").classList.add("hidden");
     $("result").classList.remove("hidden");
@@ -591,7 +695,7 @@ const defaultSettings = { retmax: 20, showAbstract: true };
 function loadSettings() {
   try {
     const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
-    return Object.assign({}, defaultSettings, s);
+    return {retmax:[20,40,100].includes(s.retmax) ? s.retmax : 20, showAbstract:typeof s.showAbstract === "boolean" ? s.showAbstract : true};
   } catch {
     return { ...defaultSettings };
   }
@@ -753,6 +857,8 @@ $("navHome").addEventListener("click", () => {
   $("query").focus();
 });
 $("navNew").addEventListener("click", () => {
+  clearPicoInputs();
+  $("picoEditor").open = false;
   $("query").value = "";
   $("topQuery").value = "";
   showDashboard();
@@ -800,3 +906,20 @@ document.querySelectorAll("[data-source-type]").forEach(button => button.addEven
   });
   filterSources();
 }));
+
+$("query").addEventListener("input", () => clearPicoInputs($("query").value));
+Object.values(PICO_INPUTS).forEach(id => $(id).addEventListener("input", () => { picoEdited = true; picoForQuery = $("query").value; }));
+$("editPico").addEventListener("click", () => {
+  $("picoEditor").open = true;
+  $("picoEditor").scrollIntoView({behavior:motionBehavior(),block:"center"});
+  $("editPicoP").focus({preventScroll:true});
+});
+$("applyPico").addEventListener("click", () => { picoEdited = true; picoForQuery = $("query").value; ask($("query").value); });
+
+$("loadMoreSources").addEventListener("click",loadMoreSources);
+if (typeof IntersectionObserver === "function") {
+  const pages = new IntersectionObserver(entries => {
+    if (entries.some(entry=>entry.isIntersecting)) loadMoreSources();
+  },{rootMargin:"100px"});
+  pages.observe($("loadMoreSources"));
+}

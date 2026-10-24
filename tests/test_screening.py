@@ -63,11 +63,11 @@ class TestScreening(unittest.TestCase):
         self.assertFalse(screen_document(document(good.replace("pembrolizumab", "placebo")), plan)["eligible"])
 
     def test_unknown_terms_are_not_lost_when_a_known_drug_is_present(self):
-        plan = build_query_plan("metformin asthma exacerbations")
-        self.assertEqual(set(plan["lexical_terms"]), {"asthma"})
+        plan = build_query_plan("metformin bronchiectasis exacerbations")
+        self.assertEqual(set(plan["lexical_terms"]), {"bronchiectasis"})
         self.assertEqual(plan["pico"]["outcome"], ["exacerbations"])
         self.assertFalse(screen_document(document("Metformin reduced mortality in diabetes."), plan)["eligible"])
-        self.assertTrue(screen_document(document("Metformin asthma exacerbations were assessed."), plan)["eligible"])
+        self.assertTrue(screen_document(document("Metformin bronchiectasis exacerbations were assessed."), plan)["eligible"])
 
     def test_unstructured_query_requires_coverage_not_one_common_word(self):
         plan = build_query_plan("budesonide asthma exacerbations")
@@ -105,7 +105,7 @@ class TestScreening(unittest.TestCase):
         cases = [("metformin 5 year mortality", "unsupported_numeric_constraint"),
                  ("metformin without diabetes mortality", "negated_population_query"),
                  ("metformin or aspirin mortality", "ambiguous_alternatives"),
-                 ("二甲双胍治疗哮喘", "unmapped_chinese_terms"), ("the effect of treatment", "no_content_terms")]
+                 ("二甲双胍治疗支气管扩张", "unmapped_chinese_terms"), ("the effect of treatment", "no_content_terms")]
         for query, issue in cases:
             with self.subTest(query=query):
                 plan = build_query_plan(query)
@@ -147,3 +147,24 @@ class TestExcerptRelevance(unittest.TestCase):
 
     def test_sentence_matching_does_not_use_arbitrary_substrings(self):
         self.assertFalse(sentence_relevant("A nystatin study was conducted.", build_query_plan("statin")))
+
+class LabelledScreeningTests(unittest.TestCase):
+    def test_labels_are_not_lexical_constraints(self):
+        plan=build_query_plan("P: adults with bronchiectasis; I: budesonide; C: placebo; O: exacerbations")
+        self.assertEqual(plan['issues'],[])
+        self.assertEqual(plan['lexical_terms'],[])
+        self.assertTrue(screen_document(document("Adults with bronchiectasis received budesonide or placebo. Exacerbations were reduced."),plan)['eligible'])
+
+    def test_explicit_negation_numbers_and_unknown_chinese_are_not_erased(self):
+        for query,reason in [("metformin; P: without diabetes","unparsed_exclusion"),
+                             ("metformin; P: adults over 65","unsupported_numeric_constraint"),
+                             ("metformin; O: 新的未收录结局","unmapped_chinese_terms")]:
+            with self.subTest(query=query):
+                plan=build_query_plan(query)
+                self.assertIn(reason,plan['issues'])
+                self.assertFalse(screen_document(document("Adults with diabetes received metformin."),plan)['eligible'])
+
+    def test_explicit_type_two_is_not_a_numeric_threshold(self):
+        plan=build_query_plan("metformin; P: adults with type 2 diabetes; O: mortality")
+        self.assertEqual(plan['issues'],[])
+        self.assertEqual(plan['pico']['population'],['adults','type 2 diabetes'])

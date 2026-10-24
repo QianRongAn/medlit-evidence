@@ -2,7 +2,7 @@
 
 医学文献检索与摘要整理原型：输入问题，从 PubMed 召回文献，展示研究类型、候选摘要句及完整性标记，供人工核查。
 
-**当前版本不自动判定支持/反对、证据冲突或结论置信度。** 原有关键词规则无法确认问题与文献的人群、干预、对照、结局一致性，已停用。研究类型参考分级也不代表结论正确率。
+**方向与可信度分开核查。** 按具体结局提取摘要报告的增加、减少或不确定方向，并附 PMID 与完整原句；标明与提问方向是否一致。可信度展示原文明确报告的 GRADE 评级，或通过五项人工核查生成分级草案。方向一致不等于临床结论成立，人工草案未经独立审核；不按文献数量或研究类型生成可信概率。
 
 ## 界面预览
 
@@ -13,7 +13,9 @@
 ## 当前能力
 
 - 中英文查询；中文医学词典映射为英文检索词。
-- 在线 PubMed 召回、去重词项的 BM25 排序及进程内 TTL 缓存；通过 PICO/有效词项筛选后才进入回答。
+- PubMed 分批持续检索、去重词项的 BM25 排序及进程内 TTL 缓存；通过 PICO/有效词项筛选后才进入回答。每批全部匹配文献均可显示，滚动到底部继续加载，不设应用总展示数量上限；大于一万条命中时按 PMID 范围分段。
+- PICO 自动识别与手动补充共用同一筛选链路；原问题没有提供的条件明确标注，补充后会参与召回和筛选。
+- 逐结局方向依据、原文 GRADE 引用及五项人工核查工作表。方法与边界见 [方向与可信度评估](docs/direction_and_grade.md)。
 - 请求失败时回退 11 篇演示语料；在线零结果保持为空。
 - 规则 PICO 词项提取与本地筛选：明确识别的人群、干预、对照、结局均须覆盖，词典外的有效英文词项也不能丢弃。未识别的字段不凭空补齐；词项匹配不等于临床语义对齐。
 - 优先按明确的 PubMed 发表类型识别研究类型；缺标时仅用标题设计自述、方法/设计小节或明确自述研究的句子保守补充。背景中提及的研究不会抬高分级，冲突或不明确时保留未分级。
@@ -26,13 +28,17 @@
 
 ## 快速开始
 
+新版开发实现位于 [`codex/evidence-integrity`](https://github.com/QianRongAn/medlit-evidence/tree/codex/evidence-integrity)，可公开获取和运行：
+
 ```bash
-# 仅运行检索与摘要整理
+git clone --branch codex/evidence-integrity https://github.com/QianRongAn/medlit-evidence.git
+cd medlit-evidence
+# 运行检索与摘要整理
 python -m pip install fastapi 'uvicorn[standard]' httpx
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-打开 `http://127.0.0.1:8000/`。网络需要代理时配置 `PUBMED_PROXY` 环境变量。
+打开 `http://127.0.0.1:8000/`。网络需要代理时配置 `PUBMED_PROXY` 环境变量；PubMed 默认直连，不继承其他工具的 `HTTP_PROXY` / `HTTPS_PROXY` 设置。
 
 完整训练和模型依赖见 `requirements.txt`：
 
@@ -54,7 +60,8 @@ LLM 必须返回含 `pmid`、`text`、`quote` 的 JSON 条目。服务端只允�
 | --- | --- | --- |
 | GET | `/health` | PubMed 连通性、模型可用性、演示语料数量 |
 | POST | `/api/search` | 文献、相关性、研究类型和完整性状态 |
-| POST | `/api/answer` | 摘要整理、候选句、PICO 词项、来源及评估状态 |
+| POST | `/api/answer` | 摘要整理、PICO、来源方向、原文评级及分页游标 |
+| POST | `/api/grade` | 五项人工核查工作表的分级草案或缺项提示 |
 
 ```json
 {"query": "他汀类药物会增加新发糖尿病风险吗", "retmax": 20}
@@ -99,6 +106,14 @@ LLM 必须返回含 `pmid`、`text`、`quote` 的 JSON 条目。服务端只允�
 本地规则与保守召回边界见 [检索与 PICO 筛选说明](docs/retrieval_screening.md)。
 
 `0.6.0` 查询与摘录变更：翻译和PICO共用术语表，补充中文问句处理；抽取按整节过滤背景/方法，保留结果不确定性，`source_section`记录章节。缩写分句保留完整数值比较，LLM上下文只发送完整可用句并要求完整原句引用。
+
+### 0.7.0：PICO、连续加载与评估工作表
+
+`retmax` 控制网络批次规模（1–100），不再作为匹配文献的总展示上限。每次先检查 `max(100, retmax × 5)` 篇候选，最多每批 500 篇；返回本批全部匹配记录。将 `screening.next_cursor` 原样带回相同查询与 PICO 即可继续，直到游标为 null。后续网络失败返回错误，保留已有结果，不拼接离线语料。
+
+可选 `pico` 对象包含字符串字段 `population`、`intervention`、`comparison`、`outcome`，每字段不超过 200 字；留空沿用原问题，多个条件可用顿号分隔。原文缺少的条件不从检索结果倒推。明确的否定、未支持的数字条件和未映射中文仍须保留并提示处理。
+
+`results[].reported_assessment` 给出逐结局报告方向、与提问方向的对应关系、PMID、原句及原文 GRADE 评级；这是可核查的摘要抽取，不是对因果性和临床适用性的自动证明。旧 `confidence`/`conflict` 保持 null，避免旧客户端把新抽取规则当作已校准临床评分。
 
 ## 研究资产与边界
 

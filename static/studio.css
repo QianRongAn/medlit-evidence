@@ -2184,3 +2184,32 @@ footer p {
     font-size:15px;
   }
 }
+.pico-editor {margin-top:16px;font-size:13px;color:var(--muted);grid-column:1/-1}
+.pico-editor summary {padding:6px 0;color:var(--link)}
+.pico-editor>p {font-size:12px;margin:6px 0 12px}
+.pico-input-grid {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:12px 0}
+.pico-input-grid label {display:flex;flex-direction:column;gap:6px;color:var(--text);font-size:12px}
+.pico-input-grid input {width:100%;min-width:0;border:1px solid #e5dfef;border-radius:10px;background:#faf9fc;padding:10px 12px;font-size:14px;color:var(--ink)}
+#applyPico {margin-top:2px}
+@media(max-width:850px){.pico-input-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){.pico-input-grid{grid-template-columns:1fr}.pico-editor>p{font-size:11px}}
+.source-pagination {text-align:center;padding:20px 0;font-size:13px;color:var(--muted)}
+.source-pagination button {margin-top:12px}
+#pageError {color:#9b4e56;font-size:13px;margin:8px 0}
+.reported-assessment {border-top:1px solid var(--line);margin-top:20px;padding-top:18px;font-size:13px}
+.reported-assessment p {margin:8px 0;font-size:12px;color:var(--muted)}
+.reported-outcome {padding:12px 0;border-bottom:1px solid var(--line)}
+.reported-outcome b {font-size:14px;font-weight:500;color:var(--ink)}
+.reported-outcome small {font-size:11px;color:var(--muted)}
+.reported-assessment details {margin:10px 0;font-size:12px}
+.reported-assessment summary {color:var(--link)}
+.reported-assessment blockquote {margin:12px 0;padding:12px;background:#f8f6fb;border-radius:10px;overflow-wrap:anywhere;font-size:13px;line-height:1.9}
+.grade-review {margin-top:20px;padding-top:16px;border-top:1px solid var(--line);font-size:13px}
+.grade-review>p {font-size:12px;color:var(--muted);margin:10px 0}
+.grade-review label {display:flex;flex-direction:column;gap:7px;margin:15px 0;color:var(--text);font-size:12px}
+.grade-review select,.grade-review textarea,.grade-review input {font:inherit;width:100%;min-width:0;border:1px solid #e5dfef;border-radius:8px;padding:9px 11px;background:#faf9fc;color:var(--ink)}
+.grade-review textarea {resize:vertical}
+.grade-review button {margin:8px 0}
+#gradeReviewResult {font-size:12px;color:var(--text)}
+.evidence-overview>.reported-assessment {border-top:0;margin-top:0;padding-top:0}
+@media(max-width:850px){.evidence-overview{display:block}}

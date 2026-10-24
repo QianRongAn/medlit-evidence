@@ -1,7 +1,7 @@
 """可解释的词项/PICO 筛选；通过只表示文本覆盖，不证明临床适用性。"""
 import re
 
-from .pico import POPULATION, normalize_text, pico_mentions, term_mentions, term_variants
+from .pico import PICO_LABEL_PATTERN, TERM_LISTS, POPULATION, normalize_text, pico_mentions, term_mentions, term_variants
 from .tokenizer import tokenize
 from .translate import ZH2EN, translate_query
 
@@ -49,6 +49,9 @@ def build_query_plan(query):
             remaining[start:end] = " " * (end - start)
     remaining = "".join(remaining)
     unknown = _unmapped_chinese(remaining)
+    for values in pico.values():
+        unknown.extend(value for value in values if re.search(r"[\u4e00-\u9fff]", value))
+    unknown = list(dict.fromkeys(unknown))
     tokens = _lexical_tokens(translate_query(remaining))
     ranking = list(tokens)
     for required in pico.values():
@@ -70,9 +73,21 @@ def build_query_plan(query):
           or any(_NEGATED.search(text[max(0, start - 55):start])
                  for start, _, _ in mentions["comparison"])):
         issues.append("unparsed_exclusion")
+    for match in re.finditer(PICO_LABEL_PATTERN, text):
+        value = match.group(2)
+        if re.search(r"\b(?:without|excluding|excluded|no|not|non)\b|不患|未患|排除|没有|无", value):
+            issues.append("unparsed_exclusion")
+        residual = list(value)
+        for values in TERM_LISTS.values():
+            for concept, _ in values:
+                for start, end in term_mentions(value, concept):
+                    residual[start:end] = " " * (end-start)
+        if re.search(r"\d", "".join(residual)):
+            issues.append("unsupported_numeric_constraint")
+    issues = list(dict.fromkeys(issues))
     if not any(pico.values()) and not tokens:
         issues.append("no_content_terms")
-    return {"version": "2", "pico": pico, "lexical_terms": tokens,
+    return {"version": "2", "query": query, "pico": pico, "lexical_terms": tokens,
             "ranking_tokens": ranking, "unmapped_terms": unknown, "issues": issues,
             "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。"}
 

@@ -58,7 +58,7 @@ class QueryVocabularyTests(unittest.TestCase):
         self.assertTrue(screen_document(doc("Semaglutide produced weight loss in the trial."), plan)["eligible"])
 
     def test_unknown_conditions_are_not_erased_with_question_fillers(self):
-        for query in ("二甲双胍对哮喘患者有何作用", "司美格鲁肽与安慰剂相比在妊娠期有何作用"):
+        for query in ("二甲双胍对支气管扩张患者有何作用", "司美格鲁肽与安慰剂相比在妊娠期有何作用"):
             with self.subTest(query=query):
                 plan = build_query_plan(query)
                 self.assertIn("unmapped_chinese_terms", plan["issues"])

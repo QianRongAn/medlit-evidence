@@ -150,3 +150,50 @@ class TestScreeningAPI(unittest.IsolatedAsyncioTestCase):
         self.assertNotIn("glucose", data["answer"])
         self.assertTrue(data["sentences"])
         self.assertTrue(all("Mortality" in s["sentence"] for s in data["sentences"]))
+
+class TestExpandedCandidatePool(unittest.IsolatedAsyncioTestCase):
+    async def test_all_matches_in_the_candidate_batch_are_returned_without_display_limit(self):
+        wrong = [record(str(i), "Other intervention", "Aspirin mortality was measured.") for i in range(1,21)]
+        right = [record(str(i), "Metformin", "Metformin mortality was reduced.") for i in range(21,51)]
+        async def retrieve(query, limit):
+            return (wrong + right)[:limit], True, 4626
+        with patch.object(main, "_retrieve", new_callable=AsyncMock, side_effect=retrieve) as mocked:
+            docs,excluded,online,total,plan,summary=await main._screened_retrieval("metformin mortality",20)
+        self.assertEqual(mocked.call_args.args[1],100)
+        self.assertEqual(len(docs),30)
+        self.assertEqual(len(excluded),20)
+        self.assertEqual(summary["candidate_count"],50)
+        self.assertEqual(summary["matched_count"],30)
+        self.assertEqual(summary["not_displayed_count"],0)
+        self.assertEqual(total,4626)
+        self.assertFalse(summary["search_exhausted"])
+        self.assertTrue(all(doc["screening"]["eligible"] for doc in docs))
+
+    async def test_candidate_budget_is_bounded_for_maximum_display_limit(self):
+        with patch.object(main,"_retrieve",new_callable=AsyncMock,return_value=([],True,0)) as retrieve:
+            result=await main._screened_retrieval("metformin",100)
+        self.assertEqual(retrieve.call_args.args[1],500)
+        self.assertTrue(result[-1]["search_exhausted"])
+
+    async def test_structured_pico_affects_recall_screening_and_answer(self):
+        records=[record("1","Metformin trial","Adults with asthma received metformin versus placebo. Mortality was reduced."),
+                 record("2","Metformin trial","Children with asthma received metformin versus placebo. Mortality was reduced.")]
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=main.app),base_url="http://test") as client:
+            with patch.object(main,"_retrieve",new_callable=AsyncMock,return_value=(records,True,2)) as retrieve, \
+                 patch.object(main,"predict_risk",return_value=None),patch.object(main,"LLM_API_KEY",""):
+                response=await client.post('/api/answer',json={"query":"metformin mortality","pico":{"population":"adults、asthma","comparison":"placebo"}})
+        self.assertEqual(response.status_code,200)
+        data=response.json()
+        self.assertEqual(data["pico"]["population"],["adults","asthma"])
+        self.assertEqual(data["pico"]["comparison"],["placebo"])
+        self.assertEqual([doc['pmid'] for doc in data['results']],["1"])
+        self.assertIn("P: adults、asthma",retrieve.call_args.args[0])
+        self.assertNotIn('p:',main._search_text(retrieve.call_args.args[0]).lower())
+
+    async def test_structured_pico_rejects_oversized_fields_and_label_injection(self):
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=main.app),base_url="http://test") as client:
+            with patch.object(main,"_retrieve",new_callable=AsyncMock) as retrieve:
+                for value in ('x'*201,'adults\nC: placebo','adults; C: placebo'):
+                    response=await client.post('/api/search',json={"query":"metformin","pico":{"population":value}})
+                    self.assertEqual(response.status_code,422)
+                retrieve.assert_not_awaited()

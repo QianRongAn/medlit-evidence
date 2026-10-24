@@ -323,12 +323,12 @@ test("PICO overview names identified and unspecified conditions without invented
   const {context,get} = loadApp();
   context.renderPico({population:["heart failure"], intervention:["SGLT2 inhibitor"]});
   assert.equal(get("picoP").textContent,"heart failure");
-  assert.equal(get("picoC").textContent,"未明确");
+  assert.equal(get("picoC").textContent,"原问题未指定");
   assert.match(get("picoSummary").textContent,/已识别：人群、干预/);
-  assert.match(get("picoSummary").textContent,/未明确：对照、结局/);
+  assert.match(get("picoSummary").textContent,/原问题未指定：对照、结局/);
   assert.doesNotMatch(get("picoSummary").textContent,/%|大部分匹配/);
   context.renderPico(null);
-  assert.equal(get("picoP").textContent,"未明确");
+  assert.equal(get("picoP").textContent,"原问题未指定");
   assert.match(get("picoSummary").textContent,/尚未识别研究条件/);
 });
 
@@ -361,4 +361,119 @@ test("empty source results have an explicit message and no fabricated distributi
   assert.equal(get("docCount").textContent,"0 篇文献");
   context.filterSources();
   assert.equal(get("sourceEmpty").classList.contains("hidden"),false);
+});
+
+test("manual PICO belongs to its question and is sent on re-query", async () => {
+  const {context,get}=loadApp(); requestRuntime(context);
+  get("editPicoP").value="adults";get("editPicoC").value="placebo";
+  vm.runInContext('picoEdited=true; picoForQuery="metformin";',context);
+  const payloads=[];
+  context.fetch=async (_url,options)=>{payloads.push(JSON.parse(options.body));return {ok:true,json:async()=>emptyAnswer("metformin")};};
+  await context.ask("metformin");
+  assert.equal(payloads[0].pico.population,"adults");
+  assert.equal(payloads[0].pico.comparison,"placebo");
+  await context.ask("aspirin");
+  assert.equal(payloads[1].pico,undefined);
+  assert.equal(get("editPicoP").value,"");
+});
+
+test("retrieval summary separates the scanned pool, matches and displayed sources",()=>{
+  const {context,get}=loadApp();
+  const data={query:"metformin",total:4626,results:[{},{}],online:true,mode:"extractive",
+    screening:{candidate_count:100,matched_count:35,included_count:2,excluded_count:65,not_displayed_count:33,search_exhausted:false}};
+  context.renderStats(data,1200,null);context.renderScreening(data);
+  assert.match(get("retrievalSummary").textContent,/已检查 100 篇 · 通过 35 篇 · 展示 2 篇/);
+  assert.match(get("screeningNote").textContent,/33 篇通过筛选/);
+  assert.match(get("screeningNote").textContent,/尚未检查全部/);
+});
+
+test("history action has no numeric badge in the shipped markup",()=>{
+  const html=fs.readFileSync(path.join(__dirname,"../static/index.html"),"utf8");
+  assert.doesNotMatch(html,/id="notifBadge"/);
+  assert.match(html,/id="navNotifications"/);
+});
+
+test("page merging retains every unique match and keeps prior exclusions",()=>{
+  const {context}=loadApp();
+  const first={results:[{pmid:"1"},{pmid:"2"}],excluded_results:[{pmid:"9"}],screening:{candidate_count:3},evidence:{conclusions:[]}};
+  const next={results:[{pmid:"2"},{pmid:"3"}],excluded_results:[{pmid:"8"}],screening:{candidate_count:3,next_cursor:"next"},evidence:{conclusions:[]}};
+  const merged=context.mergeSourcePage(first,next);
+  assert.deepEqual(Array.from(merged.results,d=>d.pmid),["1","2","3"]);
+  assert.equal(merged.screening.candidate_count,6);
+  assert.equal(merged.screening.included_count,3);
+  assert.equal(merged.screening.excluded_count,2);
+  assert.equal(merged.screening.next_cursor,"next");
+});
+
+test("next-page errors retain the current result and permit retry",async()=>{
+  const {context,get}=loadApp();
+  context.page={query:"metformin",total:4000,results:[{pmid:"1"}],screening:{next_cursor:"cursor",candidate_count:100}};
+  vm.runInContext('resultData=page',context);
+  context.AbortController=AbortController;
+  context.fetch=async()=>({ok:false,json:async()=>({detail:"temporary failure"})});
+  await context.loadMoreSources();
+  assert.equal(vm.runInContext('resultData.results.length',context),1);
+  assert.equal(get("pageError").textContent,"temporary failure");
+  assert.equal(get("loadMoreSources").disabled,false);
+});
+
+test("a late source page cannot replace a new question",async()=>{
+  const {context}=loadApp();context.AbortController=AbortController;
+  context.page={query:"old",results:[],screening:{next_cursor:"cursor"}};
+  vm.runInContext('resultData=page',context);
+  let resolve;context.fetch=()=>new Promise(r=>resolve=r);
+  const pending=context.loadMoreSources();
+  context.cancelSourcePages();
+  resolve({ok:true,json:async()=>({results:[{pmid:"99"}],screening:{}})});
+  await pending;
+  assert.equal(vm.runInContext('resultData',context),null);
+});
+
+test("source-reported grades and directions remain cited and are not numeric probabilities",()=>{
+  const {context,get}=loadApp();
+  vm.runInContext(fs.readFileSync(path.join(__dirname,"../static/assessment-ui.js"),"utf8"),context);
+  context.renderReportedAssessment([{pmid:"123",reported_assessment:[{outcome:"mortality",direction:"decrease",question_direction:"decrease",alignment:"same_direction",findings:[{pmid:"123",quote:"Metformin reduced mortality.",label:"报告减少"}],source_certainty:[{pmid:"123",label:"中等",quote:"Moderate-certainty evidence."}]}]}]);
+  assert.match(get("reportedDirection").innerHTML,/与提问方向一致 1/);
+  assert.match(get("reportedDirection").innerHTML,/PMID 123/);
+  assert.equal(get("confTag").textContent,"中等（原文报告）");
+  assert.doesNotMatch(get("confTag").textContent,/%/);
+  assert.match(get("reportedCertainty").innerHTML,/Moderate-certainty evidence/);
+});
+
+test("incomplete manual GRADE does not display a completed level",async()=>{
+  const {context,get}=loadApp();
+  vm.runInContext(fs.readFileSync(path.join(__dirname,"../static/assessment-ui.js"),"utf8"),context);
+  context.resetGradeReview();
+  context.fetch=async()=>({ok:true,json:async()=>({status:"incomplete",missing:["imprecision","references"]})});
+  await context.submitGradeReview();
+  assert.match(get("gradeReviewResult").textContent,/待补齐：2 项/);
+  assert.doesNotMatch(get("confTag").textContent,/人工草案/);
+});
+
+test("leaving a result clears the human GRADE worksheet",()=>{
+  const {context,get}=loadApp();
+  vm.runInContext(fs.readFileSync(path.join(__dirname,"../static/assessment-ui.js"),"utf8"),context);
+  get("gradeReferences").value="123";
+  get("gradeReviewResult").textContent="高（人工草案）";
+  context.showDashboard();
+  assert.equal(get("gradeReferences").value,"");
+  assert.equal(get("gradeReviewResult").textContent,"");
+});
+
+test("integrity warnings also cover papers loaded on later pages",()=>{
+  const {context}=loadApp();
+  const merged=context.mergeSourcePage({results:[{pmid:"1",integrity:"ok"}],screening:{candidate_count:1}},
+    {results:[{pmid:"2",integrity:"retracted",integrity_flags:["retracted"]}],screening:{candidate_count:1}});
+  assert.equal(merged.evidence.retracted_count,1);
+  assert.match(merged.evidence.integrity_warning,/已撤稿，不用于回答/);
+});
+
+test("an incomplete re-review clears a formerly completed manual grade",async()=>{
+  const {context,get}=loadApp();
+  vm.runInContext(fs.readFileSync(path.join(__dirname,"../static/assessment-ui.js"),"utf8"),context);
+  context.fetch=async()=>({ok:true,json:async()=>({status:"incomplete",missing:["imprecision"]})});
+  get("confTag").textContent="高（人工草案）";
+  await context.submitGradeReview();
+  assert.doesNotMatch(get("confTag").textContent,/人工草案/);
+  assert.match(get("gradeReviewResult").textContent,/未生成分级/);
 });
