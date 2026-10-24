@@ -1,0 +1,875 @@
+{
+  "run_sha256": "ef5c9d91ead6f17b25d916619ffd40805aa25d1c994f18aa4fae95f02172540a",
+  "reviewer": "Codex GPT-6; same 62 source/context judgments re-attested after identical committed-code run",
+  "reviewer_kind": "model_authored_source_review",
+  "items": [
+    {
+      "claim_id": "82a6e85875f1c767fac1c05d0b93ad41599e1fcbe537f5282bb1bb14671829e4",
+      "query_id": "Q01",
+      "sentence": {
+        "sentence": "In the SELECT cardiovascular outcomes trial, semaglutide showed a 20% reduction in major adverse cardiovascular events in 17,604 adults with preexisting cardiovascular disease, overweight or obesity, without diabetes.",
+        "pmid": "38740993",
+        "title": "Long-term weight loss effects of semaglutide in obesity without diabetes in the SELECT trial.",
+        "polarity": "unassessed",
+        "source_section": "unstructured"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "次分析原句准确引用SELECT既往心血管结果；主题相关但不是直接终点报告，严格匹配仍按原冻结标签为否。"
+    },
+    {
+      "claim_id": "9978ddbca8581fa3187ab379b8590815d007d87d120a9c8820a476edb091cd4b",
+      "query_id": "Q01",
+      "sentence": {
+        "sentence": "A primary cardiovascular end-point event occurred in 569 of the 8803 patients (6.5%) in the semaglutide group and in 701 of the 8801 patients (8.0%) in the placebo group (hazard ratio, 0.80; 95% confidence interval, 0.72 to 0.90; P<0.001).",
+        "pmid": "37952131",
+        "title": "Semaglutide and Cardiovascular Outcomes in Obesity without Diabetes.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "原始SELECT结果句完整报告心血管复合事件人数、比例、HR、区间与p值，未丢失对照。"
+    },
+    {
+      "claim_id": "f4d20addf33f40f5b29acfeb4e2f7179d13b85cdc104d08cf3422e45b0bc7954",
+      "query_id": "Q02",
+      "sentence": {
+        "sentence": "In the SELECT cardiovascular outcomes trial, semaglutide showed a 20% reduction in major adverse cardiovascular events in 17,604 adults with preexisting cardiovascular disease, overweight or obesity, without diabetes.",
+        "pmid": "38740993",
+        "title": "Long-term weight loss effects of semaglutide in obesity without diabetes in the SELECT trial.",
+        "polarity": "unassessed",
+        "source_section": "unstructured"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "次分析原句准确引用SELECT既往心血管结果；主题相关但不是直接终点报告，严格匹配仍按原冻结标签为否。"
+    },
+    {
+      "claim_id": "8809a159d9841aa9fc2760251cf15ae3ca0c973c755265473bba74394820a6e5",
+      "query_id": "Q02",
+      "sentence": {
+        "sentence": "A primary cardiovascular end-point event occurred in 569 of the 8803 patients (6.5%) in the semaglutide group and in 701 of the 8801 patients (8.0%) in the placebo group (hazard ratio, 0.80; 95% confidence interval, 0.72 to 0.90; P<0.001).",
+        "pmid": "37952131",
+        "title": "Semaglutide and Cardiovascular Outcomes in Obesity without Diabetes.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "原始SELECT结果句完整报告心血管复合事件人数、比例、HR、区间与p值，未丢失对照。"
+    },
+    {
+      "claim_id": "96bd23ea6b0eff040cdda341fc5aa97cc2d31678a8c193c379e4bb600c0a5217",
+      "query_id": "Q03",
+      "sentence": {
+        "sentence": "In patients treated with semaglutide, weight loss continued over 65 weeks and was sustained for up to 4 years.",
+        "pmid": "38740993",
+        "title": "Long-term weight loss effects of semaglutide in obesity without diabetes in the SELECT trial.",
+        "polarity": "unassessed",
+        "source_section": "unstructured"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "体重下降持续时间与源摘要一致，没有声称心血管获益。"
+    },
+    {
+      "claim_id": "cac51116cb46378d98d84731913b3f58a4888b8763817e779522e238971071d3",
+      "query_id": "Q03",
+      "sentence": {
+        "sentence": "In SELECT, at 208 weeks, semaglutide produced clinically significant weight loss and improvements in anthropometric measurements versus placebo.",
+        "pmid": "38740993",
+        "title": "Long-term weight loss effects of semaglutide in obesity without diabetes in the SELECT trial.",
+        "polarity": "unassessed",
+        "source_section": "unstructured"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "208周减重及人体测量与安慰剂比较，时间和对照保留。"
+    },
+    {
+      "claim_id": "f5d935ccb7b63a83a50c2ab6fb918ff52e834ea0d7c242707b176ea615c93848",
+      "query_id": "Q03",
+      "sentence": {
+        "sentence": "At 208 weeks, semaglutide was associated with mean reduction in weight (-10.2%), waist circumference (-7.7 cm) and waist-to-height ratio (-6.9%) versus placebo (-1.5%, -1.3 cm and -1.0%, respectively; P < 0.0001 for all comparisons versus placebo).",
+        "pmid": "38740993",
+        "title": "Long-term weight loss effects of semaglutide in obesity without diabetes in the SELECT trial.",
+        "polarity": "unassessed",
+        "source_section": "unstructured"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "体重、腰围及腰高比分别与安慰剂的数值、单位、区间含义保持原文。"
+    },
+    {
+      "claim_id": "241f1fcbdf4482197521c67a112085ba7367f56dd46649ccf10a2a688dff583d",
+      "query_id": "Q03",
+      "sentence": {
+        "sentence": "Clinically meaningful weight loss occurred in both sexes and all races, body sizes and regions.",
+        "pmid": "38740993",
+        "title": "Long-term weight loss effects of semaglutide in obesity without diabetes in the SELECT trial.",
+        "polarity": "unassessed",
+        "source_section": "unstructured"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "性别、种族、体型与地区的减重观察保持原文范围，未新增其他人群。"
+    },
+    {
+      "claim_id": "46ae230be5767d9e92c985aa4ac877d7b1a86ac73074743ac0c18502121a1735",
+      "query_id": "Q04",
+      "sentence": {
+        "sentence": "In patients treated with semaglutide, weight loss continued over 65 weeks and was sustained for up to 4 years.",
+        "pmid": "38740993",
+        "title": "Long-term weight loss effects of semaglutide in obesity without diabetes in the SELECT trial.",
+        "polarity": "unassessed",
+        "source_section": "unstructured"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "体重下降持续时间与源摘要一致，没有声称心血管获益。"
+    },
+    {
+      "claim_id": "38e7e2384c8988d3e4380256ab6be44c48a3a62e44a35e9b8debaec1760653bf",
+      "query_id": "Q04",
+      "sentence": {
+        "sentence": "In SELECT, at 208 weeks, semaglutide produced clinically significant weight loss and improvements in anthropometric measurements versus placebo.",
+        "pmid": "38740993",
+        "title": "Long-term weight loss effects of semaglutide in obesity without diabetes in the SELECT trial.",
+        "polarity": "unassessed",
+        "source_section": "unstructured"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "208周减重及人体测量与安慰剂比较，时间和对照保留。"
+    },
+    {
+      "claim_id": "70507cd159fd2b5733ed2b183718d2e5805b3352cfc0f026dfafd03daa80094f",
+      "query_id": "Q04",
+      "sentence": {
+        "sentence": "At 208 weeks, semaglutide was associated with mean reduction in weight (-10.2%), waist circumference (-7.7 cm) and waist-to-height ratio (-6.9%) versus placebo (-1.5%, -1.3 cm and -1.0%, respectively; P < 0.0001 for all comparisons versus placebo).",
+        "pmid": "38740993",
+        "title": "Long-term weight loss effects of semaglutide in obesity without diabetes in the SELECT trial.",
+        "polarity": "unassessed",
+        "source_section": "unstructured"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "体重、腰围及腰高比分别与安慰剂的数值、单位、区间含义保持原文。"
+    },
+    {
+      "claim_id": "52531e7f5c2b7dbfeae58b0d733bd30c01ee4059b2ee1e740e92ce26a86216c4",
+      "query_id": "Q04",
+      "sentence": {
+        "sentence": "Clinically meaningful weight loss occurred in both sexes and all races, body sizes and regions.",
+        "pmid": "38740993",
+        "title": "Long-term weight loss effects of semaglutide in obesity without diabetes in the SELECT trial.",
+        "polarity": "unassessed",
+        "source_section": "unstructured"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "性别、种族、体型与地区的减重观察保持原文范围，未新增其他人群。"
+    },
+    {
+      "claim_id": "64b6fa5b32dd3c307e87832edd5eb8392f1c449e5cdf6ed65ec0713a1d16f2d0",
+      "query_id": "Q05",
+      "sentence": {
+        "sentence": "Among persons with moderate-to-severe obstructive sleep apnea and obesity, tirzepatide reduced the AHI, body weight, hypoxic burden, hsCRP concentration, and systolic blood pressure and improved sleep-related patient-reported outcomes.",
+        "pmid": "38912654",
+        "title": "Tirzepatide for the Treatment of Obstructive Sleep Apnea and Obesity.",
+        "polarity": "unassessed",
+        "source_section": "conclusions"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "SURMOUNT-OSA结论保留中重度OSA及肥胖限定、AHI及其他结局。"
+    },
+    {
+      "claim_id": "c7d96fdebb36c3511e16374c498a45c5abb7e0cb936e6531142dcfa341d1f258",
+      "query_id": "Q05",
+      "sentence": {
+        "sentence": "At baseline, the mean AHI was 51.5 events per hour in trial 1 and 49.5 events per hour in trial 2, and the mean body-mass index (BMI, the weight in kilograms divided by the square of the height in meters) was 39.1 and 38.7, respectively.",
+        "pmid": "38912654",
+        "title": "Tirzepatide for the Treatment of Obstructive Sleep Apnea and Obesity.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "基线AHI和BMI是人群描述，事实忠实但未给出治疗变化。"
+    },
+    {
+      "claim_id": "f178824ea3cef10e5781e3e8b0b2d541fff4303ae94fc60f37c9c2db70ca8fe2",
+      "query_id": "Q05",
+      "sentence": {
+        "sentence": "In trial 1, the mean change in AHI at week 52 was -25.3 events per hour (95% confidence interval [CI], -29.3 to -21.2) with tirzepatide and -5.3 events per hour (95% CI, -9.4 to -1.1) with placebo, for an estimated treatment difference of -20.0 events per hour (95% CI, -25.8 to -14.2) (P<0.001).",
+        "pmid": "38912654",
+        "title": "Tirzepatide for the Treatment of Obstructive Sleep Apnea and Obesity.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "试验1的52周AHI变化保留药物、安慰剂、治疗差异及区间。"
+    },
+    {
+      "claim_id": "d1e91914dbcc23d3fe7d5d00ec0c74829a1267e60048c20a09c6e40bc3b6297b",
+      "query_id": "Q05",
+      "sentence": {
+        "sentence": "In trial 2, the mean change in AHI at week 52 was -29.3 events per hour (95% CI, -33.2 to -25.4) with tirzepatide and -5.5 events per hour (95% CI, -9.9 to -1.2) with placebo, for an estimated treatment difference of -23.8 events per hour (95% CI, -29.6 to -17.9) (P<0.001).",
+        "pmid": "38912654",
+        "title": "Tirzepatide for the Treatment of Obstructive Sleep Apnea and Obesity.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "试验2的52周AHI变化完整保留组别、数值与区间。"
+    },
+    {
+      "claim_id": "0677bfb67b929814008c861632ac0499c0a1473e46c8e62526325aa544ad44e4",
+      "query_id": "Q06",
+      "sentence": {
+        "sentence": "Among persons with moderate-to-severe obstructive sleep apnea and obesity, tirzepatide reduced the AHI, body weight, hypoxic burden, hsCRP concentration, and systolic blood pressure and improved sleep-related patient-reported outcomes.",
+        "pmid": "38912654",
+        "title": "Tirzepatide for the Treatment of Obstructive Sleep Apnea and Obesity.",
+        "polarity": "unassessed",
+        "source_section": "conclusions"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "SURMOUNT-OSA结论保留中重度OSA及肥胖限定、AHI及其他结局。"
+    },
+    {
+      "claim_id": "f607faf7b950ad325b4156bdde9b8d15ebb02cb07036a62ad0a9c8561d98d48d",
+      "query_id": "Q06",
+      "sentence": {
+        "sentence": "At baseline, the mean AHI was 51.5 events per hour in trial 1 and 49.5 events per hour in trial 2, and the mean body-mass index (BMI, the weight in kilograms divided by the square of the height in meters) was 39.1 and 38.7, respectively.",
+        "pmid": "38912654",
+        "title": "Tirzepatide for the Treatment of Obstructive Sleep Apnea and Obesity.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "基线AHI和BMI是人群描述，事实忠实但未给出治疗变化。"
+    },
+    {
+      "claim_id": "2dda239f596281c98b59e8e007c71f17a60034f4c0a8a8147ecebc5e34e31de7",
+      "query_id": "Q06",
+      "sentence": {
+        "sentence": "In trial 1, the mean change in AHI at week 52 was -25.3 events per hour (95% confidence interval [CI], -29.3 to -21.2) with tirzepatide and -5.3 events per hour (95% CI, -9.4 to -1.1) with placebo, for an estimated treatment difference of -20.0 events per hour (95% CI, -25.8 to -14.2) (P<0.001).",
+        "pmid": "38912654",
+        "title": "Tirzepatide for the Treatment of Obstructive Sleep Apnea and Obesity.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "试验1的52周AHI变化保留药物、安慰剂、治疗差异及区间。"
+    },
+    {
+      "claim_id": "1d45058cab40cdae70ef54006c4921a58fc7b19bb3118292d59bbb777b4a2d38",
+      "query_id": "Q06",
+      "sentence": {
+        "sentence": "In trial 2, the mean change in AHI at week 52 was -29.3 events per hour (95% CI, -33.2 to -25.4) with tirzepatide and -5.5 events per hour (95% CI, -9.9 to -1.2) with placebo, for an estimated treatment difference of -23.8 events per hour (95% CI, -29.6 to -17.9) (P<0.001).",
+        "pmid": "38912654",
+        "title": "Tirzepatide for the Treatment of Obstructive Sleep Apnea and Obesity.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "试验2的52周AHI变化完整保留组别、数值与区间。"
+    },
+    {
+      "claim_id": "4b906a2080b819c20adee7cffc1e25d6846f1b0acf8ab2eefc0849a6f4f3d70e",
+      "query_id": "Q09",
+      "sentence": {
+        "sentence": "In patients with COPD and type 2 inflammation as indicated by elevated blood eosinophil counts, dupilumab was associated with fewer exacerbations and better lung function than placebo.",
+        "pmid": "38767614",
+        "title": "Dupilumab for COPD with Blood Eosinophil Evidence of Type 2 Inflammation.",
+        "polarity": "unassessed",
+        "source_section": "conclusions"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "NOTUS结论限定COPD及2型炎症，报告加重减少与肺功能改善。"
+    },
+    {
+      "claim_id": "a335b8d186b4cf08d32878f9f71045c13dc9907a52354abc0d8e7e092f160ea4",
+      "query_id": "Q09",
+      "sentence": {
+        "sentence": "The annualized rate of moderate or severe exacerbations was 0.86 (95% confidence interval [CI], 0.70 to 1.06) with dupilumab and 1.30 (95% CI, 1.05 to 1.60) with placebo; the rate ratio as compared with placebo was 0.66 (95% CI, 0.54 to 0.82; P<0.001).",
+        "pmid": "38767614",
+        "title": "Dupilumab for COPD with Blood Eosinophil Evidence of Type 2 Inflammation.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "中重度加重年化发生率、对照、比值及区间与原文一致。"
+    },
+    {
+      "claim_id": "40fbaaf8ea1907e0a701ac7b43a9ad1e07931ef9e364523f4ac5f9f0e20deb48",
+      "query_id": "Q10",
+      "sentence": {
+        "sentence": "In patients with COPD and type 2 inflammation as indicated by elevated blood eosinophil counts, dupilumab was associated with fewer exacerbations and better lung function than placebo.",
+        "pmid": "38767614",
+        "title": "Dupilumab for COPD with Blood Eosinophil Evidence of Type 2 Inflammation.",
+        "polarity": "unassessed",
+        "source_section": "conclusions"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "NOTUS结论限定COPD及2型炎症，报告加重减少与肺功能改善。"
+    },
+    {
+      "claim_id": "b0fe5751abf478d8bca7e29afd9936b242cd13982f7903ff04b88b1a890f8e6d",
+      "query_id": "Q10",
+      "sentence": {
+        "sentence": "The annualized rate of moderate or severe exacerbations was 0.86 (95% confidence interval [CI], 0.70 to 1.06) with dupilumab and 1.30 (95% CI, 1.05 to 1.60) with placebo; the rate ratio as compared with placebo was 0.66 (95% CI, 0.54 to 0.82; P<0.001).",
+        "pmid": "38767614",
+        "title": "Dupilumab for COPD with Blood Eosinophil Evidence of Type 2 Inflammation.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "中重度加重年化发生率、对照、比值及区间与原文一致。"
+    },
+    {
+      "claim_id": "e2e8ae39fb732e77a65a4f21174d21855700adc0f9e3bd472970a756f1a10b5b",
+      "query_id": "Q11",
+      "sentence": {
+        "sentence": "Lecanemab reduced markers of amyloid in early Alzheimer's disease and resulted in moderately less decline on measures of cognition and function than placebo at 18 months but was associated with adverse events.",
+        "pmid": "36449413",
+        "title": "Lecanemab in Early Alzheimer's Disease.",
+        "polarity": "unassessed",
+        "source_section": "conclusions"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "早期AD认知和功能下降较少，18个月、安慰剂与不良事件限定保留；没有改写成逆转疾病。"
+    },
+    {
+      "claim_id": "3635984c8706823e6c07a73d0b5bad3cb4c605e9bc8782b6e60667b924d06d60",
+      "query_id": "Q11",
+      "sentence": {
+        "sentence": "The mean CDR-SB score at baseline was approximately 3.2 in both groups.",
+        "pmid": "36449413",
+        "title": "Lecanemab in Early Alzheimer's Disease.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "CDR-SB基线值是真实人群描述，不是治疗对认知下降的结果。"
+    },
+    {
+      "claim_id": "4dc3d1290728fabf1241c7e7fba0c3aaed679f03b4e7bc2d652660ec678888c6",
+      "query_id": "Q12",
+      "sentence": {
+        "sentence": "Lecanemab reduced markers of amyloid in early Alzheimer's disease and resulted in moderately less decline on measures of cognition and function than placebo at 18 months but was associated with adverse events.",
+        "pmid": "36449413",
+        "title": "Lecanemab in Early Alzheimer's Disease.",
+        "polarity": "unassessed",
+        "source_section": "conclusions"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "早期AD认知和功能下降较少，18个月、安慰剂与不良事件限定保留；没有改写成逆转疾病。"
+    },
+    {
+      "claim_id": "abf06f9717e69e43f1cf945a55a2936f698308a3b0740bdb3711fc5e1c757028",
+      "query_id": "Q12",
+      "sentence": {
+        "sentence": "The mean CDR-SB score at baseline was approximately 3.2 in both groups.",
+        "pmid": "36449413",
+        "title": "Lecanemab in Early Alzheimer's Disease.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "CDR-SB基线值是真实人群描述，不是治疗对认知下降的结果。"
+    },
+    {
+      "claim_id": "c99fb6108ce22c45e96fdb890b5eafa67c671da67c96d525f8b8fffdb94282e7",
+      "query_id": "Q13",
+      "sentence": {
+        "sentence": "Among patients with chronic kidney disease, regardless of the presence or absence of diabetes, the risk of a composite of a sustained decline in the estimated GFR of at least 50%, end-stage kidney disease, or death from renal or cardiovascular causes was significantly lower with dapagliflozin than with placebo.",
+        "pmid": "32970396",
+        "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+        "polarity": "unassessed",
+        "source_section": "conclusions"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "忠实陈述CKD复合肾脏/死亡终点；不能据此判定单独死亡率效果。"
+    },
+    {
+      "claim_id": "78067d10d31192f315aa229571b1a6a5672f14a5727de99ef3432a7a99058da6",
+      "query_id": "Q13",
+      "sentence": {
+        "sentence": "The hazard ratio for the composite of a sustained decline in the estimated GFR of at least 50%, end-stage kidney disease, or death from renal causes was 0.56 (95% CI, 0.45 to 0.68; P<0.001), and the hazard ratio for the composite of death from cardiovascular causes or hospitalization for heart failure was 0.71 (95% CI, 0.55 to 0.92; P = 0.009).",
+        "pmid": "32970396",
+        "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "完整保留两个复合终点的HR，仍不能当作单独死亡率结果。"
+    },
+    {
+      "claim_id": "39ed0176c8cd77867f8e878d120e3d4044b1615122cd89e04c02e3bc84b2b3cf",
+      "query_id": "Q13",
+      "sentence": {
+        "sentence": "Death occurred in 101 participants (4.7%) in the dapagliflozin group and 146 participants (6.8%) in the placebo group (hazard ratio, 0.69; 95% CI, 0.53 to 0.88; P = 0.004).",
+        "pmid": "32970396",
+        "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "CKD两组死亡人数、比例、HR和区间均与源摘要一致，直接涉及所问死亡率。"
+    },
+    {
+      "claim_id": "86c7c38c482c970f616521a98ee62fcb096d446e39c140ac6a5770c71138a553",
+      "query_id": "Q14",
+      "sentence": {
+        "sentence": "Among patients with chronic kidney disease, regardless of the presence or absence of diabetes, the risk of a composite of a sustained decline in the estimated GFR of at least 50%, end-stage kidney disease, or death from renal or cardiovascular causes was significantly lower with dapagliflozin than with placebo.",
+        "pmid": "32970396",
+        "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+        "polarity": "unassessed",
+        "source_section": "conclusions"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "忠实陈述CKD复合肾脏/死亡终点；不能据此判定单独死亡率效果。"
+    },
+    {
+      "claim_id": "2a26e608124a7fcfdcecb432f36059551d2eb2e92e1b49e83cf55af4ac9ad779",
+      "query_id": "Q14",
+      "sentence": {
+        "sentence": "The hazard ratio for the composite of a sustained decline in the estimated GFR of at least 50%, end-stage kidney disease, or death from renal causes was 0.56 (95% CI, 0.45 to 0.68; P<0.001), and the hazard ratio for the composite of death from cardiovascular causes or hospitalization for heart failure was 0.71 (95% CI, 0.55 to 0.92; P = 0.009).",
+        "pmid": "32970396",
+        "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "完整保留两个复合终点的HR，仍不能当作单独死亡率结果。"
+    },
+    {
+      "claim_id": "d55f2e91f9f607b0b7ee717c35a1b05400b1a90a9e04338998f8dd8eeaacc7d7",
+      "query_id": "Q14",
+      "sentence": {
+        "sentence": "Death occurred in 101 participants (4.7%) in the dapagliflozin group and 146 participants (6.8%) in the placebo group (hazard ratio, 0.69; 95% CI, 0.53 to 0.88; P = 0.004).",
+        "pmid": "32970396",
+        "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "CKD两组死亡人数、比例、HR和区间均与源摘要一致，直接涉及所问死亡率。"
+    },
+    {
+      "claim_id": "89624f97593e756158a54e5d83a3a15f0a57c83ef0d88e81e3b18f19164d7b5a",
+      "query_id": "Q15",
+      "sentence": {
+        "sentence": "Among patients with heart failure and a reduced ejection fraction, the risk of worsening heart failure or death from cardiovascular causes was lower among those who received dapagliflozin than among those who received placebo, regardless of the presence or absence of diabetes.",
+        "pmid": "31535829",
+        "title": "Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction.",
+        "polarity": "unassessed",
+        "source_section": "conclusions"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "HFrEF复合终点表述忠实，但不能替代单独死亡率比较。"
+    },
+    {
+      "claim_id": "3840e6a2cd62bfe3ddd57bc1ad7be60e85790d7847bf31d735da58d0da05ad4c",
+      "query_id": "Q15",
+      "sentence": {
+        "sentence": "The hazard ratio for the composite of a sustained decline in the estimated GFR of at least 50%, end-stage kidney disease, or death from renal causes was 0.56 (95% CI, 0.45 to 0.68; P<0.001), and the hazard ratio for the composite of death from cardiovascular causes or hospitalization for heart failure was 0.71 (95% CI, 0.55 to 0.92; P = 0.009).",
+        "pmid": "32970396",
+        "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "CKD复合终点忠实，但入组人群不是所问心衰人群，且是复合结局。"
+    },
+    {
+      "claim_id": "e0aacf7e02fe3e555999f2797b3082b80fe25f2437dd06f27d7b48dadd0ddb1a",
+      "query_id": "Q15",
+      "sentence": {
+        "sentence": "Death from cardiovascular causes occurred in 227 patients (9.6%) in the dapagliflozin group and in 273 patients (11.5%) in the placebo group (hazard ratio, 0.82; 95% CI, 0.69 to 0.98); 276 patients (11.6%) and 329 patients (13.9%), respectively, died from any cause (hazard ratio, 0.83; 95% CI, 0.71 to 0.97).",
+        "pmid": "31535829",
+        "title": "Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "DAPA-HF心血管死亡与全因死亡结果完整保留组别、人数、HR和区间。"
+    },
+    {
+      "claim_id": "d48ab5ceeed549194f7ed5c9dba8777bc9f4921c3d4fb66578eb7c5ca3b02a55",
+      "query_id": "Q15",
+      "sentence": {
+        "sentence": "Death occurred in 101 participants (4.7%) in the dapagliflozin group and 146 participants (6.8%) in the placebo group (hazard ratio, 0.69; 95% CI, 0.53 to 0.88; P = 0.004).",
+        "pmid": "32970396",
+        "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "死亡数值忠实于DAPA-CKD，但不能当作心衰入组人群的结果。"
+    },
+    {
+      "claim_id": "8ba3fd11b8f7e9027f76fd65f7834615cd998ce8ae2fcc49bc342305fe7c4574",
+      "query_id": "Q16",
+      "sentence": {
+        "sentence": "Among patients with heart failure and a reduced ejection fraction, the risk of worsening heart failure or death from cardiovascular causes was lower among those who received dapagliflozin than among those who received placebo, regardless of the presence or absence of diabetes.",
+        "pmid": "31535829",
+        "title": "Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction.",
+        "polarity": "unassessed",
+        "source_section": "conclusions"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "HFrEF复合终点表述忠实，但不能替代单独死亡率比较。"
+    },
+    {
+      "claim_id": "5aeda5531207b1cbc03896faf61ea1243bc05e75bb17956d795087ca6d4a8ecf",
+      "query_id": "Q16",
+      "sentence": {
+        "sentence": "The hazard ratio for the composite of a sustained decline in the estimated GFR of at least 50%, end-stage kidney disease, or death from renal causes was 0.56 (95% CI, 0.45 to 0.68; P<0.001), and the hazard ratio for the composite of death from cardiovascular causes or hospitalization for heart failure was 0.71 (95% CI, 0.55 to 0.92; P = 0.009).",
+        "pmid": "32970396",
+        "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "CKD复合终点忠实，但入组人群不是所问心衰人群，且是复合结局。"
+    },
+    {
+      "claim_id": "a2f6506ac7ce9987f88de6aba155630c7cb8d6e421fa86ada81fe9d640b60bfe",
+      "query_id": "Q16",
+      "sentence": {
+        "sentence": "Death from cardiovascular causes occurred in 227 patients (9.6%) in the dapagliflozin group and in 273 patients (11.5%) in the placebo group (hazard ratio, 0.82; 95% CI, 0.69 to 0.98); 276 patients (11.6%) and 329 patients (13.9%), respectively, died from any cause (hazard ratio, 0.83; 95% CI, 0.71 to 0.97).",
+        "pmid": "31535829",
+        "title": "Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "DAPA-HF心血管死亡与全因死亡结果完整保留组别、人数、HR和区间。"
+    },
+    {
+      "claim_id": "da3e8eee6339020847a6027f908e8b36c41cc45059b1021f80400be2e57dd200",
+      "query_id": "Q16",
+      "sentence": {
+        "sentence": "Death occurred in 101 participants (4.7%) in the dapagliflozin group and 146 participants (6.8%) in the placebo group (hazard ratio, 0.69; 95% CI, 0.53 to 0.88; P = 0.004).",
+        "pmid": "32970396",
+        "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "死亡数值忠实于DAPA-CKD，但不能当作心衰入组人群的结果。"
+    },
+    {
+      "claim_id": "a9364901b59ca311630167200c4f24e1742b6564b21665c2a7a62e929abc75b8",
+      "query_id": "Q17",
+      "sentence": {
+        "sentence": "At final analysis (median follow-up of 44·5 months [IQR 39·7-49·8]), median overall survival was not reached (NR; 95% CI 49·2-NR) with pembrolizumab vs 36·7 months (27·6-NR) with chemotherapy (hazard ratio [HR] 0·74; 95% CI 0·53-1·03; p=0·036).",
+        "pmid": "35427471",
+        "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+        "polarity": "unassessed",
+        "source_section": "findings"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "最终OS数值、HR、p值与来源一致，后续两句明确统计阈值，未自行宣称OS显著获益。"
+    },
+    {
+      "claim_id": "ff9f0320b6f34537376490d26d47a3fe31a582c21c25e89dcd4f27d5b7bb4f2d",
+      "query_id": "Q17",
+      "sentence": {
+        "sentence": "Superiority of pembrolizumab versus chemotherapy for overall survival was not demonstrated because the prespecified α of 0·025 needed for statistical significance was not achieved.",
+        "pmid": "35427471",
+        "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+        "polarity": "unassessed",
+        "source_section": "findings"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "保留预设α=0.025未达到的说明，不能把p=0.036直接解释为显著。"
+    },
+    {
+      "claim_id": "8e6d54a3834e4d1d23465f7c4837bf67587313a847b975ac257567cb3319b5b7",
+      "query_id": "Q17",
+      "sentence": {
+        "sentence": "In this updated analysis, although pembrolizumab continued to show durable antitumour activity and fewer treatment-related adverse events compared with chemotherapy, there was no significant difference in overall survival between the two treatment groups.",
+        "pmid": "35427471",
+        "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+        "polarity": "unassessed",
+        "source_section": "interpretation"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "最终解读明确OS无显著差异，不用PFS获益替代OS。"
+    },
+    {
+      "claim_id": "9642a63996a877d468602e26df748cc823de2ef24d0d2d7671d15caab7aa4e36",
+      "query_id": "Q18",
+      "sentence": {
+        "sentence": "At final analysis (median follow-up of 44·5 months [IQR 39·7-49·8]), median overall survival was not reached (NR; 95% CI 49·2-NR) with pembrolizumab vs 36·7 months (27·6-NR) with chemotherapy (hazard ratio [HR] 0·74; 95% CI 0·53-1·03; p=0·036).",
+        "pmid": "35427471",
+        "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+        "polarity": "unassessed",
+        "source_section": "findings"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "最终OS数值、HR、p值与来源一致，后续两句明确统计阈值，未自行宣称OS显著获益。"
+    },
+    {
+      "claim_id": "4439ee38723e7ca0dad27ae546b6d89c0d4e6ccb14e454068f88bd5fc3ea0de1",
+      "query_id": "Q18",
+      "sentence": {
+        "sentence": "Superiority of pembrolizumab versus chemotherapy for overall survival was not demonstrated because the prespecified α of 0·025 needed for statistical significance was not achieved.",
+        "pmid": "35427471",
+        "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+        "polarity": "unassessed",
+        "source_section": "findings"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "保留预设α=0.025未达到的说明，不能把p=0.036直接解释为显著。"
+    },
+    {
+      "claim_id": "c1a33050d8571aec3c44afe924f198d24948c3f50a3c8939c248f13649384995",
+      "query_id": "Q18",
+      "sentence": {
+        "sentence": "In this updated analysis, although pembrolizumab continued to show durable antitumour activity and fewer treatment-related adverse events compared with chemotherapy, there was no significant difference in overall survival between the two treatment groups.",
+        "pmid": "35427471",
+        "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+        "polarity": "unassessed",
+        "source_section": "interpretation"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "最终解读明确OS无显著差异，不用PFS获益替代OS。"
+    },
+    {
+      "claim_id": "ca19cfce1f412512627f5a26b54f12b034a38fc84a8ad690042c53ce460f3122",
+      "query_id": "Q19",
+      "sentence": {
+        "sentence": "Cancer was the major contributor to the higher mortality in the aspirin group, accounting for 1.6 excess deaths per 1000 person-years.",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "每千人年1.6例超额癌症死亡与原文一致，属于所问死亡结局。"
+    },
+    {
+      "claim_id": "b549d53d7670ebbe2cf4111a9ea0fa440da7e318264a435eb6e025e2d0eadec9",
+      "query_id": "Q19",
+      "sentence": {
+        "sentence": "Higher all-cause mortality was observed among apparently healthy older adults who received daily aspirin than among those who received placebo and was attributed primarily to cancer-related death.",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed",
+        "source_section": "conclusions"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "结论使用observed并保留健康老年人和癌症死亡解释；仍未摘录原文另句谨慎提示，这一边界保留。"
+    },
+    {
+      "claim_id": "99c95242c7964ae72263baf32431a0fcde9db5c2b4e81463a5ed7b8ebb55f937",
+      "query_id": "Q19",
+      "sentence": {
+        "sentence": "The risk of death from any cause was 12.7 events per 1000 person-years in the aspirin group and 11.1 events per 1000 person-years in the placebo group (hazard ratio, 1.14; 95% confidence interval [CI], 1.01 to 1.29).",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "两组全因死亡事件率、HR和区间完整，未改写为因果判断。"
+    },
+    {
+      "claim_id": "d8d928f071820bb05bde64e8ce0133a238050d98d77c2cf902af30868ab271c8",
+      "query_id": "Q19",
+      "sentence": {
+        "sentence": "Cancer-related death occurred in 3.1% of the participants in the aspirin group and in 2.3% of those in the placebo group (hazard ratio, 1.31; 95% CI, 1.10 to 1.56).",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "癌症死亡百分比、HR和区间与原文一致，没有夸大为所有癌症风险。"
+    },
+    {
+      "claim_id": "a023a976a38af1d6ffd17ae62a579720004a071ff346e402d8cd4b891c5dbd5a",
+      "query_id": "Q20",
+      "sentence": {
+        "sentence": "Cancer was the major contributor to the higher mortality in the aspirin group, accounting for 1.6 excess deaths per 1000 person-years.",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "每千人年1.6例超额癌症死亡与原文一致，属于所问死亡结局。"
+    },
+    {
+      "claim_id": "5ad21a1bd654b8724ace8a223a0504bd1078d802b1e99037f9d44191a3a0ba9d",
+      "query_id": "Q20",
+      "sentence": {
+        "sentence": "Higher all-cause mortality was observed among apparently healthy older adults who received daily aspirin than among those who received placebo and was attributed primarily to cancer-related death.",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed",
+        "source_section": "conclusions"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "结论使用observed并保留健康老年人和癌症死亡解释；仍未摘录原文另句谨慎提示，这一边界保留。"
+    },
+    {
+      "claim_id": "3fb49cfda373a43170d6a80ab8cb506d72f15af24fc7b87391184c24927695e4",
+      "query_id": "Q20",
+      "sentence": {
+        "sentence": "The risk of death from any cause was 12.7 events per 1000 person-years in the aspirin group and 11.1 events per 1000 person-years in the placebo group (hazard ratio, 1.14; 95% confidence interval [CI], 1.01 to 1.29).",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "两组全因死亡事件率、HR和区间完整，未改写为因果判断。"
+    },
+    {
+      "claim_id": "5da98d7c9bb3f0a3d27cf63b2866b84105f93a33a8b0d08ee6d4c727351d121e",
+      "query_id": "Q20",
+      "sentence": {
+        "sentence": "Cancer-related death occurred in 3.1% of the participants in the aspirin group and in 2.3% of those in the placebo group (hazard ratio, 1.31; 95% CI, 1.10 to 1.56).",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "癌症死亡百分比、HR和区间与原文一致，没有夸大为所有癌症风险。"
+    },
+    {
+      "claim_id": "25aa8c9c15c8b738b2661e39410df0dd322b4013663a92f5a932aea49afecc77",
+      "query_id": "Q21",
+      "sentence": {
+        "sentence": "Aspirin use in healthy elderly persons did not prolong disability-free survival over a period of 5 years but led to a higher rate of major hemorrhage than placebo.",
+        "pmid": "30221596",
+        "title": "Effect of Aspirin on Disability-free Survival in the Healthy Elderly.",
+        "polarity": "unassessed",
+        "source_section": "conclusions"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "ASPREE结论保留健康老年人、无残疾生存和更高出血率，没有将出血说成获益。"
+    },
+    {
+      "claim_id": "26dc55c4e67850d21fe3153dd4c710e110603c7be92fb700f65f48a790db5f27",
+      "query_id": "Q21",
+      "sentence": {
+        "sentence": "The rate of major hemorrhage was higher in the aspirin group than in the placebo group (3.8% vs. 2.8%; hazard ratio, 1.38; 95% CI, 1.18 to 1.62; P<0.001).",
+        "pmid": "30221596",
+        "title": "Effect of Aspirin on Disability-free Survival in the Healthy Elderly.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "严重出血3.8%对2.8%、HR1.38、区间与p值完整，vs.不再截断。"
+    },
+    {
+      "claim_id": "60656294f24ec8a1ab8a5abf5f5a3daf0da27c2c5d5490f6a75cb5b3f1656926",
+      "query_id": "Q22",
+      "sentence": {
+        "sentence": "Aspirin use in healthy elderly persons did not prolong disability-free survival over a period of 5 years but led to a higher rate of major hemorrhage than placebo.",
+        "pmid": "30221596",
+        "title": "Effect of Aspirin on Disability-free Survival in the Healthy Elderly.",
+        "polarity": "unassessed",
+        "source_section": "conclusions"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "ASPREE结论保留健康老年人、无残疾生存和更高出血率，没有将出血说成获益。"
+    },
+    {
+      "claim_id": "62a9808a355836d59cab104551132d22831d0a2cc7128b7074866a1317007890",
+      "query_id": "Q22",
+      "sentence": {
+        "sentence": "The rate of major hemorrhage was higher in the aspirin group than in the placebo group (3.8% vs. 2.8%; hazard ratio, 1.38; 95% CI, 1.18 to 1.62; P<0.001).",
+        "pmid": "30221596",
+        "title": "Effect of Aspirin on Disability-free Survival in the Healthy Elderly.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "严重出血3.8%对2.8%、HR1.38、区间与p值完整，vs.不再截断。"
+    },
+    {
+      "claim_id": "aa0fe5296604f5cab124bf73c4284fce310c73399659ff89b4125fc455ada218",
+      "query_id": "Q23",
+      "sentence": {
+        "sentence": "With a minimum follow-up of 10 years, median overall survival was 71.9 months with nivolumab plus ipilimumab, 36.9 months with nivolumab, and 19.9 months with ipilimumab.",
+        "pmid": "39282897",
+        "title": "Final, 10-Year Outcomes with Nivolumab plus Ipilimumab in Advanced Melanoma.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "十年结果分别保留联合、纳武利尤单药、伊匹木单药OS，未将联合结果当单药。"
+    },
+    {
+      "claim_id": "24a4ea42013395b5e5eb12dc29714d4ed394c6af2c7992c29b881dc1d6da6b5d",
+      "query_id": "Q24",
+      "sentence": {
+        "sentence": "With a minimum follow-up of 10 years, median overall survival was 71.9 months with nivolumab plus ipilimumab, 36.9 months with nivolumab, and 19.9 months with ipilimumab.",
+        "pmid": "39282897",
+        "title": "Final, 10-Year Outcomes with Nivolumab plus Ipilimumab in Advanced Melanoma.",
+        "polarity": "unassessed",
+        "source_section": "results"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "十年结果分别保留联合、纳武利尤单药、伊匹木单药OS，未将联合结果当单药。"
+    }
+  ]
+}

@@ -39,6 +39,51 @@ class TestPico(unittest.TestCase):
         self.assertEqual(p["intervention"], [])
         self.assertEqual(p["outcome"], [])
 
+    def test_generic_diabetes_and_incident_diabetes_have_distinct_roles(self):
+        self.assertEqual(extract_pico("糖尿病患者")["population"], ["diabetes"])
+        self.assertEqual(extract_pico("新发糖尿病风险")["population"], [])
+        self.assertEqual(extract_pico("新发糖尿病风险")["outcome"], ["incident diabetes"])
+        self.assertEqual(extract_pico("二甲双胍会增加糖尿病风险吗")["outcome"], ["diabetes"])
+
+    def test_boundaries_and_active_comparator_roles(self):
+        self.assertEqual(extract_pico("nystatin")["intervention"], [])
+        self.assertEqual(extract_pico("metformin versus aspirin")["comparison"], ["aspirin"])
+        self.assertEqual(extract_pico("nivolumab versus pembrolizumab")["intervention"], ["nivolumab"])
+
+    def test_typed_diabetes_and_specific_cancer_do_not_duplicate_generic_terms(self):
+        self.assertEqual(extract_pico("type 2 diabetes patients")["population"], ["type 2 diabetes"])
+        self.assertEqual(extract_pico("patients with lung cancer")["population"], ["lung cancer"])
+
+
+
+
+class LabelledPicoTests(unittest.TestCase):
+    def test_explicit_fields_recognize_unknown_english_terms_in_their_given_role(self):
+        p=extract_pico("P: adults with bronchiectasis; I: budesonide; C: placebo; O: exacerbations")
+        self.assertEqual(p['population'],['adults','bronchiectasis'])
+        self.assertEqual(p['intervention'],['budesonide'])
+        self.assertEqual(p['comparison'],['placebo'])
+        self.assertEqual(p['outcome'],['exacerbations'])
+
+    def test_chinese_labels_and_patients_suffix_do_not_create_spurious_terms(self):
+        p=extract_pico("人群：心衰患者；干预：SGLT2 抑制剂；对照：常规治疗；结局：全因死亡率")
+        self.assertEqual(p['population'],['heart failure'])
+        self.assertEqual(p['intervention'],['sglt2 inhibitor'])
+        self.assertEqual(p['comparison'],['standard care'])
+        self.assertEqual(p['outcome'],['mortality'])
+
+    def test_specific_statins_keep_comparator_identity(self):
+        p=extract_pico("阿托伐他汀比瑞舒伐他汀能降低死亡率吗")
+        self.assertEqual(p['intervention'],['atorvastatin'])
+        self.assertEqual(p['comparison'],['rosuvastatin'])
+
+    def test_common_aliases_do_not_invent_other_fields(self):
+        p=extract_pico("older adults with asthma received sglt-2 inhibitors for hospitalizations")
+        self.assertEqual(p['population'],['elderly','asthma'])
+        self.assertEqual(p['intervention'],['sglt2 inhibitor'])
+        self.assertEqual(p['outcome'],['hospitalization'])
+        self.assertEqual(p['comparison'],[])
+
 
 if __name__ == "__main__":
     unittest.main()

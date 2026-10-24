@@ -23,3 +23,6 @@ secrets.local.json
 data/integrity_signals.jsonl
 data/all_pmids_for_signals.txt
 oa_key1.json
+
+# Local visual inspection artifacts
+.taste-skill/

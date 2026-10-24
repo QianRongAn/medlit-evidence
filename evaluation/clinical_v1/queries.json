@@ -1,0 +1,930 @@
+[
+  {
+    "id": "Q01",
+    "family": "select_cv",
+    "language": "en",
+    "query": "semaglutide obesity cardiovascular events",
+    "gold_pico": {
+      "population": [
+        "obesity"
+      ],
+      "intervention": [
+        "semaglutide"
+      ],
+      "comparison": [],
+      "outcome": [
+        "cardiovascular risk"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "37952131",
+      "38740993"
+    ],
+    "pico_matched_pmids": [
+      "37952131"
+    ],
+    "rationale": "SELECT报告心血管复合结局；体重次分析仅在背景引用该心血管结果。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q02",
+    "family": "select_cv",
+    "language": "zh",
+    "query": "司美格鲁肽对肥胖患者的心血管事件有什么影响？",
+    "gold_pico": {
+      "population": [
+        "obesity"
+      ],
+      "intervention": [
+        "semaglutide"
+      ],
+      "comparison": [],
+      "outcome": [
+        "cardiovascular risk"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "37952131",
+      "38740993"
+    ],
+    "pico_matched_pmids": [
+      "37952131"
+    ],
+    "rationale": "同一SELECT心血管问题的中文表达。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q03",
+    "family": "select_weight",
+    "language": "en",
+    "query": "semaglutide versus placebo obesity weight loss",
+    "gold_pico": {
+      "population": [
+        "obesity"
+      ],
+      "intervention": [
+        "semaglutide"
+      ],
+      "comparison": [
+        "placebo"
+      ],
+      "outcome": [
+        "weight loss"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "38740993"
+    ],
+    "pico_matched_pmids": [
+      "38740993"
+    ],
+    "rationale": "208周体重变化是次分析直接报告结局；原始心血管摘要无体重变化结果。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q04",
+    "family": "select_weight",
+    "language": "zh",
+    "query": "肥胖患者使用司美格鲁肽与安慰剂相比减重效果如何？",
+    "gold_pico": {
+      "population": [
+        "obesity"
+      ],
+      "intervention": [
+        "semaglutide"
+      ],
+      "comparison": [
+        "placebo"
+      ],
+      "outcome": [
+        "weight loss"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "38740993"
+    ],
+    "pico_matched_pmids": [
+      "38740993"
+    ],
+    "rationale": "同一SELECT减重比较的中文表达。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q05",
+    "family": "surmount",
+    "language": "en",
+    "query": "tirzepatide obstructive sleep apnea apnea-hypopnea index",
+    "gold_pico": {
+      "population": [
+        "obstructive sleep apnea"
+      ],
+      "intervention": [
+        "tirzepatide"
+      ],
+      "comparison": [],
+      "outcome": [
+        "apnea-hypopnea index"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "38912654"
+    ],
+    "pico_matched_pmids": [
+      "38912654"
+    ],
+    "rationale": "SURMOUNT-OSA直接报告AHI变化。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q06",
+    "family": "surmount",
+    "language": "zh",
+    "query": "替尔泊肽对阻塞性睡眠呼吸暂停患者的呼吸暂停低通气指数有何影响？",
+    "gold_pico": {
+      "population": [
+        "obstructive sleep apnea"
+      ],
+      "intervention": [
+        "tirzepatide"
+      ],
+      "comparison": [],
+      "outcome": [
+        "apnea-hypopnea index"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "38912654"
+    ],
+    "pico_matched_pmids": [
+      "38912654"
+    ],
+    "rationale": "未在问题明确肥胖和对照，不额外添加到PICO。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q07",
+    "family": "finearts",
+    "language": "en",
+    "query": "finerenone versus placebo heart failure hospitalization",
+    "gold_pico": {
+      "population": [
+        "heart failure"
+      ],
+      "intervention": [
+        "finerenone"
+      ],
+      "comparison": [
+        "placebo"
+      ],
+      "outcome": [
+        "hospitalization"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "39225278"
+    ],
+    "pico_matched_pmids": [
+      "39225278"
+    ],
+    "rationale": "FINEARTS-HF恶化事件定义含非计划住院；不将复合结局解释为单独死亡获益。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q08",
+    "family": "finearts",
+    "language": "zh",
+    "query": "非奈利酮与安慰剂相比对心衰患者住院有何影响？",
+    "gold_pico": {
+      "population": [
+        "heart failure"
+      ],
+      "intervention": [
+        "finerenone"
+      ],
+      "comparison": [
+        "placebo"
+      ],
+      "outcome": [
+        "hospitalization"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "39225278"
+    ],
+    "pico_matched_pmids": [
+      "39225278"
+    ],
+    "rationale": "同一心衰住院比较的中文表达。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q09",
+    "family": "notus",
+    "language": "en",
+    "query": "dupilumab COPD exacerbations",
+    "gold_pico": {
+      "population": [
+        "copd"
+      ],
+      "intervention": [
+        "dupilumab"
+      ],
+      "comparison": [],
+      "outcome": [
+        "exacerbations"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "38767614"
+    ],
+    "pico_matched_pmids": [
+      "38767614"
+    ],
+    "rationale": "NOTUS直接报告COPD急性加重年化发生率。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q10",
+    "family": "notus",
+    "language": "zh",
+    "query": "度普利尤单抗对慢阻肺患者急性加重有什么影响？",
+    "gold_pico": {
+      "population": [
+        "copd"
+      ],
+      "intervention": [
+        "dupilumab"
+      ],
+      "comparison": [],
+      "outcome": [
+        "exacerbations"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "38767614"
+    ],
+    "pico_matched_pmids": [
+      "38767614"
+    ],
+    "rationale": "同一COPD急性加重问题的中文表达。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q11",
+    "family": "clarity",
+    "language": "en",
+    "query": "lecanemab early Alzheimer's disease cognitive decline",
+    "gold_pico": {
+      "population": [
+        "early alzheimer's disease"
+      ],
+      "intervention": [
+        "lecanemab"
+      ],
+      "comparison": [],
+      "outcome": [
+        "cognitive decline"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "36449413"
+    ],
+    "pico_matched_pmids": [
+      "36449413"
+    ],
+    "rationale": "Clarity AD报告早期AD认知与功能下降；不是逆转疾病。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q12",
+    "family": "clarity",
+    "language": "zh",
+    "query": "仑卡奈单抗对早期阿尔茨海默病患者认知下降有什么影响？",
+    "gold_pico": {
+      "population": [
+        "early alzheimer's disease"
+      ],
+      "intervention": [
+        "lecanemab"
+      ],
+      "comparison": [],
+      "outcome": [
+        "cognitive decline"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "36449413"
+    ],
+    "pico_matched_pmids": [
+      "36449413"
+    ],
+    "rationale": "同一早期AD认知下降问题的中文表达。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q13",
+    "family": "dapa_ckd",
+    "language": "en",
+    "query": "dapagliflozin chronic kidney disease mortality",
+    "gold_pico": {
+      "population": [
+        "chronic kidney disease"
+      ],
+      "intervention": [
+        "dapagliflozin"
+      ],
+      "comparison": [],
+      "outcome": [
+        "mortality"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "32970396",
+      "31535829"
+    ],
+    "pico_matched_pmids": [
+      "32970396"
+    ],
+    "rationale": "DAPA-CKD报告CKD人群死亡；DAPA-HF人群是HFrEF，不能代替CKD。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q14",
+    "family": "dapa_ckd",
+    "language": "zh",
+    "query": "达格列净对慢性肾病患者死亡率有什么影响？",
+    "gold_pico": {
+      "population": [
+        "chronic kidney disease"
+      ],
+      "intervention": [
+        "dapagliflozin"
+      ],
+      "comparison": [],
+      "outcome": [
+        "mortality"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "32970396",
+      "31535829"
+    ],
+    "pico_matched_pmids": [
+      "32970396"
+    ],
+    "rationale": "同一CKD死亡问题的中文表达。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q15",
+    "family": "dapa_hf",
+    "language": "en",
+    "query": "dapagliflozin heart failure mortality",
+    "gold_pico": {
+      "population": [
+        "heart failure"
+      ],
+      "intervention": [
+        "dapagliflozin"
+      ],
+      "comparison": [],
+      "outcome": [
+        "mortality"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "31535829",
+      "32970396"
+    ],
+    "pico_matched_pmids": [
+      "31535829"
+    ],
+    "rationale": "DAPA-HF报告HFrEF死亡；DAPA-CKD有心衰住院结局但不是心衰入组人群。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q16",
+    "family": "dapa_hf",
+    "language": "zh",
+    "query": "达格列净对心衰患者死亡率有什么影响？",
+    "gold_pico": {
+      "population": [
+        "heart failure"
+      ],
+      "intervention": [
+        "dapagliflozin"
+      ],
+      "comparison": [],
+      "outcome": [
+        "mortality"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "31535829",
+      "32970396"
+    ],
+    "pico_matched_pmids": [
+      "31535829"
+    ],
+    "rationale": "同一心衰死亡问题的中文表达。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q17",
+    "family": "keynote",
+    "language": "en",
+    "query": "pembrolizumab versus chemotherapy colorectal cancer overall survival",
+    "gold_pico": {
+      "population": [
+        "colorectal cancer"
+      ],
+      "intervention": [
+        "pembrolizumab"
+      ],
+      "comparison": [
+        "chemotherapy"
+      ],
+      "outcome": [
+        "overall survival"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "35427471"
+    ],
+    "pico_matched_pmids": [
+      "35427471"
+    ],
+    "rationale": "KEYNOTE-177最终OS未达预设显著性阈值，PFS获益不能替代OS显著性。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q18",
+    "family": "keynote",
+    "language": "zh",
+    "query": "帕博利珠单抗与化疗相比对结直肠癌患者总生存期有何影响？",
+    "gold_pico": {
+      "population": [
+        "colorectal cancer"
+      ],
+      "intervention": [
+        "pembrolizumab"
+      ],
+      "comparison": [
+        "chemotherapy"
+      ],
+      "outcome": [
+        "overall survival"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "35427471"
+    ],
+    "pico_matched_pmids": [
+      "35427471"
+    ],
+    "rationale": "同一结直肠癌OS比较的中文表达。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q19",
+    "family": "aspree_mortality",
+    "language": "en",
+    "query": "aspirin elderly mortality",
+    "gold_pico": {
+      "population": [
+        "elderly"
+      ],
+      "intervention": [
+        "aspirin"
+      ],
+      "comparison": [],
+      "outcome": [
+        "mortality"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "30221595",
+      "30221596"
+    ],
+    "pico_matched_pmids": [
+      "30221595",
+      "30221596"
+    ],
+    "rationale": "两篇ASPREE摘要均报告死亡事件率；死亡分析要求谨慎解释。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q20",
+    "family": "aspree_mortality",
+    "language": "zh",
+    "query": "阿司匹林对老年人死亡率有什么影响？",
+    "gold_pico": {
+      "population": [
+        "elderly"
+      ],
+      "intervention": [
+        "aspirin"
+      ],
+      "comparison": [],
+      "outcome": [
+        "mortality"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "30221595",
+      "30221596"
+    ],
+    "pico_matched_pmids": [
+      "30221595",
+      "30221596"
+    ],
+    "rationale": "同一老年人死亡问题的中文表达。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q21",
+    "family": "aspree_bleeding",
+    "language": "en",
+    "query": "aspirin versus placebo elderly major hemorrhage",
+    "gold_pico": {
+      "population": [
+        "elderly"
+      ],
+      "intervention": [
+        "aspirin"
+      ],
+      "comparison": [
+        "placebo"
+      ],
+      "outcome": [
+        "major hemorrhage"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "30221596"
+    ],
+    "pico_matched_pmids": [
+      "30221596"
+    ],
+    "rationale": "ASPREE主报告直接报告严重出血；死亡专篇摘要没有该结局。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q22",
+    "family": "aspree_bleeding",
+    "language": "zh",
+    "query": "阿司匹林与安慰剂相比对老年人严重出血有什么影响？",
+    "gold_pico": {
+      "population": [
+        "elderly"
+      ],
+      "intervention": [
+        "aspirin"
+      ],
+      "comparison": [
+        "placebo"
+      ],
+      "outcome": [
+        "major hemorrhage"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "30221596"
+    ],
+    "pico_matched_pmids": [
+      "30221596"
+    ],
+    "rationale": "同一严重出血比较的中文表达。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q23",
+    "family": "checkmate",
+    "language": "en",
+    "query": "nivolumab versus ipilimumab melanoma overall survival",
+    "gold_pico": {
+      "population": [
+        "melanoma"
+      ],
+      "intervention": [
+        "nivolumab"
+      ],
+      "comparison": [
+        "ipilimumab"
+      ],
+      "outcome": [
+        "overall survival"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "39282897"
+    ],
+    "pico_matched_pmids": [
+      "39282897"
+    ],
+    "rationale": "CheckMate067有两单药直接比较；联合组不能当作单药结果。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q24",
+    "family": "checkmate",
+    "language": "zh",
+    "query": "纳武利尤单抗与伊匹木单抗相比对黑色素瘤患者总生存期有何影响？",
+    "gold_pico": {
+      "population": [
+        "melanoma"
+      ],
+      "intervention": [
+        "nivolumab"
+      ],
+      "comparison": [
+        "ipilimumab"
+      ],
+      "outcome": [
+        "overall survival"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "39282897"
+    ],
+    "pico_matched_pmids": [
+      "39282897"
+    ],
+    "rationale": "同一黑色素瘤单药比较的中文表达。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q25",
+    "family": "negative_t1d",
+    "language": "en",
+    "query": "semaglutide type 1 diabetes cardiovascular events",
+    "gold_pico": {
+      "population": [
+        "type 1 diabetes"
+      ],
+      "intervention": [
+        "semaglutide"
+      ],
+      "comparison": [],
+      "outcome": [
+        "cardiovascular risk"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "37952131",
+      "38740993"
+    ],
+    "pico_matched_pmids": [],
+    "rationale": "SELECT排除糖尿病，不能作为1型糖尿病人群直接证据。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q26",
+    "family": "negative_t1d",
+    "language": "zh",
+    "query": "司美格鲁肽对1型糖尿病患者心血管事件有何影响？",
+    "gold_pico": {
+      "population": [
+        "type 1 diabetes"
+      ],
+      "intervention": [
+        "semaglutide"
+      ],
+      "comparison": [],
+      "outcome": [
+        "cardiovascular risk"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "37952131",
+      "38740993"
+    ],
+    "pico_matched_pmids": [],
+    "rationale": "候选池中无1型糖尿病直接证据，不代表PubMed无证据。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q27",
+    "family": "negative_children",
+    "language": "en",
+    "query": "dapagliflozin children heart failure mortality",
+    "gold_pico": {
+      "population": [
+        "children",
+        "heart failure"
+      ],
+      "intervention": [
+        "dapagliflozin"
+      ],
+      "comparison": [],
+      "outcome": [
+        "mortality"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "31535829",
+      "32970396"
+    ],
+    "pico_matched_pmids": [],
+    "rationale": "两项DAPA研究均不能作为儿童心衰人群直接证据。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q28",
+    "family": "negative_children",
+    "language": "zh",
+    "query": "达格列净对儿童心衰患者死亡率有何影响？",
+    "gold_pico": {
+      "population": [
+        "children",
+        "heart failure"
+      ],
+      "intervention": [
+        "dapagliflozin"
+      ],
+      "comparison": [],
+      "outcome": [
+        "mortality"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "31535829",
+      "32970396"
+    ],
+    "pico_matched_pmids": [],
+    "rationale": "候选池无儿童心衰证据；不能外推成人结果。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q29",
+    "family": "negative_breast",
+    "language": "en",
+    "query": "pembrolizumab versus chemotherapy breast cancer overall survival",
+    "gold_pico": {
+      "population": [
+        "breast cancer"
+      ],
+      "intervention": [
+        "pembrolizumab"
+      ],
+      "comparison": [
+        "chemotherapy"
+      ],
+      "outcome": [
+        "overall survival"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "35427471"
+    ],
+    "pico_matched_pmids": [],
+    "rationale": "KEYNOTE177是结直肠癌，不能回答乳腺癌。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  },
+  {
+    "id": "Q30",
+    "family": "negative_breast",
+    "language": "zh",
+    "query": "帕博利珠单抗与化疗相比对乳腺癌患者总生存期有何影响？",
+    "gold_pico": {
+      "population": [
+        "breast cancer"
+      ],
+      "intervention": [
+        "pembrolizumab"
+      ],
+      "comparison": [
+        "chemotherapy"
+      ],
+      "outcome": [
+        "overall survival"
+      ]
+    },
+    "topic_relevant_pmids": [
+      "35427471"
+    ],
+    "pico_matched_pmids": [],
+    "rationale": "候选池中无乳腺癌直接证据，不代表PubMed无证据。",
+    "annotation": {
+      "author": "Codex GPT-6",
+      "kind": "model_authored_source_review",
+      "expert_status": "pending"
+    }
+  }
+]

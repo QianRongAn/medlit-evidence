@@ -1,0 +1,32 @@
+{
+  "version": "clinical_v1",
+  "created_at": "2026-10-18",
+  "frozen_before_run": true,
+  "annotation_kind": "model_authored_source_review",
+  "expert_review_status": "pending",
+  "baseline_commit": "d784cafb62606aabafde83651ef74ece70427619",
+  "scope": "closed_corpus_snapshot_not_live_pubmed; paired_languages_not_independent",
+  "retrieval_k": 5,
+  "answer_mode": "extractive",
+  "files": {
+    "corpus.json": "3d5cdf9861aefc2674e00724f3731e99bf3d870f106ab4a4f0fd3b028b9139de",
+    "queries.json": "786ffcad2f0f01efdb69c6846e3dd1b1bffc7e6e8aaf109991d73a6842b186c2",
+    "judgments.csv": "70edc3e68c2c857dd0fe54217afbf825e9404bcf41b113eb871983f9de7931af"
+  },
+  "source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/37952131/",
+    "https://pubmed.ncbi.nlm.nih.gov/38912654/",
+    "https://pubmed.ncbi.nlm.nih.gov/39225278/",
+    "https://pubmed.ncbi.nlm.nih.gov/38767614/",
+    "https://pubmed.ncbi.nlm.nih.gov/36449413/",
+    "https://pubmed.ncbi.nlm.nih.gov/32970396/",
+    "https://pubmed.ncbi.nlm.nih.gov/35427471/",
+    "https://pubmed.ncbi.nlm.nih.gov/31535829/",
+    "https://pubmed.ncbi.nlm.nih.gov/30221595/",
+    "https://pubmed.ncbi.nlm.nih.gov/30221596/",
+    "https://pubmed.ncbi.nlm.nih.gov/39282897/",
+    "https://pubmed.ncbi.nlm.nih.gov/38740993/"
+  ],
+  "selection": "12 primary trial reports/analyses, purposive 10 trial families; not random clinical traffic",
+  "source": "NCBI efetch original XML parsed by repository; fetched 2026-10-18"
+}

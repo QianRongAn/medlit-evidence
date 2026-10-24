@@ -1,0 +1,351 @@
+{
+  "benchmark_sha256": "2fccf8e1c11fad26677c3f5b62c3260ed87d9c277e53f91c43e338085b4792a4",
+  "run_sha256": "ef5c9d91ead6f17b25d916619ffd40805aa25d1c994f18aa4fae95f02172540a",
+  "annotation_kind": "model_authored_source_review",
+  "expert_review_status": "pending",
+  "summary_reviewer_kind": "model_authored_source_review",
+  "scope": "closed_corpus_snapshot_not_live_pubmed; paired_languages_not_independent",
+  "mode_requested": "extractive",
+  "llm_success_queries": 0,
+  "all": {
+    "query_n": 30,
+    "topic_precision_at_5": {
+      "numerator": 30,
+      "denominator": 30,
+      "rate": 1.0
+    },
+    "pico_document_match_at_5": {
+      "numerator": 26,
+      "denominator": 30,
+      "rate": 0.8666666666666667
+    },
+    "closed_pool_recall_at_5": {
+      "numerator": 26,
+      "denominator": 26,
+      "rate": 1.0
+    },
+    "answerable_query_hit_at_5": {
+      "numerator": 24,
+      "denominator": 24,
+      "rate": 1.0
+    },
+    "pico_query_exact": {
+      "numerator": 30,
+      "denominator": 30,
+      "rate": 1.0
+    },
+    "answer_coverage": {
+      "numerator": 22,
+      "denominator": 24,
+      "rate": 0.9166666666666666
+    },
+    "no_evidence_abstention": {
+      "numerator": 6,
+      "denominator": 6,
+      "rate": 1.0
+    },
+    "claim_review_coverage": {
+      "numerator": 62,
+      "denominator": 62,
+      "rate": 1.0
+    },
+    "summary_faithfulness": {
+      "numerator": 62,
+      "denominator": 62,
+      "rate": 1.0
+    },
+    "summary_responsiveness": {
+      "numerator": 48,
+      "denominator": 62,
+      "rate": 0.7741935483870968
+    },
+    "supported_answer_coverage": {
+      "numerator": 22,
+      "denominator": 24,
+      "rate": 0.9166666666666666
+    },
+    "pico_fields": {
+      "population": {
+        "tp": 32,
+        "fp": 0,
+        "fn": 0,
+        "exact": 30
+      },
+      "intervention": {
+        "tp": 30,
+        "fp": 0,
+        "fn": 0,
+        "exact": 30
+      },
+      "comparison": {
+        "tp": 12,
+        "fp": 0,
+        "fn": 0,
+        "exact": 30
+      },
+      "outcome": {
+        "tp": 30,
+        "fp": 0,
+        "fn": 0,
+        "exact": 30
+      }
+    }
+  },
+  "by_language": {
+    "en": {
+      "query_n": 15,
+      "topic_precision_at_5": {
+        "numerator": 15,
+        "denominator": 15,
+        "rate": 1.0
+      },
+      "pico_document_match_at_5": {
+        "numerator": 13,
+        "denominator": 15,
+        "rate": 0.8666666666666667
+      },
+      "closed_pool_recall_at_5": {
+        "numerator": 13,
+        "denominator": 13,
+        "rate": 1.0
+      },
+      "answerable_query_hit_at_5": {
+        "numerator": 12,
+        "denominator": 12,
+        "rate": 1.0
+      },
+      "pico_query_exact": {
+        "numerator": 15,
+        "denominator": 15,
+        "rate": 1.0
+      },
+      "answer_coverage": {
+        "numerator": 11,
+        "denominator": 12,
+        "rate": 0.9166666666666666
+      },
+      "no_evidence_abstention": {
+        "numerator": 3,
+        "denominator": 3,
+        "rate": 1.0
+      },
+      "claim_review_coverage": {
+        "numerator": 31,
+        "denominator": 31,
+        "rate": 1.0
+      },
+      "summary_faithfulness": {
+        "numerator": 31,
+        "denominator": 31,
+        "rate": 1.0
+      },
+      "summary_responsiveness": {
+        "numerator": 24,
+        "denominator": 31,
+        "rate": 0.7741935483870968
+      },
+      "supported_answer_coverage": {
+        "numerator": 11,
+        "denominator": 12,
+        "rate": 0.9166666666666666
+      },
+      "pico_fields": {
+        "population": {
+          "tp": 16,
+          "fp": 0,
+          "fn": 0,
+          "exact": 15
+        },
+        "intervention": {
+          "tp": 15,
+          "fp": 0,
+          "fn": 0,
+          "exact": 15
+        },
+        "comparison": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "exact": 15
+        },
+        "outcome": {
+          "tp": 15,
+          "fp": 0,
+          "fn": 0,
+          "exact": 15
+        }
+      }
+    },
+    "zh": {
+      "query_n": 15,
+      "topic_precision_at_5": {
+        "numerator": 15,
+        "denominator": 15,
+        "rate": 1.0
+      },
+      "pico_document_match_at_5": {
+        "numerator": 13,
+        "denominator": 15,
+        "rate": 0.8666666666666667
+      },
+      "closed_pool_recall_at_5": {
+        "numerator": 13,
+        "denominator": 13,
+        "rate": 1.0
+      },
+      "answerable_query_hit_at_5": {
+        "numerator": 12,
+        "denominator": 12,
+        "rate": 1.0
+      },
+      "pico_query_exact": {
+        "numerator": 15,
+        "denominator": 15,
+        "rate": 1.0
+      },
+      "answer_coverage": {
+        "numerator": 11,
+        "denominator": 12,
+        "rate": 0.9166666666666666
+      },
+      "no_evidence_abstention": {
+        "numerator": 3,
+        "denominator": 3,
+        "rate": 1.0
+      },
+      "claim_review_coverage": {
+        "numerator": 31,
+        "denominator": 31,
+        "rate": 1.0
+      },
+      "summary_faithfulness": {
+        "numerator": 31,
+        "denominator": 31,
+        "rate": 1.0
+      },
+      "summary_responsiveness": {
+        "numerator": 24,
+        "denominator": 31,
+        "rate": 0.7741935483870968
+      },
+      "supported_answer_coverage": {
+        "numerator": 11,
+        "denominator": 12,
+        "rate": 0.9166666666666666
+      },
+      "pico_fields": {
+        "population": {
+          "tp": 16,
+          "fp": 0,
+          "fn": 0,
+          "exact": 15
+        },
+        "intervention": {
+          "tp": 15,
+          "fp": 0,
+          "fn": 0,
+          "exact": 15
+        },
+        "comparison": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "exact": 15
+        },
+        "outcome": {
+          "tp": 15,
+          "fp": 0,
+          "fn": 0,
+          "exact": 15
+        }
+      }
+    }
+  },
+  "by_answer_mode": {
+    "extractive": {
+      "query_n": 30,
+      "topic_precision_at_5": {
+        "numerator": 30,
+        "denominator": 30,
+        "rate": 1.0
+      },
+      "pico_document_match_at_5": {
+        "numerator": 26,
+        "denominator": 30,
+        "rate": 0.8666666666666667
+      },
+      "closed_pool_recall_at_5": {
+        "numerator": 26,
+        "denominator": 26,
+        "rate": 1.0
+      },
+      "answerable_query_hit_at_5": {
+        "numerator": 24,
+        "denominator": 24,
+        "rate": 1.0
+      },
+      "pico_query_exact": {
+        "numerator": 30,
+        "denominator": 30,
+        "rate": 1.0
+      },
+      "answer_coverage": {
+        "numerator": 22,
+        "denominator": 24,
+        "rate": 0.9166666666666666
+      },
+      "no_evidence_abstention": {
+        "numerator": 6,
+        "denominator": 6,
+        "rate": 1.0
+      },
+      "claim_review_coverage": {
+        "numerator": 62,
+        "denominator": 62,
+        "rate": 1.0
+      },
+      "summary_faithfulness": {
+        "numerator": 62,
+        "denominator": 62,
+        "rate": 1.0
+      },
+      "summary_responsiveness": {
+        "numerator": 48,
+        "denominator": 62,
+        "rate": 0.7741935483870968
+      },
+      "supported_answer_coverage": {
+        "numerator": 22,
+        "denominator": 24,
+        "rate": 0.9166666666666666
+      },
+      "pico_fields": {
+        "population": {
+          "tp": 32,
+          "fp": 0,
+          "fn": 0,
+          "exact": 30
+        },
+        "intervention": {
+          "tp": 30,
+          "fp": 0,
+          "fn": 0,
+          "exact": 30
+        },
+        "comparison": {
+          "tp": 12,
+          "fp": 0,
+          "fn": 0,
+          "exact": 30
+        },
+        "outcome": {
+          "tp": 30,
+          "fp": 0,
+          "fn": 0,
+          "exact": 30
+        }
+      }
+    }
+  },
+  "llm_faithfulness": null
+}
