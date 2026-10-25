@@ -1,40 +1,16 @@
-"""结论极性识别、证据冲突检测与置信度评分。
+"""抽取摘要结论并报告完整性；未经验证的语义判定明确弃权。
 
-这是本产品相对通用大模型的核心差异点：不给出"标准答案"，
-而是显式识别每篇文献结论的方向（支持 / 反对 / 中立），
-检测同一问题下是否存在对立的结论（证据冲突），并给出证据置信度。
+获益/伤害措辞不能推导对用户命题的支持/反对，研究类型也不能推导结论
+正确率。在问题与文献的 PICO 对齐及独立评估就绪前，不计算方向或置信度。
 """
-
 import re
-from datetime import date
+from .integrity import document_integrity, is_usable_evidence
 
-from .study_type import GRADE_ORDER
-
-# 强正向短语（明确有益，含"未增加风险"类安全性结论）
-STRONG_POS = [
-    "reduced risk", "reduced mortality", "improved survival", "lower risk",
-    "prolonged survival", "superior", "non-inferior", "noninferior",
-    "no increase in", "did not increase",
-]
-
-# 强负向短语（明确无效 / 有害 / 有争议）
-STRONG_NEG = [
-    "no significant", "no benefit", "no difference", "did not", "failed to",
-    "not associated", "no association", "inconclusive", "conflicting",
-    "controversial", "increased risk", "increased mortality", "higher risk",
-    "higher mortality", "worse", "adverse",
-]
-
-# 弱正向词（可被否定词抵消）
-WEAK_POS = [
-    "reduce", "reduces", "reduced", "reduction", "lower", "lowered",
-    "decrease", "decreased", "improve", "improved", "improvement",
-    "benefit", "beneficial", "effective", "efficacy", "prolong", "prolonged",
-    "fewer", "better", "safe",
-]
-
-NEGATORS = ["no ", "not ", "did not", "failed to", "without", "lack of", "absence of"]
-
+ASSESSMENT_VERSION = "2"
+ASSESSMENT_NOTE = (
+    "尚未验证问题与文献的人群、干预、对照和结局是否一致；"
+    "不自动判断支持、反对或证据冲突，也不计算结论置信度。"
+)
 _SENT_SPLIT = re.compile(r"(?<=[.!?])\s+")
 _CONCLUSION_PREFIX = (
     "conclusion", "conclusions", "findings", "finding", "interpretation",
@@ -42,35 +18,13 @@ _CONCLUSION_PREFIX = (
 )
 _SKIP_PREFIX = ("discussion", "limitation", "limitations", "registration")
 
-GRADE_BASE = {"High": 90, "Moderate": 70, "Low": 50, "Very low": 30, "N/A": 40}
-
-
-def _sentences(text):
-    return [s.strip() for s in _SENT_SPLIT.split(text or "") if len(s.strip()) > 15]
-
-
-def classify_polarity(text):
-    """返回 support / against / neutral。强短语优先，弱正向词受否定词抵消。"""
-    t = (text or "").lower()
-    if any(w in t for w in STRONG_POS):
-        return "support"
-    if any(w in t for w in STRONG_NEG):
-        return "against"
-    if any(w in t for w in WEAK_POS):
-        if any(w in t for w in NEGATORS):
-            return "neutral"
-        return "support"
-    if any(w in t for w in NEGATORS):
-        return "against"
-    return "neutral"
-
 
 def extract_conclusion(doc):
-    """抽取一篇文献的结论句（优先结论标签，否则跳过讨论/局限段取末句）。"""
+    """摘录候选结论原句；不保证该句回答了用户的问题。"""
     text = (doc.get("abstract") or "").strip()
-    sents = _sentences(text)
+    sents = [s.strip() for s in _SENT_SPLIT.split(text) if len(s.strip()) > 15]
     if not sents:
-        return (doc.get("title") or "")
+        return doc.get("title") or ""
     for s in reversed(sents):
         if s.lower().startswith(_CONCLUSION_PREFIX):
             return s
@@ -80,102 +34,60 @@ def extract_conclusion(doc):
     return sents[-1]
 
 
-def _year_int(d):
-    y = d.get("year")
-    if not y:
-        return 0
-    m = re.match(r"(\d{4})", str(y))
-    return int(m.group(1)) if m else 0
-
-
-def compute_confidence(docs, conflict):
-    """0-100 分：证据整体质量（等级加权平均）+ 结论一致性 + 文献量 + 时效。
-
-    关键：不取"最高等级那一篇"的分数，而是按全部文献的等级加权平均，
-    极低/未分级文献会真实地拉低分数，避免"一篇 meta 分析掩盖所有烂证据"。
-    """
-    grades = [GRADE_BASE.get(d.get("grade", "N/A"), 40) for d in docs]
-    quality = sum(grades) / len(grades) if grades else 40
-    score = float(quality)
-    score += -10 if conflict else 6
-    n = len(docs)
-    if n >= 6:
-        score += 4
-    elif n >= 3:
-        score += 2
-    cur = date.today().year
-    if any(_year_int(d) and _year_int(d) >= cur - 5 for d in docs):
-        score += 4
-    return max(0, min(100, int(round(score))))
-
-
 def analyze_evidence(docs):
-    """对 top docs 做结论极性、冲突检测、置信度评分。
+    """返回候选结论、完整性计数和显式的未评估状态。
 
-    撤稿文献（integrity=retracted）不参与结论方向统计，避免把已失效的
-    结论计入"支持/反对"；存疑（concern）与更正（corrected）保留但计入告警。
+    保留旧字段名便于客户端迁移：confidence/conflict 为 None，表示未评估，
+    而非低置信度或已证明无冲突；未评估文献不得计为中立或无效。
     """
     items = []
-    retracted = 0
-    concern = 0
-    corrected = 0
+    counts = {"retracted": 0, "concern": 0, "corrected": 0}
+    notices = 0
     for d in docs:
-        concl = extract_conclusion(d)
-        integ = d.get("integrity", "ok")
-        if integ == "retracted":
-            retracted += 1
-        elif integ == "concern":
-            concern += 1
-        elif integ == "corrected":
-            corrected += 1
+        details = document_integrity(d)
+        integrity = details["integrity"]
+        flags = set(details["integrity_flags"])
+        for flag in counts:
+            counts[flag] += flag in flags
+        notices += details["is_notice"]
         items.append({
             "pmid": d.get("pmid"),
             "title": d.get("title"),
-            "polarity": classify_polarity(concl),
-            "conclusion": concl,
+            "polarity": "unassessed",
+            "conclusion": extract_conclusion(d),
             "grade": d.get("grade"),
             "year": d.get("year"),
-            "integrity": integ,
+            "integrity": integrity,
+            "integrity_flags": [flag for flag in counts if flag in flags],
+            "is_notice": details["is_notice"],
         })
 
-    # 撤稿文献的结论不可采信，不参与方向统计
-    valid = [it for it in items if it["integrity"] != "retracted"]
-    support = sum(1 for it in valid if it["polarity"] == "support")
-    against = sum(1 for it in valid if it["polarity"] == "against")
-    neutral = len(valid) - support - against
-    conflict = support > 0 and against > 0
-
-    if conflict:
-        verdict = "证据存在分歧"
-    elif support > 0 and against == 0:
-        verdict = "证据倾向支持"
-    elif against > 0 and support == 0:
-        verdict = "证据倾向不支持"
-    else:
-        verdict = "证据不足或未明确"
-
-    confidence = compute_confidence(valid, conflict)
-    if retracted:
-        confidence = max(0, confidence - 15)
-
-    integrity_warning = None
-    if retracted:
-        integrity_warning = f"有 {retracted} 篇文献已撤稿，其结论未计入"
-    elif concern:
-        integrity_warning = f"有 {concern} 篇文献被标记存疑（Expression of Concern）"
-    elif corrected:
-        integrity_warning = f"有 {corrected} 篇文献已更正/再发表"
+    usable_count = sum(is_usable_evidence(it) for it in items)
+    warnings = []
+    if counts["retracted"]:
+        warnings.append(f"有 {counts['retracted']} 篇文献已撤稿，不用于回答")
+    if counts["concern"]:
+        warnings.append(f"有 {counts['concern']} 篇文献被标记存疑（Expression of Concern）")
+    if counts["corrected"]:
+        warnings.append(f"有 {counts['corrected']} 篇文献存在更正/重发记录，请核对关联版本")
+    if notices:
+        warnings.append(f"有 {notices} 篇学术通知，仅供核查关联记录，不用于回答")
 
     return {
-        "verdict": verdict,
-        "conflict": conflict,
-        "confidence": confidence,
-        "support_count": support,
-        "against_count": against,
-        "neutral_count": neutral,
+        "assessment_version": ASSESSMENT_VERSION,
+        "assessment_status": "unassessed" if usable_count else "no_usable_evidence",
+        "assessment_note": ASSESSMENT_NOTE,
+        "verdict": "证据方向待核对" if usable_count else "无可用相关证据",
+        "conflict": None,
+        "confidence": None,
+        "support_count": 0,
+        "against_count": 0,
+        "neutral_count": 0,
+        "unassessed_count": usable_count,
         "conclusions": items,
-        "retracted_count": retracted,
-        "concern_count": concern,
-        "corrected_count": corrected,
-        "integrity_warning": integrity_warning,
+        "retracted_count": counts["retracted"],
+        "concern_count": counts["concern"],
+        "corrected_count": counts["corrected"],
+        "notice_count": notices,
+        "integrity_warning": "；".join(warnings) or None,
     }

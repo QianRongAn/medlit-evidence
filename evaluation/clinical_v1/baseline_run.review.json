@@ -1,0 +1,345 @@
+{
+  "run_sha256": "00176e2937933bc810328b6cb121cfa02916d35654a2580e1162c2fd896fdccf",
+  "reviewer": "Codex GPT-6; source/context review after frozen baseline",
+  "reviewer_kind": "model_authored_source_review",
+  "items": [
+    {
+      "claim_id": "1f0e8964cf4bff9757c7230710a7938ca6666db6267f59625d91bb8e0d3f2278",
+      "query_id": "Q01",
+      "sentence": {
+        "sentence": "In the SELECT cardiovascular outcomes trial, semaglutide showed a 20% reduction in major adverse cardiovascular events in 17,604 adults with preexisting cardiovascular disease, overweight or obesity, without diabetes.",
+        "pmid": "38740993",
+        "title": "Long-term weight loss effects of semaglutide in obesity without diabetes in the SELECT trial.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "次分析背景准确复述SELECT的已知心血管结果；主题相关，但不是预标的直接结局研究。"
+    },
+    {
+      "claim_id": "31f203a2c9b17f460805b972f25bd86aed7e30f3838aa35b63c449ec56a00894",
+      "query_id": "Q01",
+      "sentence": {
+        "sentence": "Whether semaglutide can reduce cardiovascular risk associated with overweight and obesity in the absence of diabetes is unknown.",
+        "pmid": "37952131",
+        "title": "Semaglutide and Cardiovascular Outcomes in Obesity without Diabetes.",
+        "polarity": "unassessed"
+      },
+      "faithful": false,
+      "answers_question": false,
+      "rationale": "这是研究前背景中的未知状态，最终SELECT结果已回答该问题；脱离背景标签作为当前回答会误导为尚无结论。"
+    },
+    {
+      "claim_id": "fabbadbd92f6593cfc1585194cd3357f3cc9221f7ebf17a5332a50ee42e1942f",
+      "query_id": "Q09",
+      "sentence": {
+        "sentence": "In patients with COPD and type 2 inflammation as indicated by elevated blood eosinophil counts, dupilumab was associated with fewer exacerbations and better lung function than placebo.",
+        "pmid": "38767614",
+        "title": "Dupilumab for COPD with Blood Eosinophil Evidence of Type 2 Inflammation.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "NOTUS结论保留COPD及2型炎症人群、加重和肺功能结果，没有夸大到所有COPD患者。"
+    },
+    {
+      "claim_id": "870564b4a46960d1254aad6e896010aeeedd5cc13eaff44b853b0f4432506ae3",
+      "query_id": "Q13",
+      "sentence": {
+        "sentence": "Among patients with chronic kidney disease, regardless of the presence or absence of diabetes, the risk of a composite of a sustained decline in the estimated GFR of at least 50%, end-stage kidney disease, or death from renal or cardiovascular causes was significantly lower with dapagliflozin than with placebo.",
+        "pmid": "32970396",
+        "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "忠实于CKD复合肾脏/死亡终点，但复合终点降低不能回答单独死亡率降低。"
+    },
+    {
+      "claim_id": "9929e5e5e30313377073c31e8fec6c19f8a646bee9a07077d8f6dbe236d1de94",
+      "query_id": "Q13",
+      "sentence": {
+        "sentence": "Death occurred in 101 participants (4.7%) in the dapagliflozin group and 146 participants (6.8%) in the placebo group (hazard ratio, 0.69; 95% CI, 0.53 to 0.88; P = 0.004).",
+        "pmid": "32970396",
+        "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "CKD结果段直接报告两组死亡数和HR，方向及区间与原文相同。"
+    },
+    {
+      "claim_id": "f791914a30540568934a84f4e788122091269bdb99bba4f78bf7ad3ef9b8647e",
+      "query_id": "Q15",
+      "sentence": {
+        "sentence": "Among patients with heart failure and a reduced ejection fraction, the risk of worsening heart failure or death from cardiovascular causes was lower among those who received dapagliflozin than among those who received placebo, regardless of the presence or absence of diabetes.",
+        "pmid": "31535829",
+        "title": "Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "忠实HFrEF复合终点；不能据复合终点直接回答单独死亡率。"
+    },
+    {
+      "claim_id": "df4cc7371b7c1f920bea8914283379b51b17fa6f2e3328354a0a40e0f36ca5b4",
+      "query_id": "Q15",
+      "sentence": {
+        "sentence": "Among patients with chronic kidney disease, regardless of the presence or absence of diabetes, the risk of a composite of a sustained decline in the estimated GFR of at least 50%, end-stage kidney disease, or death from renal or cardiovascular causes was significantly lower with dapagliflozin than with placebo.",
+        "pmid": "32970396",
+        "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "忠实于CKD原文，但CKD入组人群不等同于所问的心衰人群。"
+    },
+    {
+      "claim_id": "8056962e174ce61dc17239c675fb5fab09c84687386ee642b2739f7b881b401c",
+      "query_id": "Q15",
+      "sentence": {
+        "sentence": "Death from cardiovascular causes occurred in 227 patients (9.6%) in the dapagliflozin group and in 273 patients (11.5%) in the placebo group (hazard ratio, 0.82; 95% CI, 0.69 to 0.98); 276 patients (11.6%) and 329 patients (13.9%), respectively, died from any cause (hazard ratio, 0.83; 95% CI, 0.71 to 0.97).",
+        "pmid": "31535829",
+        "title": "Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "DAPA-HF结果完整保留心血管死亡与全因死亡比较，适用所问心衰人群。"
+    },
+    {
+      "claim_id": "479ff0b5490100e72febcd7a0c8c508248643b33c1471fccc5c7f254bb0e8b97",
+      "query_id": "Q15",
+      "sentence": {
+        "sentence": "Death occurred in 101 participants (4.7%) in the dapagliflozin group and 146 participants (6.8%) in the placebo group (hazard ratio, 0.69; 95% CI, 0.53 to 0.88; P = 0.004).",
+        "pmid": "32970396",
+        "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "数字忠实于DAPA-CKD，但它不构成心衰入组人群的死亡率结果。"
+    },
+    {
+      "claim_id": "61200cd38d997a5cf9a083557f89e6844d61c9ce084349bfd6a7db067947c5da",
+      "query_id": "Q17",
+      "sentence": {
+        "sentence": "At final analysis (median follow-up of 44·5 months [IQR 39·7-49·8]), median overall survival was not reached (NR; 95% CI 49·2-NR) with pembrolizumab vs 36·7 months (27·6-NR) with chemotherapy (hazard ratio [HR] 0·74; 95% CI 0·53-1·03; p=0·036).",
+        "pmid": "35427471",
+        "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "OS数值与HR忠实，p值仅按原样列出，没有自行宣称显著；后续条目给出预设阈值。"
+    },
+    {
+      "claim_id": "eeb0a11f695c098ec89344f89193c485760e6228ad7a4d463f58eb7f8221ff3d",
+      "query_id": "Q17",
+      "sentence": {
+        "sentence": "Superiority of pembrolizumab versus chemotherapy for overall survival was not demonstrated because the prespecified α of 0·025 needed for statistical significance was not achieved.",
+        "pmid": "35427471",
+        "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "准确保留未达到预设α=0.025，避免把p=0.036解释为OS显著获益。"
+    },
+    {
+      "claim_id": "86147ae197e1d849a928ae5623e76151eab750de9b80d15d8b6a8d49967679fc",
+      "query_id": "Q17",
+      "sentence": {
+        "sentence": "In this updated analysis, although pembrolizumab continued to show durable antitumour activity and fewer treatment-related adverse events compared with chemotherapy, there was no significant difference in overall survival between the two treatment groups.",
+        "pmid": "35427471",
+        "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "最终解读明确OS无显著差异，未用PFS替代OS。"
+    },
+    {
+      "claim_id": "d0ec3f1772155c6743f3d18b036cd17965f8eabe367ece5775f08e648c827349",
+      "query_id": "Q17",
+      "sentence": {
+        "sentence": "However, the treatment's effect on overall survival in this cohort of patients was unknown.",
+        "pmid": "35427471",
+        "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+        "polarity": "unassessed"
+      },
+      "faithful": false,
+      "answers_question": false,
+      "rationale": "这是研究前背景中的未知状态；最终分析已有OS结果，作为当前结论输出造成时间语境错置。"
+    },
+    {
+      "claim_id": "b23148c325c21133db87580901c53e67906fb663054d0e6bb1a9c96200a50223",
+      "query_id": "Q19",
+      "sentence": {
+        "sentence": "Higher all-cause mortality was observed among apparently healthy older adults who received daily aspirin than among those who received placebo and was attributed primarily to cancer-related death.",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "准确使用observed而非因果结论；保留健康老年人及癌症死亡说明。原文另有谨慎解释提示，回答未摘出。"
+    },
+    {
+      "claim_id": "6b06729764f36c9452066acbfeddbd5b4d0de0b385b7c8209fdf5472805ba621",
+      "query_id": "Q19",
+      "sentence": {
+        "sentence": "Hazard ratios were calculated to compare mortality between the aspirin group and the placebo group, and post hoc exploratory analyses of specific causes of death were performed.",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "这是死亡率HR计算方法，不是治疗对死亡率的结果。"
+    },
+    {
+      "claim_id": "57f512bff9a3a16d329d82e5b82514c58de297a7bb3d50c6a36502f4b7625426",
+      "query_id": "Q19",
+      "sentence": {
+        "sentence": "Cancer was the major contributor to the higher mortality in the aspirin group, accounting for 1.6 excess deaths per 1000 person-years.",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "每千人年1.6例超额癌症死亡与来源一致，涉及所问死亡结局。"
+    },
+    {
+      "claim_id": "97216b8d9b25f358402e75d05dda7be10bc6c00fab6808fc0349c22f8ce042e3",
+      "query_id": "Q19",
+      "sentence": {
+        "sentence": "A numerically higher rate of the secondary end point of death from any cause was observed with aspirin than with placebo.",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "numerically higher保留了背景对死亡观察的限定，没有改写成确定因果关系。"
+    },
+    {
+      "claim_id": "691867f3d4e498ab32ae7bdfad36d2f92c31bddf0ba7dd4b609f9d2bd68438ed",
+      "query_id": "Q20",
+      "sentence": {
+        "sentence": "Higher all-cause mortality was observed among apparently healthy older adults who received daily aspirin than among those who received placebo and was attributed primarily to cancer-related death.",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "中文问题下仍返回原文；observed和健康老年人限定得到保留，但缺少原文谨慎解释提示。"
+    },
+    {
+      "claim_id": "ebfaeb3b14e3f1508f72323ba4a5d52c6a1d7a1276705e0263b7fbbbc82f49fb",
+      "query_id": "Q20",
+      "sentence": {
+        "sentence": "Hazard ratios were calculated to compare mortality between the aspirin group and the placebo group, and post hoc exploratory analyses of specific causes of death were performed.",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "HR计算是方法说明，不能当作死亡率效果结果。"
+    },
+    {
+      "claim_id": "66bbf423f85446b1301f17098662ea9785de54c699c5c99f368902edbb2fcf1b",
+      "query_id": "Q20",
+      "sentence": {
+        "sentence": "Cancer was the major contributor to the higher mortality in the aspirin group, accounting for 1.6 excess deaths per 1000 person-years.",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "癌症死亡差异与来源一致，属于所问死亡结局。"
+    },
+    {
+      "claim_id": "baed3bb378b98d5f9a236ca6331a7d2a47e7552d93f8666299ad69999b1c5327",
+      "query_id": "Q20",
+      "sentence": {
+        "sentence": "A numerically higher rate of the secondary end point of death from any cause was observed with aspirin than with placebo.",
+        "pmid": "30221595",
+        "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "背景的numerically higher限定得到保留，且与同篇最终观察方向一致。"
+    },
+    {
+      "claim_id": "de7aac66e6c3d2ac807436a7e4ee22d87fc8fe4dea5634e9533f6d0fbd7ed2da",
+      "query_id": "Q21",
+      "sentence": {
+        "sentence": "Aspirin use in healthy elderly persons did not prolong disability-free survival over a period of 5 years but led to a higher rate of major hemorrhage than placebo.",
+        "pmid": "30221596",
+        "title": "Effect of Aspirin on Disability-free Survival in the Healthy Elderly.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "ASPREE结论准确表达更高严重出血发生率，并保留健康老年人限定。"
+    },
+    {
+      "claim_id": "75eb90bd51445aa78776462521a556760bd90f9328a03e3462257736c86d6166",
+      "query_id": "Q21",
+      "sentence": {
+        "sentence": "The rate of major hemorrhage was higher in the aspirin group than in the placebo group (3.8% vs.",
+        "pmid": "30221596",
+        "title": "Effect of Aspirin on Disability-free Survival in the Healthy Elderly.",
+        "polarity": "unassessed"
+      },
+      "faithful": false,
+      "answers_question": false,
+      "rationale": "分句器在vs.处截断，只有3.8%而没有对照2.8%、HR与区间；不是可完整解释的比较陈述。"
+    },
+    {
+      "claim_id": "33f9fbfc47d7892c47d1616412484fb33195d371fe7175484d168e066350aa36",
+      "query_id": "Q21",
+      "sentence": {
+        "sentence": "Secondary end points reported in this article included the individual components of the primary end point and major hemorrhage.",
+        "pmid": "30221596",
+        "title": "Effect of Aspirin on Disability-free Survival in the Healthy Elderly.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": false,
+      "rationale": "仅列出次要终点包含严重出血，未提供效果结果。"
+    },
+    {
+      "claim_id": "36294999ed3d1ef31968f89c3739b11a767a077f1648feea68e381f48c962245",
+      "query_id": "Q23",
+      "sentence": {
+        "sentence": "Previous results from this trial showed longer overall survival after treatment with nivolumab plus ipilimumab or with nivolumab monotherapy than with ipilimumab monotherapy in patients with advanced melanoma.",
+        "pmid": "39282897",
+        "title": "Final, 10-Year Outcomes with Nivolumab plus Ipilimumab in Advanced Melanoma.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "背景明确说previous results，时间限定未丢失；同时区分联合用药与单药，包含所问单药比较。"
+    },
+    {
+      "claim_id": "f060e02838b167f406fb27ac11fd41e31a4e728fb6a0e662cd4bc39515968941",
+      "query_id": "Q23",
+      "sentence": {
+        "sentence": "With a minimum follow-up of 10 years, median overall survival was 71.9 months with nivolumab plus ipilimumab, 36.9 months with nivolumab, and 19.9 months with ipilimumab.",
+        "pmid": "39282897",
+        "title": "Final, 10-Year Outcomes with Nivolumab plus Ipilimumab in Advanced Melanoma.",
+        "polarity": "unassessed"
+      },
+      "faithful": true,
+      "answers_question": true,
+      "rationale": "十年结果分别列出联合、纳武利尤单药和伊匹木单药OS中位数，组别未混淆。"
+    }
+  ]
+}

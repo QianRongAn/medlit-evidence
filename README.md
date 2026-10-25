@@ -1,7 +1,5 @@
 # MedLit Evidence
 
-> 新版实现位于 [`codex/evidence-integrity`](https://github.com/QianRongAn/medlit-evidence/tree/codex/evidence-integrity)。下方为该版本的实际首页截图，获取与运行命令见“快速开始”。
-
 医学文献检索与摘要整理原型：输入问题，从 PubMed 召回文献，展示研究类型、候选摘要句及完整性标记，供人工核查。
 
 **方向与可信度分开核查。** 按具体结局提取摘要报告的增加、减少或不确定方向，并附 PMID 与完整原句；标明与提问方向是否一致。可信度展示原文明确报告的 GRADE 评级，或通过五项人工核查生成分级草案。方向一致不等于临床结论成立，人工草案未经独立审核；不按文献数量或研究类型生成可信概率。
@@ -17,7 +15,7 @@
 - 中英文查询；中文医学词典映射为英文检索词。
 - PubMed 分批持续检索、去重词项的 BM25 排序及进程内 TTL 缓存；通过 PICO/有效词项筛选后才进入回答。每批全部匹配文献均可显示，滚动到底部继续加载，不设应用总展示数量上限；大于一万条命中时按 PMID 范围分段。
 - PICO 自动识别与手动补充共用同一筛选链路；原问题没有提供的条件明确标注，补充后会参与召回和筛选。
-- 逐结局方向依据、原文 GRADE 引用及五项人工核查工作表。方法与边界见 [方向与可信度评估](https://github.com/QianRongAn/medlit-evidence/blob/codex/evidence-integrity/docs/direction_and_grade.md)。
+- 逐结局方向依据、原文 GRADE 引用及五项人工核查工作表。方法与边界见 [方向与可信度评估](docs/direction_and_grade.md)。
 - 请求失败时回退 11 篇演示语料；在线零结果保持为空。
 - 规则 PICO 词项提取与本地筛选：明确识别的人群、干预、对照、结局均须覆盖，词典外的有效英文词项也不能丢弃。未识别的字段不凭空补齐；词项匹配不等于临床语义对齐。
 - 优先按明确的 PubMed 发表类型识别研究类型；缺标时仅用标题设计自述、方法/设计小节或明确自述研究的句子保守补充。背景中提及的研究不会抬高分级，冲突或不明确时保留未分级。
@@ -30,10 +28,10 @@
 
 ## 快速开始
 
-新版开发实现位于 [`codex/evidence-integrity`](https://github.com/QianRongAn/medlit-evidence/tree/codex/evidence-integrity)，可公开获取和运行：
+直接获取本项目并运行：
 
 ```bash
-git clone --branch codex/evidence-integrity https://github.com/QianRongAn/medlit-evidence.git
+git clone https://github.com/QianRongAn/medlit-evidence.git
 cd medlit-evidence
 # 运行检索与摘要整理
 python -m pip install fastapi 'uvicorn[standard]' httpx
@@ -94,7 +92,7 @@ LLM 必须返回含 `pmid`、`text`、`quote` 的 JSON 条目。服务端只允�
 - `evidence.notice_count` 单列通知数量；多状态计数可能重叠。通知不参与回答、LLM 上下文或模型评分。只有旧 `integrity` 字段的本地记录仍受相同过滤。
 - 已撤稿旧版与修正后重发的新版分开标记；普通评论、更新和重印不直接触发完整性告警。`ok` 只代表当前元数据未命中这些规则，不能证明文章无问题。
 
-规则、关系方向和 NLM 依据见 [分类与完整性说明](https://github.com/QianRongAn/medlit-evidence/blob/codex/evidence-integrity/docs/classification_and_integrity.md)。
+规则、关系方向和 NLM 依据见 [分类与完整性说明](docs/classification_and_integrity.md)。
 
 `0.5.0` 检索筛选变更：
 
@@ -105,7 +103,7 @@ LLM 必须返回含 `pmid`、`text`、`quote` 的 JSON 条目。服务端只允�
 - 普通糖尿病不再默认等于 2 型；新发糖尿病风险不再当作既有糖尿病人群；英文药名采用词边界，具体比较药物不再折叠成同一药物类别。
 - 未映射中文、数字阈值/时窗、排除人群或“或者”条件暂不能可靠解析时明确弃权，不删除条件后放宽搜索结果。离线演示先筛选再按返回上限截断。
 
-本地规则与保守召回边界见 [检索与 PICO 筛选说明](https://github.com/QianRongAn/medlit-evidence/blob/codex/evidence-integrity/docs/retrieval_screening.md)。
+本地规则与保守召回边界见 [检索与 PICO 筛选说明](docs/retrieval_screening.md)。
 
 `0.6.0` 查询与摘录变更：翻译和PICO共用术语表，补充中文问句处理；抽取按整节过滤背景/方法，保留结果不确定性，`source_section`记录章节。缩写分句保留完整数值比较，LLM上下文只发送完整可用句并要求完整原句引用。
 
@@ -121,19 +119,19 @@ LLM 必须返回含 `pmid`、`text`、`quote` 的 JSON 条目。服务端只允�
 
 仓库含试点与全量特征表、模型文件、SHAP 图、消融及引文信号实验脚本：
 
-- [全量模型历史报告](https://github.com/QianRongAn/medlit-evidence/blob/codex/evidence-integrity/data/model_report_large.md)
-- [引文信号历史报告](https://github.com/QianRongAn/medlit-evidence/blob/codex/evidence-integrity/data/citation_signal_report.md)
-- [多信号研究方案](https://github.com/QianRongAn/medlit-evidence/blob/codex/evidence-integrity/docs/credibility_cross_validation.md)
+- [全量模型历史报告](data/model_report_large.md)
+- [引文信号历史报告](data/citation_signal_report.md)
+- [多信号研究方案](docs/credibility_cross_validation.md)
 
-以上是探索性结果。已统一 AP 与同折常量基线，显式年份切点和严格固定观察窗校验；方法与真实重跑结果见 [评估协议 v2](https://github.com/QianRongAn/medlit-evidence/blob/codex/evidence-integrity/docs/evaluation_protocol.md)。当前数据采样、发表年份删失、预测时点来源和概率校准仍有待验证，不能据此认定某篇文献会在未来撤稿。`data/integrity_signals.jsonl` 为被忽略的本地产物，当前仓库不足以独立复现引文信号报告。
+以上是探索性结果。已统一 AP 与同折常量基线，显式年份切点和严格固定观察窗校验；方法与真实重跑结果见 [评估协议 v2](docs/evaluation_protocol.md)。当前数据采样、发表年份删失、预测时点来源和概率校准仍有待验证，不能据此认定某篇文献会在未来撤稿。`data/integrity_signals.jsonl` 为被忽略的本地产物，当前仓库不足以独立复现引文信号报告。
 
 ## 临床检索与摘要初评
 
-已建立 [独立来源评测集](https://github.com/QianRongAn/medlit-evidence/blob/codex/evidence-integrity/evaluation/clinical_v1/) 并冻结先标注后运行：30个中英文问题、12篇真实PubMed报告、360项文献判断。初稿由开发者模型审核，临床专家盲审待完成，不是整体临床正确率。
+已建立 [独立来源评测集](evaluation/clinical_v1/) 并冻结先标注后运行：30个中英文问题、12篇真实PubMed报告、360项文献判断。初稿由开发者模型审核，临床专家盲审待完成，不是整体临床正确率。
 
-固定候选池中，返回文献主题相关17/17，严格PICO匹配15/17；抽取句语境忠实23/26。但有效回答覆盖仅8/24，中文仅1/12。PICO四字段解析全对6/30，生成式LLM尚未评估。完整分母、失败案例与复现方法见 [初评报告](https://github.com/QianRongAn/medlit-evidence/blob/codex/evidence-integrity/docs/clinical_benchmark_report.md) 和 [评测协议](https://github.com/QianRongAn/medlit-evidence/blob/codex/evidence-integrity/docs/clinical_benchmark_protocol.md)。
+固定候选池中，返回文献主题相关17/17，严格PICO匹配15/17；抽取句语境忠实23/26。但有效回答覆盖仅8/24，中文仅1/12。PICO四字段解析全对6/30，生成式LLM尚未评估。完整分母、失败案例与复现方法见 [初评报告](docs/clinical_benchmark_report.md) 和 [评测协议](docs/clinical_benchmark_protocol.md)。
 
-已据此修复三个P1：中文覆盖、背景时间语境、vs.分句。在同一**已知开发基准**上，有效回答覆盖从8/24到22/24，中文从1/12到11/12；严格PICO文献匹配从15/17到26/30，错误人群仍待处理。62项新抽取句经模型逐句复核均受原文支持，不能解读为总体100%正确。详见 [P1修复与复测](https://github.com/QianRongAn/medlit-evidence/blob/codex/evidence-integrity/docs/p1_context_repair.md)。
+已据此修复三个P1：中文覆盖、背景时间语境、vs.分句。在同一**已知开发基准**上，有效回答覆盖从8/24到22/24，中文从1/12到11/12；严格PICO文献匹配从15/17到26/30，错误人群仍待处理。62项新抽取句经模型逐句复核均受原文支持，不能解读为总体100%正确。详见 [P1修复与复测](docs/p1_context_repair.md)。
 
 ## 测试与后续工作
 
@@ -144,7 +142,7 @@ node --test tests/test_ui.cjs
 
 Python 测试替换外部网络服务，不需要密钥或预训练模型；评估回归需要安装 requirements.txt 中的科学计算依赖。GitHub Actions 在 Python 3.10 / 3.12 下验证后端，并运行前端状态回归测试。
 
-[项目状态](https://github.com/QianRongAn/medlit-evidence/blob/codex/evidence-integrity/docs/project_status.md) · [项目审查与优先级](https://github.com/QianRongAn/medlit-evidence/blob/codex/evidence-integrity/docs/project_review.md)
+[项目状态](docs/project_status.md) · [项目审查与优先级](docs/project_review.md)
 
 本工具仅供研究与信息整理，不构成医疗建议。
 

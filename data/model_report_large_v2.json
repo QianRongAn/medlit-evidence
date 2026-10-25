@@ -1,0 +1,596 @@
+{
+  "protocol_version": 2,
+  "configuration": {
+    "features": "data/features_large.csv",
+    "report": "data/model_report_large_v2.md",
+    "protocol": "publication-cohort",
+    "cutoff_year": 2024,
+    "gap_years": 0,
+    "cutoff_date": null,
+    "as_of": null,
+    "horizon_days": null,
+    "gap_days": 0,
+    "models_dir": null
+  },
+  "note": "仅回顾性发表年份分组；缺少时点特征/事件/随访数据时，未来撤稿预测不可评估。",
+  "excluded_temporal_n": 0,
+  "seed": 42,
+  "experiments": {
+    "逻辑回归": {
+      "features": [
+        "title_len",
+        "abstract_len",
+        "n_sentences",
+        "avg_sentence_len",
+        "n_authors",
+        "n_affiliations",
+        "n_grants",
+        "n_references",
+        "is_english",
+        "year",
+        "n_exaggeration",
+        "n_certainty",
+        "n_hedge",
+        "n_stats",
+        "digits_per_1000",
+        "single_author",
+        "design_meta",
+        "design_rct",
+        "design_case_report",
+        "design_cohort",
+        "design_basic",
+        "design_review"
+      ],
+      "model_params": {
+        "C": 0.5,
+        "class_weight": "balanced",
+        "dual": false,
+        "fit_intercept": true,
+        "intercept_scaling": 1,
+        "l1_ratio": 0.0,
+        "max_iter": 2000,
+        "n_jobs": null,
+        "penalty": "deprecated",
+        "random_state": null,
+        "solver": "lbfgs",
+        "tol": 0.0001,
+        "verbose": 0,
+        "warm_start": false
+      },
+      "results": {
+        "stratified_cv": [
+          {
+            "train_n": 18629,
+            "test_n": 4658,
+            "train_prevalence": 0.40023619088517903,
+            "train_ids_sha256": "15b62acf928f4f5be7955227bf7cb56efe37c7326379006d42c1787277bc89ba",
+            "test_ids_sha256": "dddb02c801a3e5a44ea236f9cc778c5ca98d66f1616583fb3d52565acfd1a6fe",
+            "model": {
+              "roc_auc": 0.7860545657517981,
+              "ap": 0.7031583238371597,
+              "pr_trapezoid": 0.7027475215314266,
+              "brier": 0.1883898397500544,
+              "prevalence": 0.4003864319450408
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4003864319450408,
+              "pr_trapezoid": 0.7001932159725204,
+              "brier": 0.24007715963173612,
+              "prevalence": 0.4003864319450408
+            },
+            "delta_ap": 0.3027718918921189,
+            "delta_brier": -0.05168731988168171
+          },
+          {
+            "train_n": 18629,
+            "test_n": 4658,
+            "train_prevalence": 0.4002898706318106,
+            "train_ids_sha256": "1f639b12a3e84d67b0973eeff1239aeb6d1d55a7f6998781642fefb66b9d57f6",
+            "test_ids_sha256": "86ee85a40e451633626dda6183844fdaff9935ec92aae188ead340d3c716f47d",
+            "model": {
+              "roc_auc": 0.796387914322844,
+              "ap": 0.7138277503882864,
+              "pr_trapezoid": 0.7136338489997476,
+              "brier": 0.1853781474599405,
+              "prevalence": 0.4001717475311292
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4001717475311292,
+              "pr_trapezoid": 0.7000858737655646,
+              "brier": 0.24003433396207835,
+              "prevalence": 0.4001717475311292
+            },
+            "delta_ap": 0.31365600285715717,
+            "delta_brier": -0.054656186502137855
+          },
+          {
+            "train_n": 18630,
+            "test_n": 4657,
+            "train_prevalence": 0.40026838432635536,
+            "train_ids_sha256": "0816e49647ac8b8561fe5b774ed8db1d17e089f2e412a9fa5364ea96ba647f48",
+            "test_ids_sha256": "d0c004a8d9e1a1197bc45287a65aa3ca607f7064009d5ffb45fc26f4abc881a8",
+            "model": {
+              "roc_auc": 0.7939885351023175,
+              "ap": 0.7204529822223107,
+              "pr_trapezoid": 0.7203026301507685,
+              "brier": 0.1858002337637252,
+              "prevalence": 0.4002576766158471
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4002576766158471,
+              "pr_trapezoid": 0.7001288383079236,
+              "brier": 0.24005146904058614,
+              "prevalence": 0.4002576766158471
+            },
+            "delta_ap": 0.3201953056064636,
+            "delta_brier": -0.05425123527686093
+          },
+          {
+            "train_n": 18630,
+            "test_n": 4657,
+            "train_prevalence": 0.40026838432635536,
+            "train_ids_sha256": "831323e564d68f237570a16a6ed812898413a30757a16ec50e0f826516470abb",
+            "test_ids_sha256": "9b8f13f95029b455ff752e5574629d00a66a458c7cf0634ebc8b7190aa9ea1c4",
+            "model": {
+              "roc_auc": 0.7975737166337057,
+              "ap": 0.7291064743680424,
+              "pr_trapezoid": 0.7289796151522208,
+              "brier": 0.18415929775206313,
+              "prevalence": 0.4002576766158471
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4002576766158471,
+              "pr_trapezoid": 0.7001288383079236,
+              "brier": 0.24005146904058614,
+              "prevalence": 0.4002576766158471
+            },
+            "delta_ap": 0.32884879775219533,
+            "delta_brier": -0.055892171288523
+          },
+          {
+            "train_n": 18630,
+            "test_n": 4657,
+            "train_prevalence": 0.40026838432635536,
+            "train_ids_sha256": "7e115d13c447881193ec39b6b823436e21f70cf09c03060c70f23e3ca39a3a3c",
+            "test_ids_sha256": "6a6052b766507a47b1cdbd86a1e82e2e67c54bd14ef3748fb3f6746e6b0fb8dd",
+            "model": {
+              "roc_auc": 0.8001297311334743,
+              "ap": 0.7234220021428677,
+              "pr_trapezoid": 0.723258259186379,
+              "brier": 0.18350424574347426,
+              "prevalence": 0.4002576766158471
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4002576766158471,
+              "pr_trapezoid": 0.7001288383079236,
+              "brier": 0.24005146904058614,
+              "prevalence": 0.4002576766158471
+            },
+            "delta_ap": 0.32316432552702057,
+            "delta_brier": -0.05654722329711187
+          }
+        ],
+        "publication_cohort": [
+          {
+            "train_n": 17177,
+            "test_n": 6110,
+            "train_prevalence": 0.48407754555510274,
+            "train_ids_sha256": "1c670984fc745fc5b62a4335094595c081e898efe11f3416c15bb5b257073d81",
+            "test_ids_sha256": "f47bcd7d99f529a749d25d0dce37aa1bfdb558a8f203eca802af9cacfda0be72",
+            "model": {
+              "roc_auc": 0.711996438298111,
+              "ap": 0.33864967896415593,
+              "pr_trapezoid": 0.3377834436068311,
+              "brier": 0.1275908310617228,
+              "prevalence": 0.1646481178396072
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.1646481178396072,
+              "pr_trapezoid": 0.5823240589198035,
+              "brier": 0.23957427442213097,
+              "prevalence": 0.1646481178396072
+            },
+            "delta_ap": 0.17400156112454873,
+            "delta_brier": -0.11198344336040816
+          }
+        ]
+      }
+    },
+    "LightGBM": {
+      "features": [
+        "title_len",
+        "abstract_len",
+        "n_sentences",
+        "avg_sentence_len",
+        "n_authors",
+        "n_affiliations",
+        "n_grants",
+        "n_references",
+        "is_english",
+        "year",
+        "n_exaggeration",
+        "n_certainty",
+        "n_hedge",
+        "n_stats",
+        "digits_per_1000",
+        "single_author",
+        "design_meta",
+        "design_rct",
+        "design_case_report",
+        "design_cohort",
+        "design_basic",
+        "design_review"
+      ],
+      "model_params": {
+        "boosting_type": "gbdt",
+        "class_weight": null,
+        "colsample_bytree": 0.8,
+        "importance_type": "split",
+        "learning_rate": 0.05,
+        "max_depth": 4,
+        "min_child_samples": 20,
+        "min_child_weight": 0.001,
+        "min_split_gain": 0.0,
+        "n_estimators": 200,
+        "n_jobs": 2,
+        "num_leaves": 15,
+        "objective": null,
+        "random_state": 42,
+        "reg_alpha": 0.0,
+        "reg_lambda": 0.0,
+        "subsample": 0.8,
+        "subsample_for_bin": 200000,
+        "subsample_freq": 0,
+        "verbosity": -1
+      },
+      "results": {
+        "stratified_cv": [
+          {
+            "train_n": 18629,
+            "test_n": 4658,
+            "train_prevalence": 0.40023619088517903,
+            "train_ids_sha256": "15b62acf928f4f5be7955227bf7cb56efe37c7326379006d42c1787277bc89ba",
+            "test_ids_sha256": "dddb02c801a3e5a44ea236f9cc778c5ca98d66f1616583fb3d52565acfd1a6fe",
+            "model": {
+              "roc_auc": 0.8469879217384709,
+              "ap": 0.8016954975435063,
+              "pr_trapezoid": 0.8016225587953334,
+              "brier": 0.15420968706458502,
+              "prevalence": 0.4003864319450408
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4003864319450408,
+              "pr_trapezoid": 0.7001932159725204,
+              "brier": 0.24007715963173612,
+              "prevalence": 0.4003864319450408
+            },
+            "delta_ap": 0.4013090655984655,
+            "delta_brier": -0.0858674725671511
+          },
+          {
+            "train_n": 18629,
+            "test_n": 4658,
+            "train_prevalence": 0.4002898706318106,
+            "train_ids_sha256": "1f639b12a3e84d67b0973eeff1239aeb6d1d55a7f6998781642fefb66b9d57f6",
+            "test_ids_sha256": "86ee85a40e451633626dda6183844fdaff9935ec92aae188ead340d3c716f47d",
+            "model": {
+              "roc_auc": 0.8641584434456423,
+              "ap": 0.8215071152960989,
+              "pr_trapezoid": 0.8214463614562951,
+              "brier": 0.14678184484117823,
+              "prevalence": 0.4001717475311292
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4001717475311292,
+              "pr_trapezoid": 0.7000858737655646,
+              "brier": 0.24003433396207835,
+              "prevalence": 0.4001717475311292
+            },
+            "delta_ap": 0.42133536776496966,
+            "delta_brier": -0.09325248912090012
+          },
+          {
+            "train_n": 18630,
+            "test_n": 4657,
+            "train_prevalence": 0.40026838432635536,
+            "train_ids_sha256": "0816e49647ac8b8561fe5b774ed8db1d17e089f2e412a9fa5364ea96ba647f48",
+            "test_ids_sha256": "d0c004a8d9e1a1197bc45287a65aa3ca607f7064009d5ffb45fc26f4abc881a8",
+            "model": {
+              "roc_auc": 0.8522471107259258,
+              "ap": 0.8035361230227048,
+              "pr_trapezoid": 0.80346355405336,
+              "brier": 0.15217311515185292,
+              "prevalence": 0.4002576766158471
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4002576766158471,
+              "pr_trapezoid": 0.7001288383079236,
+              "brier": 0.24005146904058614,
+              "prevalence": 0.4002576766158471
+            },
+            "delta_ap": 0.4032784464068577,
+            "delta_brier": -0.08787835388873322
+          },
+          {
+            "train_n": 18630,
+            "test_n": 4657,
+            "train_prevalence": 0.40026838432635536,
+            "train_ids_sha256": "831323e564d68f237570a16a6ed812898413a30757a16ec50e0f826516470abb",
+            "test_ids_sha256": "9b8f13f95029b455ff752e5574629d00a66a458c7cf0634ebc8b7190aa9ea1c4",
+            "model": {
+              "roc_auc": 0.8599602931301275,
+              "ap": 0.8215891127269143,
+              "pr_trapezoid": 0.8215343904399947,
+              "brier": 0.1485179566088354,
+              "prevalence": 0.4002576766158471
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4002576766158471,
+              "pr_trapezoid": 0.7001288383079236,
+              "brier": 0.24005146904058614,
+              "prevalence": 0.4002576766158471
+            },
+            "delta_ap": 0.42133143611106716,
+            "delta_brier": -0.09153351243175073
+          },
+          {
+            "train_n": 18630,
+            "test_n": 4657,
+            "train_prevalence": 0.40026838432635536,
+            "train_ids_sha256": "7e115d13c447881193ec39b6b823436e21f70cf09c03060c70f23e3ca39a3a3c",
+            "test_ids_sha256": "6a6052b766507a47b1cdbd86a1e82e2e67c54bd14ef3748fb3f6746e6b0fb8dd",
+            "model": {
+              "roc_auc": 0.8560131359975659,
+              "ap": 0.8104088249457794,
+              "pr_trapezoid": 0.8103405472333253,
+              "brier": 0.15020850770986158,
+              "prevalence": 0.4002576766158471
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4002576766158471,
+              "pr_trapezoid": 0.7001288383079236,
+              "brier": 0.24005146904058614,
+              "prevalence": 0.4002576766158471
+            },
+            "delta_ap": 0.41015114832993227,
+            "delta_brier": -0.08984296133072456
+          }
+        ],
+        "publication_cohort": [
+          {
+            "train_n": 17177,
+            "test_n": 6110,
+            "train_prevalence": 0.48407754555510274,
+            "train_ids_sha256": "1c670984fc745fc5b62a4335094595c081e898efe11f3416c15bb5b257073d81",
+            "test_ids_sha256": "f47bcd7d99f529a749d25d0dce37aa1bfdb558a8f203eca802af9cacfda0be72",
+            "model": {
+              "roc_auc": 0.7126301750624778,
+              "ap": 0.31961442016104963,
+              "pr_trapezoid": 0.31856919378248005,
+              "brier": 0.16354983401833695,
+              "prevalence": 0.1646481178396072
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.1646481178396072,
+              "pr_trapezoid": 0.5823240589198035,
+              "brier": 0.23957427442213097,
+              "prevalence": 0.1646481178396072
+            },
+            "delta_ap": 0.15496630232144243,
+            "delta_brier": -0.07602444040379402
+          }
+        ]
+      }
+    },
+    "随机森林": {
+      "features": [
+        "title_len",
+        "abstract_len",
+        "n_sentences",
+        "avg_sentence_len",
+        "n_authors",
+        "n_affiliations",
+        "n_grants",
+        "n_references",
+        "is_english",
+        "year",
+        "n_exaggeration",
+        "n_certainty",
+        "n_hedge",
+        "n_stats",
+        "digits_per_1000",
+        "single_author",
+        "design_meta",
+        "design_rct",
+        "design_case_report",
+        "design_cohort",
+        "design_basic",
+        "design_review"
+      ],
+      "model_params": {
+        "bootstrap": true,
+        "ccp_alpha": 0.0,
+        "class_weight": "balanced",
+        "criterion": "gini",
+        "max_depth": 5,
+        "max_features": "sqrt",
+        "max_leaf_nodes": null,
+        "max_samples": null,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 1,
+        "min_samples_split": 2,
+        "min_weight_fraction_leaf": 0.0,
+        "monotonic_cst": null,
+        "n_estimators": 300,
+        "n_jobs": 2,
+        "oob_score": false,
+        "random_state": 42,
+        "verbose": 0,
+        "warm_start": false
+      },
+      "results": {
+        "stratified_cv": [
+          {
+            "train_n": 18629,
+            "test_n": 4658,
+            "train_prevalence": 0.40023619088517903,
+            "train_ids_sha256": "15b62acf928f4f5be7955227bf7cb56efe37c7326379006d42c1787277bc89ba",
+            "test_ids_sha256": "dddb02c801a3e5a44ea236f9cc778c5ca98d66f1616583fb3d52565acfd1a6fe",
+            "model": {
+              "roc_auc": 0.8188696559476054,
+              "ap": 0.7659414625842138,
+              "pr_trapezoid": 0.7658460358636539,
+              "brier": 0.1871206418076549,
+              "prevalence": 0.4003864319450408
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4003864319450408,
+              "pr_trapezoid": 0.7001932159725204,
+              "brier": 0.24007715963173612,
+              "prevalence": 0.4003864319450408
+            },
+            "delta_ap": 0.365555030639173,
+            "delta_brier": -0.05295651782408123
+          },
+          {
+            "train_n": 18629,
+            "test_n": 4658,
+            "train_prevalence": 0.4002898706318106,
+            "train_ids_sha256": "1f639b12a3e84d67b0973eeff1239aeb6d1d55a7f6998781642fefb66b9d57f6",
+            "test_ids_sha256": "86ee85a40e451633626dda6183844fdaff9935ec92aae188ead340d3c716f47d",
+            "model": {
+              "roc_auc": 0.8345845135652425,
+              "ap": 0.7829498759322987,
+              "pr_trapezoid": 0.7828675849941924,
+              "brier": 0.18515940616260304,
+              "prevalence": 0.4001717475311292
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4001717475311292,
+              "pr_trapezoid": 0.7000858737655646,
+              "brier": 0.24003433396207835,
+              "prevalence": 0.4001717475311292
+            },
+            "delta_ap": 0.3827781284011695,
+            "delta_brier": -0.05487492779947531
+          },
+          {
+            "train_n": 18630,
+            "test_n": 4657,
+            "train_prevalence": 0.40026838432635536,
+            "train_ids_sha256": "0816e49647ac8b8561fe5b774ed8db1d17e089f2e412a9fa5364ea96ba647f48",
+            "test_ids_sha256": "d0c004a8d9e1a1197bc45287a65aa3ca607f7064009d5ffb45fc26f4abc881a8",
+            "model": {
+              "roc_auc": 0.8268425508897934,
+              "ap": 0.7733422773594252,
+              "pr_trapezoid": 0.7732608436573142,
+              "brier": 0.18720879998601542,
+              "prevalence": 0.4002576766158471
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4002576766158471,
+              "pr_trapezoid": 0.7001288383079236,
+              "brier": 0.24005146904058614,
+              "prevalence": 0.4002576766158471
+            },
+            "delta_ap": 0.3730846007435781,
+            "delta_brier": -0.05284266905457072
+          },
+          {
+            "train_n": 18630,
+            "test_n": 4657,
+            "train_prevalence": 0.40026838432635536,
+            "train_ids_sha256": "831323e564d68f237570a16a6ed812898413a30757a16ec50e0f826516470abb",
+            "test_ids_sha256": "9b8f13f95029b455ff752e5574629d00a66a458c7cf0634ebc8b7190aa9ea1c4",
+            "model": {
+              "roc_auc": 0.8327899377505689,
+              "ap": 0.783294596560526,
+              "pr_trapezoid": 0.783218008441233,
+              "brier": 0.18458037002542801,
+              "prevalence": 0.4002576766158471
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4002576766158471,
+              "pr_trapezoid": 0.7001288383079236,
+              "brier": 0.24005146904058614,
+              "prevalence": 0.4002576766158471
+            },
+            "delta_ap": 0.3830369199446789,
+            "delta_brier": -0.05547109901515812
+          },
+          {
+            "train_n": 18630,
+            "test_n": 4657,
+            "train_prevalence": 0.40026838432635536,
+            "train_ids_sha256": "7e115d13c447881193ec39b6b823436e21f70cf09c03060c70f23e3ca39a3a3c",
+            "test_ids_sha256": "6a6052b766507a47b1cdbd86a1e82e2e67c54bd14ef3748fb3f6746e6b0fb8dd",
+            "model": {
+              "roc_auc": 0.8284051253209663,
+              "ap": 0.7771688053265574,
+              "pr_trapezoid": 0.7770885161983578,
+              "brier": 0.18627674847414874,
+              "prevalence": 0.4002576766158471
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.4002576766158471,
+              "pr_trapezoid": 0.7001288383079236,
+              "brier": 0.24005146904058614,
+              "prevalence": 0.4002576766158471
+            },
+            "delta_ap": 0.3769111287107103,
+            "delta_brier": -0.053774720566437395
+          }
+        ],
+        "publication_cohort": [
+          {
+            "train_n": 17177,
+            "test_n": 6110,
+            "train_prevalence": 0.48407754555510274,
+            "train_ids_sha256": "1c670984fc745fc5b62a4335094595c081e898efe11f3416c15bb5b257073d81",
+            "test_ids_sha256": "f47bcd7d99f529a749d25d0dce37aa1bfdb558a8f203eca802af9cacfda0be72",
+            "model": {
+              "roc_auc": 0.6684781592576204,
+              "ap": 0.28632874683410997,
+              "pr_trapezoid": 0.28563602457573567,
+              "brier": 0.18701505967079995,
+              "prevalence": 0.1646481178396072
+            },
+            "constant_train_prevalence": {
+              "roc_auc": 0.5,
+              "ap": 0.1646481178396072,
+              "pr_trapezoid": 0.5823240589198035,
+              "brier": 0.23957427442213097,
+              "prevalence": 0.1646481178396072
+            },
+            "delta_ap": 0.12168062899450277,
+            "delta_brier": -0.05255921475133102
+          }
+        ]
+      }
+    }
+  },
+  "features_sha256": "371334da13be048ab05c8937f4d5234b21ae5c1c85bfd8aba5041699c47fa76f",
+  "versions": {
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "sklearn": "1.9.1",
+    "lightgbm": "4.7.0"
+  }
+}

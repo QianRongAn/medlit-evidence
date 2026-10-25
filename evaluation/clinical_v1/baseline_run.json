@@ -1,0 +1,1471 @@
+{
+  "benchmark_sha256": "2fccf8e1c11fad26677c3f5b62c3260ed87d9c277e53f91c43e338085b4792a4",
+  "application_sha256": "03f8ef987e399e5b6d26b6f6d23dcd9d7f928eccdc4ddb7fd75356aedff1c161",
+  "evaluator_sha256": "e47eb8dec7fbf1a95b9f8c1803a4f6bac50b8046342f58bf6c12e47526d16a8e",
+  "hash_normalization": {
+    "frozen_v1_files": "UTF-8 CRLF",
+    "source_code": "UTF-8 LF"
+  },
+  "git_commit": "6038911cdf8e4c9df8d32ee7acc112f850a1db52",
+  "mode_requested": "extractive",
+  "scope": "closed_corpus_snapshot_not_live_pubmed; paired_languages_not_independent",
+  "retmax": 5,
+  "annotation_kind": "model_authored_source_review",
+  "expert_review_status": "pending",
+  "cases": [
+    {
+      "query_id": "Q01",
+      "pico": {
+        "population": [],
+        "intervention": [],
+        "comparison": [],
+        "outcome": [
+          "cardiovascular risk"
+        ]
+      },
+      "results": [
+        "38740993",
+        "37952131"
+      ],
+      "screening": {
+        "status": "matched",
+        "candidate_count": 11,
+        "included_count": 2,
+        "excluded_count": 9,
+        "pico_constraints": {
+          "population": [],
+          "intervention": [],
+          "comparison": [],
+          "outcome": [
+            "cardiovascular risk"
+          ]
+        },
+        "lexical_terms": [
+          "semaglutide",
+          "obesity"
+        ],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 2
+      },
+      "mode": "extractive",
+      "sentences": [
+        {
+          "sentence": "In the SELECT cardiovascular outcomes trial, semaglutide showed a 20% reduction in major adverse cardiovascular events in 17,604 adults with preexisting cardiovascular disease, overweight or obesity, without diabetes.",
+          "pmid": "38740993",
+          "title": "Long-term weight loss effects of semaglutide in obesity without diabetes in the SELECT trial.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "Whether semaglutide can reduce cardiovascular risk associated with overweight and obesity in the absence of diabetes is unknown.",
+          "pmid": "37952131",
+          "title": "Semaglutide and Cardiovascular Outcomes in Obesity without Diabetes.",
+          "polarity": "unassessed"
+        }
+      ],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q02",
+      "pico": {
+        "population": [],
+        "intervention": [],
+        "comparison": [],
+        "outcome": [
+          "cardiovascular risk"
+        ]
+      },
+      "results": [],
+      "screening": {
+        "status": "unsupported_query",
+        "candidate_count": 11,
+        "included_count": 0,
+        "excluded_count": 11,
+        "pico_constraints": {
+          "population": [],
+          "intervention": [],
+          "comparison": [],
+          "outcome": [
+            "cardiovascular risk"
+          ]
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [
+          "司美格鲁肽",
+          "肥胖"
+        ],
+        "issues": [
+          "unmapped_chinese_terms"
+        ],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q03",
+      "pico": {
+        "population": [],
+        "intervention": [],
+        "comparison": [
+          "placebo"
+        ],
+        "outcome": []
+      },
+      "results": [
+        "38740993"
+      ],
+      "screening": {
+        "status": "matched",
+        "candidate_count": 5,
+        "included_count": 1,
+        "excluded_count": 4,
+        "pico_constraints": {
+          "population": [],
+          "intervention": [],
+          "comparison": [
+            "placebo"
+          ],
+          "outcome": []
+        },
+        "lexical_terms": [
+          "semaglutide",
+          "obesity",
+          "weight",
+          "loss"
+        ],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 1
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q04",
+      "pico": {
+        "population": [],
+        "intervention": [],
+        "comparison": [
+          "placebo"
+        ],
+        "outcome": []
+      },
+      "results": [],
+      "screening": {
+        "status": "unsupported_query",
+        "candidate_count": 0,
+        "included_count": 0,
+        "excluded_count": 0,
+        "pico_constraints": {
+          "population": [],
+          "intervention": [],
+          "comparison": [
+            "placebo"
+          ],
+          "outcome": []
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [
+          "肥胖",
+          "使用司美格鲁肽",
+          "减重"
+        ],
+        "issues": [
+          "unmapped_chinese_terms"
+        ],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q05",
+      "pico": {
+        "population": [],
+        "intervention": [],
+        "comparison": [],
+        "outcome": []
+      },
+      "results": [
+        "38912654"
+      ],
+      "screening": {
+        "status": "matched",
+        "candidate_count": 4,
+        "included_count": 1,
+        "excluded_count": 3,
+        "pico_constraints": {
+          "population": [],
+          "intervention": [],
+          "comparison": [],
+          "outcome": []
+        },
+        "lexical_terms": [
+          "tirzepatide",
+          "obstructive",
+          "sleep",
+          "apnea",
+          "apnea-hypopnea",
+          "index"
+        ],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 1
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q06",
+      "pico": {
+        "population": [],
+        "intervention": [],
+        "comparison": [],
+        "outcome": []
+      },
+      "results": [],
+      "screening": {
+        "status": "unsupported_query",
+        "candidate_count": 0,
+        "included_count": 0,
+        "excluded_count": 0,
+        "pico_constraints": {
+          "population": [],
+          "intervention": [],
+          "comparison": [],
+          "outcome": []
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [
+          "替尔泊肽",
+          "阻塞性睡眠呼吸暂停",
+          "呼吸暂停低通气指数",
+          "何"
+        ],
+        "issues": [
+          "unmapped_chinese_terms",
+          "no_content_terms"
+        ],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q07",
+      "pico": {
+        "population": [
+          "heart failure"
+        ],
+        "intervention": [],
+        "comparison": [
+          "placebo"
+        ],
+        "outcome": [
+          "hospitalization"
+        ]
+      },
+      "results": [
+        "39225278"
+      ],
+      "screening": {
+        "status": "matched",
+        "candidate_count": 3,
+        "included_count": 1,
+        "excluded_count": 2,
+        "pico_constraints": {
+          "population": [
+            "heart failure"
+          ],
+          "intervention": [],
+          "comparison": [
+            "placebo"
+          ],
+          "outcome": [
+            "hospitalization"
+          ]
+        },
+        "lexical_terms": [
+          "finerenone"
+        ],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 1
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q08",
+      "pico": {
+        "population": [
+          "heart failure"
+        ],
+        "intervention": [],
+        "comparison": [
+          "placebo"
+        ],
+        "outcome": [
+          "hospitalization"
+        ]
+      },
+      "results": [],
+      "screening": {
+        "status": "unsupported_query",
+        "candidate_count": 3,
+        "included_count": 0,
+        "excluded_count": 3,
+        "pico_constraints": {
+          "population": [
+            "heart failure"
+          ],
+          "intervention": [],
+          "comparison": [
+            "placebo"
+          ],
+          "outcome": [
+            "hospitalization"
+          ]
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [
+          "非奈利酮",
+          "何"
+        ],
+        "issues": [
+          "unmapped_chinese_terms"
+        ],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q09",
+      "pico": {
+        "population": [],
+        "intervention": [],
+        "comparison": [],
+        "outcome": []
+      },
+      "results": [
+        "38767614"
+      ],
+      "screening": {
+        "status": "matched",
+        "candidate_count": 1,
+        "included_count": 1,
+        "excluded_count": 0,
+        "pico_constraints": {
+          "population": [],
+          "intervention": [],
+          "comparison": [],
+          "outcome": []
+        },
+        "lexical_terms": [
+          "dupilumab",
+          "copd",
+          "exacerbations"
+        ],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 1
+      },
+      "mode": "extractive",
+      "sentences": [
+        {
+          "sentence": "In patients with COPD and type 2 inflammation as indicated by elevated blood eosinophil counts, dupilumab was associated with fewer exacerbations and better lung function than placebo.",
+          "pmid": "38767614",
+          "title": "Dupilumab for COPD with Blood Eosinophil Evidence of Type 2 Inflammation.",
+          "polarity": "unassessed"
+        }
+      ],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q10",
+      "pico": {
+        "population": [],
+        "intervention": [],
+        "comparison": [],
+        "outcome": []
+      },
+      "results": [],
+      "screening": {
+        "status": "unsupported_query",
+        "candidate_count": 0,
+        "included_count": 0,
+        "excluded_count": 0,
+        "pico_constraints": {
+          "population": [],
+          "intervention": [],
+          "comparison": [],
+          "outcome": []
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [
+          "度普利尤单抗",
+          "慢阻肺",
+          "急性加重"
+        ],
+        "issues": [
+          "unmapped_chinese_terms",
+          "no_content_terms"
+        ],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q11",
+      "pico": {
+        "population": [],
+        "intervention": [],
+        "comparison": [],
+        "outcome": []
+      },
+      "results": [
+        "36449413"
+      ],
+      "screening": {
+        "status": "matched",
+        "candidate_count": 8,
+        "included_count": 1,
+        "excluded_count": 7,
+        "pico_constraints": {
+          "population": [],
+          "intervention": [],
+          "comparison": [],
+          "outcome": []
+        },
+        "lexical_terms": [
+          "lecanemab",
+          "early",
+          "alzheimer",
+          "disease",
+          "cognitive",
+          "decline"
+        ],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 1
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q12",
+      "pico": {
+        "population": [],
+        "intervention": [],
+        "comparison": [],
+        "outcome": []
+      },
+      "results": [],
+      "screening": {
+        "status": "unsupported_query",
+        "candidate_count": 0,
+        "included_count": 0,
+        "excluded_count": 0,
+        "pico_constraints": {
+          "population": [],
+          "intervention": [],
+          "comparison": [],
+          "outcome": []
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [
+          "仑卡奈单抗",
+          "早期阿尔茨海默病",
+          "认知下降"
+        ],
+        "issues": [
+          "unmapped_chinese_terms",
+          "no_content_terms"
+        ],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q13",
+      "pico": {
+        "population": [
+          "chronic kidney disease"
+        ],
+        "intervention": [],
+        "comparison": [],
+        "outcome": [
+          "mortality"
+        ]
+      },
+      "results": [
+        "32970396"
+      ],
+      "screening": {
+        "status": "matched",
+        "candidate_count": 11,
+        "included_count": 1,
+        "excluded_count": 10,
+        "pico_constraints": {
+          "population": [
+            "chronic kidney disease"
+          ],
+          "intervention": [],
+          "comparison": [],
+          "outcome": [
+            "mortality"
+          ]
+        },
+        "lexical_terms": [
+          "dapagliflozin"
+        ],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 1
+      },
+      "mode": "extractive",
+      "sentences": [
+        {
+          "sentence": "Among patients with chronic kidney disease, regardless of the presence or absence of diabetes, the risk of a composite of a sustained decline in the estimated GFR of at least 50%, end-stage kidney disease, or death from renal or cardiovascular causes was significantly lower with dapagliflozin than with placebo.",
+          "pmid": "32970396",
+          "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "Death occurred in 101 participants (4.7%) in the dapagliflozin group and 146 participants (6.8%) in the placebo group (hazard ratio, 0.69; 95% CI, 0.53 to 0.88; P = 0.004).",
+          "pmid": "32970396",
+          "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+          "polarity": "unassessed"
+        }
+      ],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q14",
+      "pico": {
+        "population": [
+          "chronic kidney disease"
+        ],
+        "intervention": [],
+        "comparison": [],
+        "outcome": [
+          "mortality"
+        ]
+      },
+      "results": [],
+      "screening": {
+        "status": "unsupported_query",
+        "candidate_count": 11,
+        "included_count": 0,
+        "excluded_count": 11,
+        "pico_constraints": {
+          "population": [
+            "chronic kidney disease"
+          ],
+          "intervention": [],
+          "comparison": [],
+          "outcome": [
+            "mortality"
+          ]
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [
+          "达格列净"
+        ],
+        "issues": [
+          "unmapped_chinese_terms"
+        ],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q15",
+      "pico": {
+        "population": [
+          "heart failure"
+        ],
+        "intervention": [],
+        "comparison": [],
+        "outcome": [
+          "mortality"
+        ]
+      },
+      "results": [
+        "31535829",
+        "32970396"
+      ],
+      "screening": {
+        "status": "matched",
+        "candidate_count": 8,
+        "included_count": 2,
+        "excluded_count": 6,
+        "pico_constraints": {
+          "population": [
+            "heart failure"
+          ],
+          "intervention": [],
+          "comparison": [],
+          "outcome": [
+            "mortality"
+          ]
+        },
+        "lexical_terms": [
+          "dapagliflozin"
+        ],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 2
+      },
+      "mode": "extractive",
+      "sentences": [
+        {
+          "sentence": "Among patients with heart failure and a reduced ejection fraction, the risk of worsening heart failure or death from cardiovascular causes was lower among those who received dapagliflozin than among those who received placebo, regardless of the presence or absence of diabetes.",
+          "pmid": "31535829",
+          "title": "Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "Among patients with chronic kidney disease, regardless of the presence or absence of diabetes, the risk of a composite of a sustained decline in the estimated GFR of at least 50%, end-stage kidney disease, or death from renal or cardiovascular causes was significantly lower with dapagliflozin than with placebo.",
+          "pmid": "32970396",
+          "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "Death from cardiovascular causes occurred in 227 patients (9.6%) in the dapagliflozin group and in 273 patients (11.5%) in the placebo group (hazard ratio, 0.82; 95% CI, 0.69 to 0.98); 276 patients (11.6%) and 329 patients (13.9%), respectively, died from any cause (hazard ratio, 0.83; 95% CI, 0.71 to 0.97).",
+          "pmid": "31535829",
+          "title": "Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "Death occurred in 101 participants (4.7%) in the dapagliflozin group and 146 participants (6.8%) in the placebo group (hazard ratio, 0.69; 95% CI, 0.53 to 0.88; P = 0.004).",
+          "pmid": "32970396",
+          "title": "Dapagliflozin in Patients with Chronic Kidney Disease.",
+          "polarity": "unassessed"
+        }
+      ],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q16",
+      "pico": {
+        "population": [
+          "heart failure"
+        ],
+        "intervention": [],
+        "comparison": [],
+        "outcome": [
+          "mortality"
+        ]
+      },
+      "results": [],
+      "screening": {
+        "status": "unsupported_query",
+        "candidate_count": 8,
+        "included_count": 0,
+        "excluded_count": 8,
+        "pico_constraints": {
+          "population": [
+            "heart failure"
+          ],
+          "intervention": [],
+          "comparison": [],
+          "outcome": [
+            "mortality"
+          ]
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [
+          "达格列净"
+        ],
+        "issues": [
+          "unmapped_chinese_terms"
+        ],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q17",
+      "pico": {
+        "population": [
+          "colorectal cancer"
+        ],
+        "intervention": [
+          "pembrolizumab"
+        ],
+        "comparison": [
+          "chemotherapy"
+        ],
+        "outcome": [
+          "overall survival"
+        ]
+      },
+      "results": [
+        "35427471"
+      ],
+      "screening": {
+        "status": "matched",
+        "candidate_count": 4,
+        "included_count": 1,
+        "excluded_count": 3,
+        "pico_constraints": {
+          "population": [
+            "colorectal cancer"
+          ],
+          "intervention": [
+            "pembrolizumab"
+          ],
+          "comparison": [
+            "chemotherapy"
+          ],
+          "outcome": [
+            "overall survival"
+          ]
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 1
+      },
+      "mode": "extractive",
+      "sentences": [
+        {
+          "sentence": "At final analysis (median follow-up of 44·5 months [IQR 39·7-49·8]), median overall survival was not reached (NR; 95% CI 49·2-NR) with pembrolizumab vs 36·7 months (27·6-NR) with chemotherapy (hazard ratio [HR] 0·74; 95% CI 0·53-1·03; p=0·036).",
+          "pmid": "35427471",
+          "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "Superiority of pembrolizumab versus chemotherapy for overall survival was not demonstrated because the prespecified α of 0·025 needed for statistical significance was not achieved.",
+          "pmid": "35427471",
+          "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "In this updated analysis, although pembrolizumab continued to show durable antitumour activity and fewer treatment-related adverse events compared with chemotherapy, there was no significant difference in overall survival between the two treatment groups.",
+          "pmid": "35427471",
+          "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "However, the treatment's effect on overall survival in this cohort of patients was unknown.",
+          "pmid": "35427471",
+          "title": "Pembrolizumab versus chemotherapy for microsatellite instability-high or mismatch repair-deficient metastatic colorectal cancer (KEYNOTE-177): final analysis of a randomised, open-label, phase 3 study.",
+          "polarity": "unassessed"
+        }
+      ],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q18",
+      "pico": {
+        "population": [
+          "colorectal cancer"
+        ],
+        "intervention": [
+          "pembrolizumab"
+        ],
+        "comparison": [
+          "chemotherapy"
+        ],
+        "outcome": [
+          "overall survival"
+        ]
+      },
+      "results": [],
+      "screening": {
+        "status": "unsupported_query",
+        "candidate_count": 4,
+        "included_count": 0,
+        "excluded_count": 4,
+        "pico_constraints": {
+          "population": [
+            "colorectal cancer"
+          ],
+          "intervention": [
+            "pembrolizumab"
+          ],
+          "comparison": [
+            "chemotherapy"
+          ],
+          "outcome": [
+            "overall survival"
+          ]
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [
+          "何"
+        ],
+        "issues": [
+          "unmapped_chinese_terms"
+        ],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q19",
+      "pico": {
+        "population": [
+          "elderly"
+        ],
+        "intervention": [
+          "aspirin"
+        ],
+        "comparison": [],
+        "outcome": [
+          "mortality"
+        ]
+      },
+      "results": [
+        "30221595",
+        "30221596"
+      ],
+      "screening": {
+        "status": "matched",
+        "candidate_count": 8,
+        "included_count": 2,
+        "excluded_count": 6,
+        "pico_constraints": {
+          "population": [
+            "elderly"
+          ],
+          "intervention": [
+            "aspirin"
+          ],
+          "comparison": [],
+          "outcome": [
+            "mortality"
+          ]
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 2
+      },
+      "mode": "extractive",
+      "sentences": [
+        {
+          "sentence": "Higher all-cause mortality was observed among apparently healthy older adults who received daily aspirin than among those who received placebo and was attributed primarily to cancer-related death.",
+          "pmid": "30221595",
+          "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "Hazard ratios were calculated to compare mortality between the aspirin group and the placebo group, and post hoc exploratory analyses of specific causes of death were performed.",
+          "pmid": "30221595",
+          "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "Cancer was the major contributor to the higher mortality in the aspirin group, accounting for 1.6 excess deaths per 1000 person-years.",
+          "pmid": "30221595",
+          "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "A numerically higher rate of the secondary end point of death from any cause was observed with aspirin than with placebo.",
+          "pmid": "30221595",
+          "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+          "polarity": "unassessed"
+        }
+      ],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q20",
+      "pico": {
+        "population": [
+          "elderly"
+        ],
+        "intervention": [
+          "aspirin"
+        ],
+        "comparison": [],
+        "outcome": [
+          "mortality"
+        ]
+      },
+      "results": [
+        "30221595",
+        "30221596"
+      ],
+      "screening": {
+        "status": "matched",
+        "candidate_count": 8,
+        "included_count": 2,
+        "excluded_count": 6,
+        "pico_constraints": {
+          "population": [
+            "elderly"
+          ],
+          "intervention": [
+            "aspirin"
+          ],
+          "comparison": [],
+          "outcome": [
+            "mortality"
+          ]
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 2
+      },
+      "mode": "extractive",
+      "sentences": [
+        {
+          "sentence": "Higher all-cause mortality was observed among apparently healthy older adults who received daily aspirin than among those who received placebo and was attributed primarily to cancer-related death.",
+          "pmid": "30221595",
+          "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "Hazard ratios were calculated to compare mortality between the aspirin group and the placebo group, and post hoc exploratory analyses of specific causes of death were performed.",
+          "pmid": "30221595",
+          "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "Cancer was the major contributor to the higher mortality in the aspirin group, accounting for 1.6 excess deaths per 1000 person-years.",
+          "pmid": "30221595",
+          "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "A numerically higher rate of the secondary end point of death from any cause was observed with aspirin than with placebo.",
+          "pmid": "30221595",
+          "title": "Effect of Aspirin on All-Cause Mortality in the Healthy Elderly.",
+          "polarity": "unassessed"
+        }
+      ],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q21",
+      "pico": {
+        "population": [
+          "elderly"
+        ],
+        "intervention": [
+          "aspirin"
+        ],
+        "comparison": [
+          "placebo"
+        ],
+        "outcome": []
+      },
+      "results": [
+        "30221596"
+      ],
+      "screening": {
+        "status": "matched",
+        "candidate_count": 4,
+        "included_count": 1,
+        "excluded_count": 3,
+        "pico_constraints": {
+          "population": [
+            "elderly"
+          ],
+          "intervention": [
+            "aspirin"
+          ],
+          "comparison": [
+            "placebo"
+          ],
+          "outcome": []
+        },
+        "lexical_terms": [
+          "major",
+          "hemorrhage"
+        ],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 1
+      },
+      "mode": "extractive",
+      "sentences": [
+        {
+          "sentence": "Aspirin use in healthy elderly persons did not prolong disability-free survival over a period of 5 years but led to a higher rate of major hemorrhage than placebo.",
+          "pmid": "30221596",
+          "title": "Effect of Aspirin on Disability-free Survival in the Healthy Elderly.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "The rate of major hemorrhage was higher in the aspirin group than in the placebo group (3.8% vs.",
+          "pmid": "30221596",
+          "title": "Effect of Aspirin on Disability-free Survival in the Healthy Elderly.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "Secondary end points reported in this article included the individual components of the primary end point and major hemorrhage.",
+          "pmid": "30221596",
+          "title": "Effect of Aspirin on Disability-free Survival in the Healthy Elderly.",
+          "polarity": "unassessed"
+        }
+      ],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q22",
+      "pico": {
+        "population": [
+          "elderly"
+        ],
+        "intervention": [
+          "aspirin"
+        ],
+        "comparison": [
+          "placebo"
+        ],
+        "outcome": []
+      },
+      "results": [],
+      "screening": {
+        "status": "unsupported_query",
+        "candidate_count": 2,
+        "included_count": 0,
+        "excluded_count": 2,
+        "pico_constraints": {
+          "population": [
+            "elderly"
+          ],
+          "intervention": [
+            "aspirin"
+          ],
+          "comparison": [
+            "placebo"
+          ],
+          "outcome": []
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [
+          "严重出血"
+        ],
+        "issues": [
+          "unmapped_chinese_terms"
+        ],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q23",
+      "pico": {
+        "population": [
+          "melanoma"
+        ],
+        "intervention": [
+          "nivolumab"
+        ],
+        "comparison": [],
+        "outcome": [
+          "overall survival"
+        ]
+      },
+      "results": [
+        "39282897"
+      ],
+      "screening": {
+        "status": "matched",
+        "candidate_count": 4,
+        "included_count": 1,
+        "excluded_count": 3,
+        "pico_constraints": {
+          "population": [
+            "melanoma"
+          ],
+          "intervention": [
+            "nivolumab"
+          ],
+          "comparison": [],
+          "outcome": [
+            "overall survival"
+          ]
+        },
+        "lexical_terms": [
+          "ipilimumab"
+        ],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 1
+      },
+      "mode": "extractive",
+      "sentences": [
+        {
+          "sentence": "Previous results from this trial showed longer overall survival after treatment with nivolumab plus ipilimumab or with nivolumab monotherapy than with ipilimumab monotherapy in patients with advanced melanoma.",
+          "pmid": "39282897",
+          "title": "Final, 10-Year Outcomes with Nivolumab plus Ipilimumab in Advanced Melanoma.",
+          "polarity": "unassessed"
+        },
+        {
+          "sentence": "With a minimum follow-up of 10 years, median overall survival was 71.9 months with nivolumab plus ipilimumab, 36.9 months with nivolumab, and 19.9 months with ipilimumab.",
+          "pmid": "39282897",
+          "title": "Final, 10-Year Outcomes with Nivolumab plus Ipilimumab in Advanced Melanoma.",
+          "polarity": "unassessed"
+        }
+      ],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q24",
+      "pico": {
+        "population": [
+          "melanoma"
+        ],
+        "intervention": [
+          "nivolumab"
+        ],
+        "comparison": [],
+        "outcome": [
+          "overall survival"
+        ]
+      },
+      "results": [],
+      "screening": {
+        "status": "unsupported_query",
+        "candidate_count": 4,
+        "included_count": 0,
+        "excluded_count": 4,
+        "pico_constraints": {
+          "population": [
+            "melanoma"
+          ],
+          "intervention": [
+            "nivolumab"
+          ],
+          "comparison": [],
+          "outcome": [
+            "overall survival"
+          ]
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [
+          "伊匹木单抗",
+          "何"
+        ],
+        "issues": [
+          "unmapped_chinese_terms"
+        ],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q25",
+      "pico": {
+        "population": [
+          "type 1 diabetes"
+        ],
+        "intervention": [],
+        "comparison": [],
+        "outcome": [
+          "cardiovascular risk"
+        ]
+      },
+      "results": [],
+      "screening": {
+        "status": "no_match",
+        "candidate_count": 11,
+        "included_count": 0,
+        "excluded_count": 11,
+        "pico_constraints": {
+          "population": [
+            "type 1 diabetes"
+          ],
+          "intervention": [],
+          "comparison": [],
+          "outcome": [
+            "cardiovascular risk"
+          ]
+        },
+        "lexical_terms": [
+          "semaglutide"
+        ],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q26",
+      "pico": {
+        "population": [
+          "type 1 diabetes"
+        ],
+        "intervention": [],
+        "comparison": [],
+        "outcome": [
+          "cardiovascular risk"
+        ]
+      },
+      "results": [],
+      "screening": {
+        "status": "unsupported_query",
+        "candidate_count": 11,
+        "included_count": 0,
+        "excluded_count": 11,
+        "pico_constraints": {
+          "population": [
+            "type 1 diabetes"
+          ],
+          "intervention": [],
+          "comparison": [],
+          "outcome": [
+            "cardiovascular risk"
+          ]
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [
+          "司美格鲁肽",
+          "何"
+        ],
+        "issues": [
+          "unmapped_chinese_terms"
+        ],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q27",
+      "pico": {
+        "population": [
+          "children",
+          "heart failure"
+        ],
+        "intervention": [],
+        "comparison": [],
+        "outcome": [
+          "mortality"
+        ]
+      },
+      "results": [],
+      "screening": {
+        "status": "no_match",
+        "candidate_count": 8,
+        "included_count": 0,
+        "excluded_count": 8,
+        "pico_constraints": {
+          "population": [
+            "children",
+            "heart failure"
+          ],
+          "intervention": [],
+          "comparison": [],
+          "outcome": [
+            "mortality"
+          ]
+        },
+        "lexical_terms": [
+          "dapagliflozin"
+        ],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q28",
+      "pico": {
+        "population": [
+          "children",
+          "heart failure"
+        ],
+        "intervention": [],
+        "comparison": [],
+        "outcome": [
+          "mortality"
+        ]
+      },
+      "results": [],
+      "screening": {
+        "status": "unsupported_query",
+        "candidate_count": 8,
+        "included_count": 0,
+        "excluded_count": 8,
+        "pico_constraints": {
+          "population": [
+            "children",
+            "heart failure"
+          ],
+          "intervention": [],
+          "comparison": [],
+          "outcome": [
+            "mortality"
+          ]
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [
+          "达格列净",
+          "何"
+        ],
+        "issues": [
+          "unmapped_chinese_terms"
+        ],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q29",
+      "pico": {
+        "population": [
+          "breast cancer"
+        ],
+        "intervention": [
+          "pembrolizumab"
+        ],
+        "comparison": [
+          "chemotherapy"
+        ],
+        "outcome": [
+          "overall survival"
+        ]
+      },
+      "results": [],
+      "screening": {
+        "status": "no_match",
+        "candidate_count": 4,
+        "included_count": 0,
+        "excluded_count": 4,
+        "pico_constraints": {
+          "population": [
+            "breast cancer"
+          ],
+          "intervention": [
+            "pembrolizumab"
+          ],
+          "comparison": [
+            "chemotherapy"
+          ],
+          "outcome": [
+            "overall survival"
+          ]
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [],
+        "issues": [],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    },
+    {
+      "query_id": "Q30",
+      "pico": {
+        "population": [
+          "breast cancer"
+        ],
+        "intervention": [
+          "pembrolizumab"
+        ],
+        "comparison": [
+          "chemotherapy"
+        ],
+        "outcome": [
+          "overall survival"
+        ]
+      },
+      "results": [],
+      "screening": {
+        "status": "unsupported_query",
+        "candidate_count": 4,
+        "included_count": 0,
+        "excluded_count": 4,
+        "pico_constraints": {
+          "population": [
+            "breast cancer"
+          ],
+          "intervention": [
+            "pembrolizumab"
+          ],
+          "comparison": [
+            "chemotherapy"
+          ],
+          "outcome": [
+            "overall survival"
+          ]
+        },
+        "lexical_terms": [],
+        "unmapped_terms": [
+          "何"
+        ],
+        "issues": [
+          "unmapped_chinese_terms"
+        ],
+        "note": "按已识别词项和 PICO 条件保守筛选；未识别字段不作约束，通过不代表临床适用性已验证。",
+        "matched_count": 0
+      },
+      "mode": "extractive",
+      "sentences": [],
+      "fallback_reason": null
+    }
+  ],
+  "run_sha256": "00176e2937933bc810328b6cb121cfa02916d35654a2580e1162c2fd896fdccf"
+}
