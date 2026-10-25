@@ -19,7 +19,8 @@ function loadApp(history = []) {
         toggle: (name, enabled) => enabled ? classes.add(name) : classes.delete(name),
       },
       appendChild(child) { this.children.push(child); },
-      addEventListener() {}, focus() { this.focused = true; },
+      listeners: {},
+      addEventListener(name, handler) { this.listeners[name] = handler; }, focus() { this.focused = true; },
       scrollIntoView(options) { this.scrollOptions = options; },
     };
   }
@@ -447,7 +448,56 @@ test("incomplete manual GRADE does not display a completed level",async()=>{
   context.fetch=async()=>({ok:true,json:async()=>({status:"incomplete",missing:["imprecision","references"]})});
   await context.submitGradeReview();
   assert.match(get("gradeReviewResult").textContent,/待补齐：2 项/);
+  assert.match(get("gradeReviewResult").textContent,/效应估计不精确性：请选择判断、请填写理由与依据/);
+  assert.match(get("gradeReviewResult").textContent,/核查依据 PMID/);
+  assert.equal(get("grade-imprecision").focused,true);
   assert.doesNotMatch(get("confTag").textContent,/人工草案/);
+});
+
+test("GRADE lists missing selections even when all rationales are filled",async()=>{
+  const {context,get}=loadApp();
+  vm.runInContext(fs.readFileSync(path.join(__dirname,"../static/assessment-ui.js"),"utf8"),context);
+  context.resetGradeReview();
+  for(const key of ["risk_of_bias","inconsistency","indirectness","imprecision","publication_bias"]) get("reason-"+key).value="已核对全文";
+  context.fetch=async()=>({ok:true,json:async()=>({status:"incomplete",missing:["risk_of_bias","inconsistency","indirectness","imprecision","publication_bias","initial_evidence","references"]})});
+  await context.submitGradeReview();
+  assert.match(get("gradeReviewResult").textContent,/偏倚风险：请选择判断/);
+  assert.match(get("gradeReviewResult").textContent,/证据起点/);
+  assert.doesNotMatch(get("gradeReviewResult").textContent,/请填写理由/);
+  assert.equal(get("gradeReview").open,true);
+});
+
+test("complete manual GRADE submits judgments and evidence and shows the draft",async()=>{
+  const {context,get}=loadApp();
+  vm.runInContext(fs.readFileSync(path.join(__dirname,"../static/assessment-ui.js"),"utf8"),context);
+  get("gradeInitial").value="randomized";get("gradeReferences").value="123，456";
+  for(const key of ["risk_of_bias","inconsistency","indirectness","imprecision","publication_bias"]){
+    get("grade-"+key).value="not_serious";get("reason-"+key).value="核查依据";
+  }
+  context.fetch=async(url,options)=>{
+    const body=JSON.parse(options.body);
+    assert.equal(url,"/api/grade");assert.equal(body.initial,"randomized");
+    assert.deepEqual(body.references,["123","456"]);assert.equal(body.domains.imprecision.rationale,"核查依据");
+    return {ok:true,json:async()=>({status:"completed",label:"高",note:"未经独立审核"})};
+  };
+  await context.submitGradeReview();
+  assert.equal(get("confTag").textContent,"高（人工草案）");
+  assert.match(get("gradeReviewResult").textContent,/高可信度（人工草案）/);
+  assert.equal(get("submitGrade").disabled,false);
+});
+
+test("editing GRADE while a submission is pending discards its stale grade",async()=>{
+  const {context,get}=loadApp();
+  vm.runInContext(fs.readFileSync(path.join(__dirname,"../static/assessment-ui.js"),"utf8"),context);
+  let resolve;
+  context.fetch=()=>new Promise(done=>{resolve=done;});
+  const pending=context.submitGradeReview();
+  get("reason-imprecision").listeners.input();
+  resolve({ok:true,json:async()=>({status:"completed",label:"高",note:"old"})});
+  await pending;
+  assert.doesNotMatch(get("confTag").textContent,/人工草案/);
+  assert.match(get("gradeReviewResult").textContent,/已修改/);
+  assert.equal(get("submitGrade").disabled,false);
 });
 
 test("leaving a result clears the human GRADE worksheet",()=>{

@@ -89,6 +89,25 @@ class GradeWorksheetTests(unittest.TestCase):
         self.assertEqual(grade_review('randomized',fields,['123'])['level'],'very low')
 
 class GradeReviewAPITests(unittest.IsolatedAsyncioTestCase):
+    async def test_rationales_alone_abstain_then_complete_judgments_generate_draft(self):
+        import httpx
+        from app.main import app
+        from app.reported_assessment import GRADE_DOMAINS
+        payload={'initial':'randomized','references':['12345678'],
+                 'domains':{key:{'severity':'unknown','rationale':'已核查全文依据'} for key in GRADE_DOMAINS}}
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app),base_url='http://test') as client:
+            response=await client.post('/api/grade',json=payload)
+            self.assertEqual(response.status_code,200)
+            self.assertEqual(set(response.json()['missing']),set(GRADE_DOMAINS))
+            for domain in payload['domains'].values():
+                domain['severity']='not_serious'
+            payload['domains']['imprecision']['severity']='serious'
+            response=await client.post('/api/grade',json=payload)
+            self.assertEqual(response.status_code,200)
+            self.assertEqual(response.json()['status'],'completed')
+            self.assertEqual(response.json()['level'],'moderate')
+            self.assertEqual(response.json()['source'],'user_review')
+
     async def test_unknown_fields_and_bad_pmids_are_rejected(self):
         import httpx
         from app.main import app
