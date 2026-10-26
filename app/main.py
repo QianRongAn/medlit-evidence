@@ -25,7 +25,7 @@ from .synthesizer import CitationValidationError, extractive_answer, llm_answer
 from .tokenizer import tokenize
 from .translate import translate_query
 
-app = FastAPI(title="MedLit Evidence", version="0.7.0")
+app = FastAPI(title="MedLit Evidence", version="0.8.0")
 
 
 class PicoInput(BaseModel):
@@ -207,7 +207,7 @@ async def answer(q: Query):
     evidence["reported_assessment"] = reported_summary(docs,plan)
     evidence["assessment_note"] = (
         "按具体结局核对原文报告方向，并保留 PMID 和原句；方向一致不等于临床结论成立。"
-        "可信度展示原文 GRADE 评级或人工核查草案，不按文献数量生成概率。"
+        "系统自动核查五项可信度维度，展示结论、引用依据与资料缺口；摘要初评不是经全文验证的 GRADE 或概率。"
     )
 
     # 证据等级分布

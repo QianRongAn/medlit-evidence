@@ -441,6 +441,54 @@ test("source-reported grades and directions remain cited and are not numeric pro
   assert.match(get("reportedCertainty").innerHTML,/Moderate-certainty evidence/);
 });
 
+function automaticDoc(pmid,direction,priority=1) {
+  return {pmid,source:"pubmed",reported_assessment:[{outcome:"mortality",direction,findings:[],source_certainty:[],
+    automatic:{priority,design:"randomized_controlled_trial",domains:{risk_of_bias:{label:"偏倚风险",status:"unknown",evidence:[]}},
+      certainty:{status:"limited",label:"可信度受限",reason:"未报告偏倚资料",lower:"极低",upper:"高"}}}]};
+}
+
+test("automatic direction and certainty appear without any manual GRADE input",()=>{
+  const {context,get}=loadApp();
+  vm.runInContext(fs.readFileSync(path.join(__dirname,"../static/assessment-ui.js"),"utf8"),context);
+  context.renderReportedAssessment([automaticDoc("123","decrease")]);
+  assert.match(get("reportedDirection").innerHTML,/现有证据提示减少（自动初评）/);
+  assert.match(get("reportedCertainty").innerHTML,/可信度受限/);
+  assert.match(get("reportedCertainty").innerHTML,/资料不足，未按通过处理/);
+  assert.match(get("reportedCertainty").innerHTML,/无需填写人工工作表/);
+  assert.match(get("confTag").textContent,/已自动初评/);
+  assert.doesNotMatch(get("confDesc").textContent,/填写|点击生成/);
+});
+
+test("automatic conclusions update when later pages add a conflicting trial",()=>{
+  const {context,get}=loadApp();
+  vm.runInContext(fs.readFileSync(path.join(__dirname,"../static/assessment-ui.js"),"utf8"),context);
+  const first={results:[automaticDoc("123","decrease")]};
+  context.renderReportedAssessment(first.results);
+  const merged=context.mergeSourcePage(first,{results:[automaticDoc("456","increase")],screening:{}});
+  context.renderReportedAssessment(merged.results);
+  assert.match(get("reportedDirection").innerHTML,/现有证据方向不一致（自动初评）/);
+  assert.match(get("reportedCertainty").innerHTML,/PMID 456/);
+});
+
+test("an uncertain report is a caveat rather than opposite evidence",()=>{
+  const {context,get}=loadApp();
+  vm.runInContext(fs.readFileSync(path.join(__dirname,"../static/assessment-ui.js"),"utf8"),context);
+  context.renderReportedAssessment([automaticDoc("123","decrease"),automaticDoc("456","uncertain")]);
+  assert.match(get("reportedDirection").innerHTML,/现有证据提示减少（自动初评）/);
+  assert.match(get("reportedDirection").innerHTML,/不确定不等于相反方向/);
+});
+
+test("lower-priority reviews do not outvote a trial and automatic quotes are escaped",()=>{
+  const {context,get}=loadApp();
+  vm.runInContext(fs.readFileSync(path.join(__dirname,"../static/assessment-ui.js"),"utf8"),context);
+  const primary=automaticDoc("123","decrease");
+  primary.reported_assessment[0].automatic.domains.risk_of_bias.evidence=[{quote:"<script>bad()</script>",pmid:"123"}];
+  context.renderReportedAssessment([primary,...[1,2,3,4].map(n=>automaticDoc(String(n),"increase",3))]);
+  assert.match(get("reportedDirection").innerHTML,/现有证据提示减少（自动初评）/);
+  assert.doesNotMatch(get("reportedCertainty").innerHTML,/<script>/);
+  assert.match(get("reportedCertainty").innerHTML,/&lt;script&gt;/);
+});
+
 test("incomplete manual GRADE does not display a completed level",async()=>{
   const {context,get}=loadApp();
   vm.runInContext(fs.readFileSync(path.join(__dirname,"../static/assessment-ui.js"),"utf8"),context);

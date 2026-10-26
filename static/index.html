@@ -199,7 +199,7 @@
           <div class="dist-bar" id="distBar"></div>
           <div class="dist-legend" id="distLegend"></div>
           <div class="pico-overview"><h3 class="overview-label">PICO 条件识别</h3><p id="picoSummary"></p></div>
-          <details class="grade-review" id="gradeReview"><summary>填写 GRADE 可信度评估</summary>
+          <details class="grade-review" id="gradeReview"><summary>可选：人工复核 / 覆盖系统初评</summary>
             <p>请选择证据起点，为五项分别选择判断并填写理由，填写核查依据 PMID，然后点击下方“生成可信度分级草案”。只填写理由还不足以分级；系统不会代选判断。</p>
             <label>证据起点<select id="gradeInitial"><option value="unknown">请选择</option><option value="randomized">随机试验证据</option><option value="observational">观察性证据（未含升级因素）</option></select></label>
             <label>偏倚风险<select id="grade-risk_of_bias"><option value="unknown">资料待补齐</option><option value="not_serious">未发现严重问题</option><option value="serious">严重问题（降 1 级）</option><option value="very_serious">非常严重（降 2 级）</option></select><textarea id="reason-risk_of_bias" maxlength="2000" rows="2" placeholder="核查理由与依据"></textarea></label>
@@ -308,7 +308,7 @@
   </aside>
 
   <script src="/static/app.js?v=20261024-continuation"></script>
-  <script src="/static/assessment-ui.js?v=20261026-grade-feedback"></script>
+  <script src="/static/assessment-ui.js?v=20261027-automatic"></script>
   <script defer src="/static/vendor/gsap.min.js"></script>
   <script defer src="/static/ui-effects.js"></script>
 </body>

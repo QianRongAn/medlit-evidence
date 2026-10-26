@@ -72,6 +72,15 @@ def _direction(clause, outcome, intervention, comparison):
         else:
             changes.append("increase" if re.match(r"increas|higher|rais|elevat",effect.group()) else "decrease")
     if not changes:
+        # A single explicit ratio can state an effect without an active-voice verb.
+        ratios = list(re.finditer(r"\b(?:hazard ratio|risk ratio|odds ratio|rate ratio|hr|rr|or|ahr|aor)\s*[:=(]?\s*(\d*\.?\d+)\b", text))
+        if (len(ratios) == 1 and float(ratios[0].group(1)) > 0 and not comparison
+                and any(end < ratios[0].start() for _, end in anchors)
+                and not re.search(r"\b(?:versus|vs|compared|relative|reference)\b", text)):
+            value = float(ratios[0].group(1))
+            if uncertain or value == 1:
+                return "uncertain"
+            return "increase" if value > 1 else "decrease"
         if uncertain and any(0 <= start-end < 150 for _,end in anchors for start,_ in targets):
             return "uncertain"
         return None
@@ -110,7 +119,9 @@ def assess_reported_findings(doc, plan):
                     findings.append({"direction":direction,"label":_LABELS[direction],"quote":quote,
                                      "section":section,"pmid":doc.get("pmid")})
         distinct={item["direction"] for item in findings}
-        direction=next(iter(distinct)) if len(distinct)==1 else "mixed" if distinct else None
+        direction=(next(iter(distinct)) if len(distinct)==1 else
+                   "mixed" if {"increase", "decrease"} <= distinct or "mixed" in distinct else
+                   "uncertain" if distinct else None)
         requested=question_direction(plan.get("query", ""),outcome)
         alignment=("same_direction" if direction==requested else "opposite_direction") if requested and direction in ("increase","decrease") else None
         reports.append({"outcome":outcome,"direction":direction,"direction_label":_LABELS.get(direction,"缺少可核对的结局方向"),
@@ -135,12 +146,16 @@ def question_direction(query,outcome):
 
 
 def reported_summary(docs,plan):
+    from .automatic_assessment import appraise_report, summarize_automatic
     items=[]
     for doc in docs:
         reports=assess_reported_findings(doc,plan)
+        for report in reports:
+            report["automatic"] = appraise_report(doc, report, plan)
         doc["reported_assessment"]=reports
         items.extend(reports)
     return {"scope":"reported_abstract_findings","items":items,
+            "automatic_conclusions":summarize_automatic(docs,plan["pico"]["outcome"]),
             "note":"方向是具体结局在原文中的报告，不代表因果证明；原文 GRADE 评级注明来源，不按篇数或研究类型计算可信概率。"}
 
 
