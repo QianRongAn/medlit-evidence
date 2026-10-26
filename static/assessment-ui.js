@@ -59,7 +59,7 @@ function renderReportedAssessment(docs) {
         const auto=item.automatic, certainty=auto.certainty;
         return `<section><p>${cite(item.pmid)} · ${esc(auto.design)} · ${esc(certainty.reason)}</p>
           ${certainty.lower && certainty.upper && certainty.status === "limited" ? `<p>可能分级范围：${esc(certainty.lower)}—${esc(certainty.upper)}；摘要缺失资料使范围尚不能收窄，不是已确定评级。</p>` : ""}
-          ${Object.values(auto.domains).map(domain=>`<p><b>${esc(domain.label)}</b>：${esc(({serious:"发现明确局限",not_serious:"原文报告未发现严重问题",unknown:"资料不足，未按通过处理"})[domain.status])}</p>${domain.evidence.map(source=>source.quote ? `<blockquote>${esc(source.quote)}<br>${cite(source.pmid)}</blockquote>` : `<p>出版元数据：${esc(source.metadata)} · ${cite(source.pmid)}</p>`).join("")}`).join("")}</section>`;
+          ${Object.values(auto.domains).map(domain=>`<p><b>${esc(domain.label)}</b>：${esc(({serious:"发现明确局限",not_serious:"原文报告未发现严重问题",unknown:"资料不足，未按通过处理"})[domain.status])}。${esc(domain.reason || "")}</p>${domain.evidence.map(source=>source.quote ? `<blockquote>${esc(source.quote)}<br>${cite(source.pmid)}</blockquote>` : `<p>出版元数据：${esc(source.metadata)} · ${cite(source.pmid)}</p>`).join("")}`).join("")}</section>`;
       }).join("")}</details></div>`);
   });
   $("reportedDirection").innerHTML = direction.join("")

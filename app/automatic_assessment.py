@@ -63,6 +63,13 @@ def appraise_report(doc, report, plan):
         status = next(iter(statuses)) if len(statuses) == 1 else "unknown"
         domains[key] = {"label": label, "status": status, "evidence": signals,
                         "reason": "原文有可追溯的明确报告" if status != "unknown" else "摘要信息不足或报告冲突，未按无风险处理"}
+    for finding in report.get("findings", []):
+        if re.search(r"\b(?:ci|confidence interval)\b", finding["quote"], re.I):
+            domain = domains["imprecision"]
+            if not any(item["quote"] == finding["quote"] for item in domain["evidence"]):
+                domain["evidence"].append({"status":"information", "quote":finding["quote"], "pmid":doc["pmid"]})
+            if domain["status"] == "unknown":
+                domain["reason"] = "已提取效应置信区间；缺少临床重要差异阈值或最优信息量，不能仅凭统计显著判定精确性"
     if "concern" in document_integrity(doc)["integrity_flags"]:
         domains["risk_of_bias"].update(status="serious", reason="出版记录存在存疑标记，降低可信度上界")
         domains["risk_of_bias"]["evidence"].append({"status":"serious", "pmid":doc["pmid"],

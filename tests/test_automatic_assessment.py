@@ -37,6 +37,9 @@ class AutomaticAssessmentTests(unittest.TestCase):
         self.assertIsNone(auto["certainty"]["level"])
         self.assertEqual(auto["certainty"]["upper"], "高")
         self.assertTrue(all(d["status"] == "unknown" for d in auto["domains"].values()))
+        precision=auto['domains']['imprecision']
+        self.assertEqual(precision['evidence'][0]['status'],'information')
+        self.assertIn('置信区间',precision['reason'])
 
     def test_explicit_limitation_is_cited_and_reduces_upper_bound(self):
         text = "RESULTS: Metformin reduced mortality. LIMITATIONS: Residual confounding could influence our findings."
