@@ -1,0 +1,8 @@
+[
+  {"id":"FT01","question":"Vitamin D supplementation and mortality in hospitalized COVID-19 patients","query":"I: vitamin D supplementation\nO: mortality","outcome":"mortality","pmids":["34719404"]},
+  {"id":"FT02","question":"Physical activity and mortality among adults with obesity","query":"P: obesity\nI: physical activity\nO: mortality","outcome":"mortality","pmids":["38997726"]},
+  {"id":"FT03","question":"Cardiorespiratory fitness and mortality","query":"I: cardiorespiratory fitness\nO: mortality","outcome":"mortality","pmids":["38599681"]},
+  {"id":"FT04","question":"Physical activity and mortality in noncommunicable disease populations","query":"I: physical activity\nO: mortality","outcome":"mortality","pmids":["32843054"]},
+  {"id":"FT05","question":"Intermittent fasting strategies and body weight","query":"I: intermittent fasting\nO: body weight","outcome":"body weight","pmids":["40533200"]},
+  {"id":"FT06","question":"Honey for acute cough in children","query":"P: children\nI: honey\nO: cough","outcome":"cough","pmids":["37355498"]}
+]

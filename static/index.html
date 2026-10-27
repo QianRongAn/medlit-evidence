@@ -183,7 +183,7 @@
 
         <div class="card evidence-overview">
           <div class="card-head"><h2>证据概况</h2></div>
-          <div class="reported-assessment"><h3 class="overview-label">结局方向 · 原文报告</h3><div id="reportedDirection"></div><div id="reportedCertainty"></div></div>
+          <div class="reported-assessment"><h3 class="overview-label">结局方向 · 原文报告</h3><p id="fulltextStatus" role="status" aria-live="polite"></p><button id="retryFulltext" class="reading-button hidden" type="button">重试失败的全文评估</button><div id="reportedDirection"></div><div id="reportedCertainty"></div></div>
           <div class="conf-badge" id="confBadge">
             <div class="conf-left">
               <div class="conf-cap">证据方向与结论可信度</div>
@@ -308,7 +308,8 @@
   </aside>
 
   <script src="/static/app.js?v=20261024-continuation"></script>
-  <script src="/static/assessment-ui.js?v=20261027-automatic"></script>
+  <script src="/static/assessment-ui.js?v=20261027-fulltext"></script>
+  <script src="/static/fulltext-ui.js?v=20261027-fulltext"></script>
   <script defer src="/static/vendor/gsap.min.js"></script>
   <script defer src="/static/ui-effects.js"></script>
 </body>

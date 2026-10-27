@@ -489,6 +489,71 @@ test("lower-priority reviews do not outvote a trial and automatic quotes are esc
   assert.match(get("reportedCertainty").innerHTML,/&lt;script&gt;/);
 });
 
+function fulltextRuntime() {
+  const runtime=loadApp();runtime.context.AbortController=AbortController;
+  for(const name of ['assessment-ui.js','fulltext-ui.js']) vm.runInContext(fs.readFileSync(path.join(__dirname,'../static',name),'utf8'),runtime.context);
+  return runtime;
+}
+
+test("fulltext automatically enriches every source in bounded batches without a total cap",async()=>{
+  const {context,get}=fulltextRuntime();
+  context.page={query:'metformin mortality',online:true,results:Array.from({length:26},(_,i)=>automaticDoc(String(i+1),'decrease')),
+    screening:{candidate_count:100,next_cursor:'keep'},evidence:{}};
+  vm.runInContext('resultData=page',context);
+  const calls=[];
+  context.fetch=async(url,options)=>{
+    const body=JSON.parse(options.body);calls.push(body.pmids);
+    assert.equal(url,'/api/assessment/fulltext');assert.ok(body.pmids.length<=10);
+    return {ok:true,json:async()=>({results:body.pmids.map(pmid=>({...automaticDoc(pmid,'decrease'),fulltext:{status:'available'}}))})};
+  };
+  context.scheduleFulltextAssessment();
+  for(let i=0;i<8;i++)await new Promise(setImmediate);
+  assert.equal(calls.flat().length,26);assert.equal(new Set(calls.flat()).size,26);
+  assert.match(get('fulltextStatus').textContent,/已取得 26 篇开放全文/);
+  assert.equal(vm.runInContext('resultData.screening.next_cursor',context),'keep');
+  assert.equal(vm.runInContext('resultData.screening.candidate_count',context),100);
+  assert.equal(vm.runInContext('resultData === page',context),true);
+});
+
+test("a duplicate retrieval record preserves completed fulltext unless integrity changes",()=>{
+  const {context}=loadApp();
+  const old={...automaticDoc('123','decrease'),fulltext:{status:'available'},integrity:'ok'};
+  const fresh={...automaticDoc('123','uncertain'),fulltext:{},integrity:'ok'};
+  const merged=context.mergeSourcePage({results:[old]},{results:[fresh],screening:{}});
+  assert.equal(merged.results[0].fulltext.status,'available');
+  assert.equal(merged.results[0].reported_assessment[0].direction,'decrease');
+  fresh.integrity='retracted';fresh.answer_eligible=false;
+  assert.equal(context.mergeSourcePage({results:[old]},{results:[fresh],screening:{}}).results[0].fulltext.status,undefined);
+});
+
+test("late fulltext results cannot overwrite a new query",async()=>{
+  const {context}=fulltextRuntime();
+  context.page={query:'old',online:true,results:[automaticDoc('123','decrease')],screening:{},evidence:{}};
+  vm.runInContext('resultData=page',context);
+  let finish;
+  context.fetch=()=>new Promise(resolve=>{finish=resolve;});
+  context.scheduleFulltextAssessment();context.resetFulltextAssessment();
+  vm.runInContext('resultData={query:"new",online:false,results:[]}',context);
+  finish({ok:true,json:async()=>({results:[{pmid:'123',fulltext:{status:'available'}}]})});
+  await new Promise(setImmediate);
+  assert.equal(vm.runInContext('resultData.query',context),'new');
+  assert.equal(vm.runInContext('resultData.results.length',context),0);
+});
+
+test("fulltext failures retain sources and explicit retry succeeds",async()=>{
+  const {context,get}=fulltextRuntime();
+  context.page={query:'metformin mortality',online:true,results:[automaticDoc('123','decrease')],screening:{},evidence:{}};
+  vm.runInContext('resultData=page',context);
+  context.fetch=async()=>{throw new Error('temporary failure');};
+  context.scheduleFulltextAssessment();await new Promise(setImmediate);
+  assert.equal(vm.runInContext('resultData.results.length',context),1);
+  assert.match(get('fulltextStatus').textContent,/失败 1 篇/);
+  assert.equal(get('retryFulltext').classList.contains('hidden'),false);
+  context.fetch=async()=>({ok:true,json:async()=>({results:[{...automaticDoc('123','decrease'),fulltext:{status:'available'}}]})});
+  get('retryFulltext').listeners.click();await new Promise(setImmediate);
+  assert.match(get('fulltextStatus').textContent,/已取得 1 篇开放全文/);
+});
+
 test("incomplete manual GRADE does not display a completed level",async()=>{
   const {context,get}=loadApp();
   vm.runInContext(fs.readFileSync(path.join(__dirname,"../static/assessment-ui.js"),"utf8"),context);

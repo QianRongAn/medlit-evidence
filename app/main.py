@@ -15,6 +15,9 @@ from pydantic import BaseModel, Field
 from .config import CORPUS_FILE, LLM_API_KEY, RETMAX, STATIC_DIR
 from .evidence import analyze_evidence
 from .reported_assessment import reported_summary, grade_review, GRADE_DOMAINS
+from .automatic_assessment import summarize_automatic
+from .fulltext import enrich_fulltexts, fulltext_metadata
+from .fulltext_assessment import assess_fulltext
 from .integrity import document_integrity, is_usable_evidence
 from .pubmed import InvalidCursor, efetch, esearch, esearch_page, load_corpus
 from .retrieval import rank
@@ -25,7 +28,7 @@ from .synthesizer import CitationValidationError, extractive_answer, llm_answer
 from .tokenizer import tokenize
 from .translate import translate_query
 
-app = FastAPI(title="MedLit Evidence", version="0.8.0")
+app = FastAPI(title="MedLit Evidence", version="0.9.0")
 
 
 class PicoInput(BaseModel):
@@ -108,14 +111,19 @@ def _source(d, score_model=True):
     fields = ("pmid", "title", "abstract", "journal", "year", "authors", "study_type", "grade",
               "relevance", "bm25_score", "source", "integrity", "integrity_flags", "is_notice",
               "notice_types", "integrity_relations", "screening", "answer_eligible", "reported_assessment")
-    return {**{key: d.get(key) for key in fields}, "risk": predict_risk(d) if score_model else None}
+    return {**{key: d.get(key) for key in fields}, "risk": predict_risk(d) if score_model else None,
+            "fulltext": fulltext_metadata(d.get("fulltext"))}
 
 
-async def _screened_retrieval(query, retmax, pico=None, cursor=None):
+def _planned_query(query, pico=None):
     if pico:
         labels = {"population": "P", "intervention": "I", "comparison": "C", "outcome": "O"}
         query += "".join(f"\n{labels[field]}: {value.strip()}" for field, value in pico.model_dump().items() if value.strip())
-    plan = build_query_plan(query)
+    return query, build_query_plan(query)
+
+
+async def _screened_retrieval(query, retmax, pico=None, cursor=None):
+    query, plan = _planned_query(query, pico)
     # Each request is bounded; the cursor allows browsing the entire result set.
     candidate_limit = min(500, max(100, retmax * 5))
     retrieved = await _retrieve(query, candidate_limit, cursor) if cursor else await _retrieve(query, candidate_limit)
@@ -234,6 +242,48 @@ async def answer(q: Query):
         "results": [_source(d) for d in docs],
         "excluded_results": [_source(d, False) for d in excluded],
     }
+
+
+class FulltextQuery(BaseModel):
+    query: str = Field(min_length=1, max_length=2000)
+    pico: PicoInput | None = None
+    pmids: list[str] = Field(min_length=1, max_length=10)
+
+
+@app.post("/api/assessment/fulltext")
+async def fulltext_assessment(q: FulltextQuery):
+    if not q.query.strip():
+        raise HTTPException(status_code=400, detail="query 不能为空")
+    if any(not re.fullmatch(r"[1-9][0-9]{0,9}", pmid) for pmid in q.pmids):
+        raise HTTPException(status_code=422, detail="全文评估只接受有效 PMID，不接受任意网址。")
+    _, plan = _planned_query(q.query.strip(), q.pico)
+    try:
+        docs = _annotate_docs(await efetch(list(dict.fromkeys(q.pmids))), plan["ranking_tokens"])
+    except Exception as error:
+        raise HTTPException(status_code=502, detail="无法核对 PubMed 原始记录，全文评估可重试。") from error
+    requested = set(q.pmids)
+    docs = [doc for doc in docs if doc["pmid"] in requested]
+    eligible, excluded = [], []
+    for doc in docs:
+        doc["screening"] = screen_document(doc, plan)
+        doc["answer_eligible"] = doc["screening"]["eligible"] and is_usable_evidence(doc)
+        if doc["answer_eligible"]:
+            eligible.append(doc)
+        else:
+            doc["fulltext"] = {"status":"excluded", "reason":"未通过当前问题筛选、已撤稿或属于通知"}
+            doc["reported_assessment"] = []
+            excluded.append(doc)
+    reported_summary(eligible, plan)
+    await enrich_fulltexts(eligible)
+    for doc in eligible:
+        assess_fulltext(doc, plan)
+    results = [_source(doc, False) for doc in eligible + excluded]
+    present = {doc["pmid"] for doc in docs}
+    results += [{"pmid":pmid, "fulltext":{"status":"error", "reason":"PubMed 未返回该文献，可重试"}}
+                for pmid in requested - present]
+    return {"query":q.query, "results":results,
+            "automatic_conclusions":summarize_automatic(eligible, plan["pico"]["outcome"]),
+            "scope":"open_access_body_and_xml_tables", "expert_validation":"pending"}
 
 
 class GradeDomain(BaseModel):

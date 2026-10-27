@@ -5,6 +5,7 @@ let gradeDraftComplete = false;
 let gradeRevision = 0;
 
 function resetGradeReview() {
+  if (typeof resetFulltextAssessment === "function") resetFulltextAssessment();
   gradeRevision++;
   gradeDraftComplete = false;
   $("gradeInitial").value = "unknown";
@@ -49,17 +50,20 @@ function renderReportedAssessment(docs) {
       ${selected.length ? `<p>方向依据：${selected.map(item=>cite(item.pmid)).join(" · ")}。按研究设计层级选择依据，未按篇数投票，未合并可能重叠的样本。</p>` : ""}
       <p>报告增加 ${count("increase")} · 报告减少 ${count("decrease")} · 未见明确方向 ${count("uncertain")} · 文内不一致 ${count("mixed")}</p>
       ${items.some(item=>item.question_direction) ? `<p>与提问方向一致 ${items.filter(item=>item.alignment==="same_direction").length} · 相反 ${items.filter(item=>item.alignment==="opposite_direction").length}；方向一致不等于临床结论成立。</p>` : ""}
-      <small>可核对方向 ${items.filter(item => item.direction).length} / ${items.length} 篇；未命中规则的摘要仍需全文核查。</small>
-      ${evidence.length ? `<details><summary>查看方向依据</summary>${evidence.map(item => `<blockquote>${esc(item.quote)}<br>${cite(item.pmid)} · ${esc(item.label)}</blockquote>`).join("")}</details>` : ""}</div>`);
+      <small>可核对方向 ${items.filter(item => item.direction).length} / ${items.length} 篇；当前材料未提供可靠方向时不强行判定。</small>
+      ${evidence.length ? `<details><summary>查看方向依据</summary>${evidence.map(item => `<blockquote>${esc(item.quote)}<br>${cite(item.pmid)} · ${esc(item.label)} · ${item.scope === "full_text" ? `全文 ${esc(item.heading)} / ${esc(item.block_id)}` : "摘要依据"}</blockquote>`).join("")}</details>` : ""}</div>`);
     items.forEach(item => (item.source_certainty || []).forEach(source => certainties.push({...source, outcome})));
     const assessed = selected.length ? selected : items.filter(item => item.automatic);
+    const fulltext = assessed.some(item=>item.automatic.scope === "full_text");
     if (assessed.length) automatic.push(`<div class="reported-outcome"><b>${esc(outcome)} · 自动可信度评估</b>
-      <p>${esc([...new Set(assessed.map(item=>item.automatic.certainty.label))].join(" / "))}（摘要初评）</p>
+      <p>${esc([...new Set(assessed.map(item=>item.automatic.certainty.label))].join(" / "))}（${fulltext ? "已包含全文评估" : "摘要初评"}）</p>
       <details><summary>查看系统判断、引用依据与资料缺口</summary>${assessed.map(item => {
         const auto=item.automatic, certainty=auto.certainty;
+        const location = source => source.scope === "full_text" ? `<small>全文 ${esc(source.heading)} · ${esc(source.block_id)} · SHA256 ${esc(source.text_sha256.slice(0,12))}</small>` : "<small>摘要依据</small>";
         return `<section><p>${cite(item.pmid)} · ${esc(auto.design)} · ${esc(certainty.reason)}</p>
+          ${auto.scope === "full_text" ? `<p><a href="${esc(auto.source.url)}" target="_blank" rel="noopener">开放全文 ${esc(auto.source.pmcid)}</a> · ${esc(auto.source.limitations)}</p>` : ""}
           ${certainty.lower && certainty.upper && certainty.status === "limited" ? `<p>可能分级范围：${esc(certainty.lower)}—${esc(certainty.upper)}；摘要缺失资料使范围尚不能收窄，不是已确定评级。</p>` : ""}
-          ${Object.values(auto.domains).map(domain=>`<p><b>${esc(domain.label)}</b>：${esc(({serious:"发现明确局限",not_serious:"原文报告未发现严重问题",unknown:"资料不足，未按通过处理"})[domain.status])}。${esc(domain.reason || "")}</p>${domain.evidence.map(source=>source.quote ? `<blockquote>${esc(source.quote)}<br>${cite(source.pmid)}</blockquote>` : `<p>出版元数据：${esc(source.metadata)} · ${cite(source.pmid)}</p>`).join("")}`).join("")}</section>`;
+          ${Object.values(auto.domains).map(domain=>`<p><b>${esc(domain.label)}</b>：${esc(({serious:"发现明确局限",not_serious:"原文报告未发现严重问题",unknown:"资料不足，未按通过处理"})[domain.status])}。${esc(domain.reason || "")}</p>${domain.evidence.map(source=>source.quote ? `<blockquote>${esc(source.quote)}<br>${cite(source.pmid)} ${location(source)}</blockquote>` : `<p>出版元数据：${esc(source.metadata)} · ${cite(source.pmid)}</p>`).join("")}`).join("")}</section>`;
       }).join("")}</details></div>`);
   });
   $("reportedDirection").innerHTML = direction.join("")
@@ -68,12 +72,13 @@ function renderReportedAssessment(docs) {
   const unique = [...new Map(certainties.map(item => [item.pmid + item.quote, item])).values()];
   const levels = [...new Set(unique.map(item => item.label))];
   $("reportedCertainty").innerHTML = automatic.join("") + (unique.length
-    ? `<details><summary>原文 GRADE 评级及依据（${unique.length} 条）</summary>${unique.map(item => `<blockquote>${esc(item.label)} · ${esc(item.outcome)}<br>${esc(item.quote)}<br>${cite(item.pmid)}</blockquote>`).join("")}</details>`
-    : automatic.length ? '<p>以上为当前已加载文献的系统自动初评，非全文 GRADE；无需填写人工工作表。继续加载时自动更新。</p>' : '<p>当前资料无法提取可追溯的结局依据，系统不会虚构方向或分级。</p>');
+    ? `<details><summary>原文 GRADE 评级及依据（${unique.length} 条）</summary>${unique.map(item => `<blockquote>${esc(item.label)} · ${esc(item.outcome)}<br>${esc(item.quote)}<br>${cite(item.pmid)} ${item.scope === "full_text" ? `全文 ${esc(item.heading)} · ${esc(item.block_id)}` : "摘要"}</blockquote>`).join("")}</details>`
+    : automatic.length ? '<p>系统自动分析当前已取得的摘要／全文；无需填写人工工作表。继续取得材料时自动更新，尚未经过专家验证。</p>' : '<p>当前资料无法提取可追溯的结局依据，系统不会虚构方向或分级。</p>');
   $("confTag").textContent = levels.length ? levels.join(" / ") + "（原文报告）" : automatic.length ? "已自动初评 · 见各结局" : "结论依据不足";
   $("confTag").style.color = "#5F6E83";
   $("confDesc").textContent = levels.length > 1 ? "来源评级不同，未合并成一个分数"
     : levels.length ? "来源评级，不是系统校准概率" : "系统已核查当前文献；判断与资料缺口见上方";
+  if (typeof scheduleFulltextAssessment === "function") scheduleFulltextAssessment();
 }
 
 async function submitGradeReview() {

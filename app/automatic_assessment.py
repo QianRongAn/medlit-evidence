@@ -82,13 +82,13 @@ def appraise_report(doc, report, plan):
     certainty = {"status": "limited", "label": "可信度受限", "level": None,
                  "lower": LEVELS.get(lower), "upper": LEVELS.get(upper),
                  "reason": f"自动核查发现 {serious} 项明确局限、{unknown} 项资料缺口；未知项不视为通过。"}
-    if not report.get("direction"):
-        certainty.update(label="结论依据不足", reason="未能从当前摘要可靠提取对齐 PICO 的结局效应。")
-    elif report.get("source_certainty"):
+    if report.get("source_certainty"):
         levels = {item["level"] for item in report["source_certainty"]}
         certainty.update(status="source_reported", label=" / ".join(sorted({item["label"] for item in report["source_certainty"]})),
                          level=next(iter(levels)) if len(levels) == 1 else None,
                          reason="采用该结局原文明确报告的评级；系统未独立重做全文 GRADE。")
+    elif not report.get("direction"):
+        certainty.update(label="结论依据不足", reason="未能从当前材料可靠提取对齐 PICO 的结局效应。")
     elif initial and unknown == 0:
         certainty.update(status="preliminary", label=LEVELS[upper], level={1:"very low", 2:"low", 3:"moderate", 4:"high"}[upper],
                          reason="五项均有明确摘要报告，按证据起点和明确局限自动形成初评，尚未全文复核。")

@@ -535,7 +535,14 @@ function renderPageProgress() {
 }
 function mergeSourcePage(previous, next) {
   const unique = values => [...new Map(values.map(doc => [String(doc.pmid), doc])).values()];
-  const results = unique([...(previous.results || []), ...(next.results || [])]);
+  const prior = new Map((previous.results || []).map(doc=>[String(doc.pmid),doc]));
+  const incoming = (next.results || []).map(doc=>{
+    const old=prior.get(String(doc.pmid));
+    const unchanged = old && ['study_type','integrity','is_notice','integrity_flags'].every(key=>JSON.stringify(old[key])===JSON.stringify(doc[key]));
+    return unchanged && old.fulltext?.status === 'available' && !doc.fulltext?.status && doc.answer_eligible !== false
+      ? {...doc,fulltext:old.fulltext,reported_assessment:old.reported_assessment} : doc;
+  });
+  const results = unique([...(previous.results || []), ...incoming]);
   const excluded = unique([...(previous.excluded_results || []), ...(next.excluded_results || [])]);
   const counts={retracted:0,concern:0,corrected:0,notice:0};
   results.forEach(doc=>{
