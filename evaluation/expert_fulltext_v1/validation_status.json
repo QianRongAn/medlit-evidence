@@ -1,0 +1,7 @@
+{
+  "status": "awaiting_two_independent_experts",
+  "expert_accuracy": null,
+  "agreement": null,
+  "tasks": 6,
+  "reason": "尚无真实专家标注，不能报告专家验证准确率"
+}

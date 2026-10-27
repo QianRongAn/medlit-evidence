@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "materials_sha256": "3c74e5f4923029ad2293bba74ae6af70243390402ad22322b93a95c723521d01",
+  "predictions_sha256": "be3c1b6b57a9cb18383354d8e1c8bcd73cd2e0154923f8d773a8031c5efab7e7",
+  "expert_review_status": "not_started",
+  "annotation_kind": "unannotated_human_expert_pilot",
+  "clinical_generalization_validated": false,
+  "git_commit": "9b85e816e509c92ed2494f242b9a99649a11bf59",
+  "application_sha256": "ff9b43c4679ec8b2e884b1eb9ac8278e651544123d0330810ef4beef7fd5b82a",
+  "sampling": "curator_selected_pilot_not_population_representative",
+  "training_pmid_overlap": false,
+  "prior_clinical_benchmark_pmid_overlap": false
+}

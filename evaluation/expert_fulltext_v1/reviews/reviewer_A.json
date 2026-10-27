@@ -1,0 +1,217 @@
+{
+  "package_sha256": "3c74e5f4923029ad2293bba74ae6af70243390402ad22322b93a95c723521d01",
+  "reviewer": {
+    "id": "",
+    "role": "",
+    "expertise": "",
+    "human_expert": false,
+    "independent_review": false,
+    "reviewed_at": ""
+  },
+  "decisions": [
+    {
+      "task_id": "FT01:mortality",
+      "direction": "",
+      "certainty": "",
+      "rationale": "",
+      "evidence": [],
+      "domains": {
+        "risk_of_bias": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "inconsistency": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "indirectness": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "imprecision": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "publication_bias": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "task_id": "FT02:mortality",
+      "direction": "",
+      "certainty": "",
+      "rationale": "",
+      "evidence": [],
+      "domains": {
+        "risk_of_bias": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "inconsistency": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "indirectness": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "imprecision": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "publication_bias": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "task_id": "FT03:mortality",
+      "direction": "",
+      "certainty": "",
+      "rationale": "",
+      "evidence": [],
+      "domains": {
+        "risk_of_bias": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "inconsistency": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "indirectness": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "imprecision": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "publication_bias": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "task_id": "FT04:mortality",
+      "direction": "",
+      "certainty": "",
+      "rationale": "",
+      "evidence": [],
+      "domains": {
+        "risk_of_bias": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "inconsistency": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "indirectness": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "imprecision": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "publication_bias": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "task_id": "FT05:body weight",
+      "direction": "",
+      "certainty": "",
+      "rationale": "",
+      "evidence": [],
+      "domains": {
+        "risk_of_bias": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "inconsistency": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "indirectness": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "imprecision": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "publication_bias": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "task_id": "FT06:cough",
+      "direction": "",
+      "certainty": "",
+      "rationale": "",
+      "evidence": [],
+      "domains": {
+        "risk_of_bias": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "inconsistency": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "indirectness": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "imprecision": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        },
+        "publication_bias": {
+          "judgment": "",
+          "rationale": "",
+          "evidence": []
+        }
+      }
+    }
+  ]
+}
